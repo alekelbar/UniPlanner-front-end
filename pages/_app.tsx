@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { store } from '../src/redux';
 import { authInterceptor } from '../src/interceptors/auth.interceptor';
 import { LayoutComponent } from '../src/components/common/Layout/Layout';
+import Copyright from '../src/components/Copyright';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -31,6 +32,7 @@ export default function MyApp (props: MyAppProps) {
           <LayoutComponent>
             <CssBaseline />
             <Component {...pageProps} />
+            <Copyright />
           </LayoutComponent>
         </ThemeProvider>
       </CacheProvider>

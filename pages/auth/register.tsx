@@ -1,27 +1,25 @@
 import {
-  Grid,
+  Divider, Grid,
   InputLabel,
-  MenuItem,
-  Paper,
-  Select,
+  MenuItem, Select,
   TextField,
-  Typography,
-  Divider
+  Typography
 } from '@mui/material';
-import { useState } from 'react';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { Link } from '../../src/components/common';
+import { Box } from '@mui/system';
 import { useFormik } from 'formik';
-import { getNameByID } from '../../src/services';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import * as Yup from 'yup';
+
+
+import { ButtonLink, Link } from '../../src/components';
 import { useAppDispatch } from '../../src/redux/hooks.redux';
 import { startRegisterUser } from '../../src/redux/thunks/auth.thunks';
-import { GetServerSideProps } from 'next';
+import { getNameByID } from '../../src/services';
 import { Career } from '../../src/services/API/Career/career.models';
 import { CareerService } from '../../src/services/API/Career/career.service';
-import { Box } from '@mui/system';
-import { useRouter } from 'next/router';
 
 interface Props {
   careers: Career[];
@@ -171,19 +169,16 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           <Button type='submit' fullWidth variant='contained' color='primary' sx={{ mb: .5 }}>
             ¡Registrarme!
           </Button>
-
-          <Link
-            linkSx={{ listStyle: 'none', mt: .5 }}
-            buttonVariant="text"
-            children={
+          <Box mt={1}>
+            <Link
+              href='/auth'
+              sx={{ listStyle: 'none', mt: .5 }}
+            >
               <Typography variant='caption' align='center'>
                 ¿Ya te encuentras registrado?
               </Typography>
-            }
-            fullWidth
-            href='/auth'
-            buttonColor='primary'
-          />
+            </Link>
+          </Box>
         </Grid>
       </Box>
     </Grid >

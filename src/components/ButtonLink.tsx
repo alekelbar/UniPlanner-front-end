@@ -13,7 +13,7 @@ interface LinkProps {
   fullWidth?: boolean;
 }
 
-export const Link: React.FC<LinkProps> = ({ children, href, linkSx, buttonSx, buttonVariant, fullWidth = false, buttonColor }) => {
+export const ButtonLink: React.FC<LinkProps> = ({ children, href, linkSx, buttonSx, buttonVariant, fullWidth = false, buttonColor }) => {
   return (
     <MUILink sx={linkSx} component={NextLink} href={href}>
       <Button sx={buttonSx} fullWidth={fullWidth} variant={buttonVariant} color={buttonColor}>

@@ -2,10 +2,10 @@ import { Logout, Person, School } from '@mui/icons-material';
 import { Drawer, Grid, Typography, Button } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useRef } from 'react';
-import { LargeLogo } from './LargeLogo';
-import { Link } from './Link';
-import { useAppDispatch } from '../../redux/hooks.redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { LargeLogo } from '../../LargeLogo';
+import { ButtonLink } from '../../ButtonLink';
+import { useAppDispatch } from '../../../redux/hooks.redux';
+import { onLogOut } from '../../../redux/slices/auth/authSlice';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
@@ -68,7 +68,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
             {pages.map(page => {
               return (
                 <Grid item xs={12} key={page.title}>
-                  <Link
+                  <ButtonLink
                     buttonVariant='text'
                     children={
                       <>

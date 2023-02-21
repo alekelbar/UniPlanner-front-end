@@ -13,7 +13,6 @@ const Career: React.FC<Props> = () => {
   return (
     <Container maxWidth="lg">
       <Typography>Hola mundo!</Typography>
-      <Copyright />
     </Container>
   );
 };

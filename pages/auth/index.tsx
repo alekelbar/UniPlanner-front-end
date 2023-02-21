@@ -4,7 +4,7 @@ import {
   Divider
 } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Link } from '../../src/components';
+import { ButtonLink, Link } from '../../src/components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getNameByID } from '../../src/services/identificationAPI/index';
@@ -90,18 +90,16 @@ const LoginPage: React.FC = () => {
             ¡Ingresar!
           </Button>
 
-          <Link
-            linkSx={{ listStyle: 'none', mt: .5, width: '100%' }}
-            buttonVariant="text"
-            children={
+          <Box mt={1}>
+            <Link
+              href='/auth/register'
+              sx={{ listStyle: 'none', mt: .5, width: '100' }}
+            >
               <Typography variant='caption' align='center'>
                 ¿Todavía no tienes una cuenta?
               </Typography>
-            }
-            fullWidth
-            href='/auth/register'
-            buttonColor='primary'
-          />
+            </Link>
+          </Box>
 
         </Grid>
       </Box>
