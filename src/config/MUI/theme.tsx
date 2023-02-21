@@ -1,11 +1,5 @@
 import { Roboto } from "@next/font/google";
 import { createTheme } from "@mui/material/styles";
-import NextLink, { LinkProps } from 'next/link';
-import { forwardRef } from 'react';
-
-const LinkBehavior = forwardRef<HTMLAnchorElement, LinkProps>(function LinkBehavior (props, ref) {
-  return <NextLink {...props} passHref ref={ref} />;
-});
 
 export const roboto = Roboto({
   weight: ["300", "400", "500", "700"],

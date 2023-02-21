@@ -3,24 +3,23 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { UserCredentials } from '../../src/services/API/User/users.models';
 import { GetServerSideProps } from 'next';
-import Copyright from '../../src/components/Copyright';
 
 interface Props {
   parseToken: UserCredentials;
 }
 
-const Career: React.FC<Props> = () => {
+const Profile: React.FC<Props> = () => {
   return (
     <Container maxWidth="lg">
-      <Typography>Hola mundo!</Typography>
-      <Copyright />
+      <Typography>Hola Profile!</Typography>
     </Container>
   );
 };
 
-export default Career;
+export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
   const { token } = ctx.req.cookies;
 
   if (!token) {
@@ -34,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const parseToken = JSON.parse(token);
 
-  if (Object.keys(parseToken).length < 3 || parseToken.token === null) {
+  if (Object.keys(parseToken).length < 3) {
     return {
       redirect: {
         destination: '/auth',
@@ -42,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
+
   return {
     props: {
       parseToken,

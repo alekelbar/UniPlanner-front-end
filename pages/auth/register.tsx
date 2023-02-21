@@ -8,44 +8,39 @@ import {
   Typography,
   Divider
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { Link } from '../../src/components/common';
 import { useFormik } from 'formik';
 import { getNameByID } from '../../src/services';
 import * as Yup from 'yup';
-import { useAppDispatch, useAppSelector } from '../../src/redux/hooks.redux';
-import { startLoadCareers } from '../../src/redux/thunks/career.thunks';
+import { useAppDispatch } from '../../src/redux/hooks.redux';
 import { startRegisterUser } from '../../src/redux/thunks/auth.thunks';
+import { GetServerSideProps } from 'next';
+import { Career } from '../../src/services/API/Career/career.models';
+import { CareerService } from '../../src/services/API/Career/career.service';
+import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 
+interface Props {
+  careers: Career[];
+}
 
-const RegisterPage = () => {
+const RegisterPage: React.FC<Props> = ({ careers }) => {
+
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
-  const { careers } = useAppSelector(state => state.career);
-
-  const { token } = useAppSelector(state => state.auth);
-
-  if (token) {
-    router.push('/home');
-  }
-
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    dispatch(startLoadCareers());
-
-  }, []);
+  const [Message, setMessage] = useState("");
 
   const careerSelected = (careers.length > 0 ? careers[0]._id : "");
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       id: '',
-      name,
+      name: Message,
       email: '',
       career: careerSelected,
       password: '',
@@ -61,13 +56,13 @@ const RegisterPage = () => {
         fullname,
         password
       }));
-
+      router.push('/home');
     },
     validationSchema: Yup.object({
       id: Yup
         .string()
-        .required('La identificación es requerida')
-        .matches(/^[1-9]0\d{3}0\d{3}$/, 'el formato adecuado es X0XXX0XXX'),
+        .required('La identificación es requerida'),
+      // .matches(/^[1-9]0\d{3}0\d{3}$/, 'el formato adecuado es X0XXX0XXX'),
       password: Yup
         .string()
         .required('La contraseña es requerida')
@@ -78,7 +73,7 @@ const RegisterPage = () => {
         .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'La contraseña debe ser alfanumérica y tener un mínimo de 8 caracteres')
         .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
 
-      name: Yup.string().required('Su nombre es requerido'),
+      name: Yup.string().required('Su nombre es requerido').min(10, 'Su nombre debe ser más largo'),
       email: Yup.string().email('Formato incorrecto').required('Su correo electrónico es requerido'),
       career: Yup.string().min(1, 'Porfavor seleccione una carrera').required('Su carrera es requerida')
     }),
@@ -86,38 +81,33 @@ const RegisterPage = () => {
 
   const handleIdentification = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    formik.setFieldValue('id', value);
+
     if (value.length == 9) {
       //  TODO: petición HTPP para la cedula...
-      getNameByID(value)
-        .then(response => {
-          const { data } = response;
-          if (data.nombre) {
-            setName(data.nombre);
-            formik.setFieldValue('name', data.nombre);
-            return;
-          }
-          setName('Identificación no encontrada');
-        });
-    }
-
-    if (value.length < 10) {
-      formik.setFieldValue('id', value);
-      setName('');
+      const { data } = await getNameByID(value);
+      if (data.resultcount === 1) {
+        const { nombre } = data;
+        setMessage(nombre);
+        formik.setFieldValue('name', nombre);
+        return;
+      }
+      setMessage('Identificación no encontrada');
     }
   };
 
   return (
-    <Container sx={{ height: '100vh', display: 'grid', placeContent: 'center' }}>
-      <Paper component={'form'} onSubmit={formik.handleSubmit} variant='elevation' sx={{ p: 2, overflow: 'auto', width: { sm: '90%', md: '90%' } }}>
+    <Grid container sx={{ display: 'grid', placeContent: 'center' }}>
+      <Box component={'form'} onSubmit={formik.handleSubmit} sx={{ p: 4, overflow: 'auto' }}>
+        <Typography variant='h5' my={2} align='center' width={'100%'}>
+          Registro
+          <Divider sx={{ my: 1 }} />
+          <Typography variant='caption' color={'secondary'}>{Message}</Typography>
+        </Typography>
         <Grid container spacing={1} flexDirection='column' sx={{ placeItems: 'center' }}>
           <Grid item>
-            <Typography variant='h5' my={2} align='center'>
-              Módulo de Ingreso
-              <Divider sx={{ mt: 1 }} />
-              <Typography variant='caption' color={'secondary'}>{name}</Typography>
-            </Typography>
           </Grid>
-          <Grid container spacing={2} maxWidth="md">
+          <Grid container spacing={1} maxWidth="md">
             <Grid item xs={12} sm={6}>
               <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
               {formik.touched.id && formik.errors.id && (
@@ -125,7 +115,7 @@ const RegisterPage = () => {
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} disabled fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
+              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
               {formik.touched.name && formik.errors.name && (
                 <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
               )}
@@ -192,11 +182,41 @@ const RegisterPage = () => {
             }
             fullWidth
             href='/auth'
+            buttonColor='primary'
           />
         </Grid>
-      </Paper>
-    </Container >
+      </Box>
+    </Grid >
   );
 };
 
 export default RegisterPage;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const { token } = ctx.req.cookies;
+
+  if (token) {
+    const parseToken = JSON.parse(token);
+
+    if (Object.keys(parseToken).length >= 3 && parseToken.token !== null) {
+      return {
+        redirect: {
+          destination: '/home',
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  const service = CareerService.createService("v1");
+
+  const { data } = await service.listAll();
+
+  return {
+    props: {
+      careers: data
+    }
+  };
+
+};

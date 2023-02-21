@@ -11,7 +11,6 @@ const service = UserService.createService("v1");
 export const startUserLogin = (user: UserLogin) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const response = await service.login(user);
-    // set local auth
     dispatch(setAuth(response));
 
     console.log(response);
@@ -20,7 +19,6 @@ export const startUserLogin = (user: UserLogin) => {
       Swal.fire(response.error);
       dispatch(cleanErrors);
     }
-    
     setLocalToken(response);
   };
 };

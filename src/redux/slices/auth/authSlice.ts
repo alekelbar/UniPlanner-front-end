@@ -24,9 +24,12 @@ export const authSlice = createSlice({
     cleanErrors: (state) => {
       return { ...state, errors: null };
     },
+    onLogOut: (_) => {
+      return initialState;
+    },
   },
 });
 
-export const { setAuth, cleanErrors } = authSlice.actions;
+export const { setAuth, cleanErrors, onLogOut } = authSlice.actions;
 
 export default authSlice;

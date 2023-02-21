@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 
 export const setLocalToken = (session: UserCredentials) => {
   const auth = JSON.stringify(session);
-
   Cookies.set("token", auth);
 };
 

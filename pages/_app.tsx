@@ -4,10 +4,10 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createEmotionCache, theme } from '../src/config';
-import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux';
 import { authInterceptor } from '../src/interceptors/auth.interceptor';
+import { LayoutComponent } from '../src/components/common/Layout/Layout';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -18,6 +18,7 @@ interface MyAppProps extends AppProps {
 authInterceptor();
 
 export default function MyApp (props: MyAppProps) {
+
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <Provider store={store}>
@@ -27,8 +28,10 @@ export default function MyApp (props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
+          <LayoutComponent>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </LayoutComponent>
         </ThemeProvider>
       </CacheProvider>
     </Provider>

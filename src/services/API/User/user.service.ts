@@ -6,6 +6,7 @@ export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
   INTERNAL_ERROR = "Tenemos un error de servidor...",
   INVALID_CREDENTIALS = "Sus credenciales son invalidas",
+  USER_NOT_REGISTERED = "El usuario no se encuentra registrado",
 }
 
 export class UserService {
@@ -48,6 +49,15 @@ export class UserService {
           error: USER_EXCEPTIONS.INVALID_CREDENTIALS,
         };
       }
+
+      if (error.response && error.response.status === 400) {
+        return {
+          token: null,
+          user: null,
+          error: USER_EXCEPTIONS.USER_NOT_REGISTERED,
+        };
+      }
+
       return {
         token: null,
         user: null,
