@@ -1,7 +1,8 @@
 import {
   Grid, TextField,
   Typography,
-  Divider
+  Divider,
+  Tooltip
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import { ButtonLink, Link } from '../../src/components';
@@ -77,7 +78,9 @@ const LoginPage: React.FC = () => {
           <Typography variant='h5' my={2} align='center' width={'100%'}>
             Ingreso
             <Divider sx={{ mt: 1 }} />
-            <Typography variant='caption' color={'secondary'}>{messageName}</Typography>
+            <Tooltip title="Tú cedula solo es una medida de seguridad, pero puedes acceder con otro numero que te identifiqué solo a tí." placement='top-end'>
+              <Typography variant='caption' color={'secondary'}>{messageName}</Typography>
+            </Tooltip>
           </Typography>
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12} sm={6}>

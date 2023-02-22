@@ -3,6 +3,7 @@ import {
   InputLabel,
   MenuItem, Select,
   TextField,
+  Tooltip,
   Typography
 } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -117,13 +118,17 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           </Grid>
           <Grid container spacing={1} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
+              <Tooltip title="No es obligatorio, pero ayuda para tu seguridad" placement='top-end'>
+                <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
+              </Tooltip>
               {formik.touched.id && formik.errors.id && (
                 <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
+              <Tooltip title="Si tu cédula es correcta, se autocompleta" placement='top-end'>
+                <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
+              </Tooltip>
               {formik.touched.name && formik.errors.name && (
                 <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
               )}
@@ -151,26 +156,28 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
         <Grid item my={1}>
 
           <InputLabel sx={{ textAlign: 'center' }} id="career">¿Cual carrera estudia?</InputLabel>
-          <Select
-            labelId='career'
-            fullWidth
-            sx={{ mt: 1 }}
-            value={formik.values.career}
-            label="career"
-            name={'career'}
-            onChange={formik.handleChange}
-          >
-            {careers.map(career => {
+          <Tooltip title={"Mas adelante podras agregar otras"} placement='top-end'>
+            <Select
+              labelId='career'
+              fullWidth
+              sx={{ mt: 1 }}
+              value={formik.values.career}
+              label="career"
+              name={'career'}
+              onChange={formik.handleChange}
+            >
+              {careers.map(career => {
 
-              return (
-                <MenuItem key={career._id} value={career._id}>
-                  {career.name}
-                </MenuItem>
-              );
+                return (
+                  <MenuItem key={career._id} value={career._id}>
+                    {career.name}
+                  </MenuItem>
+                );
 
-            })}
+              })}
 
-          </Select>
+            </Select>
+          </Tooltip>
           {formik.touched.career && formik.errors.career && (
             <Typography variant='caption' color={'error'}>{formik.errors.career}</Typography>
           )}
