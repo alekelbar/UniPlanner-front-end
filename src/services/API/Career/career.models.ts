@@ -5,5 +5,6 @@ export interface Career {
 
 export interface CareerState {
   careers: Career[];
-  errors: null | string;
+  error: null | string;
+  loading: boolean;
 }

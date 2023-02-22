@@ -1,8 +1,7 @@
-import { InternalAxiosRequestConfig } from "axios";
+import { InternalAxiosRequestConfig, AxiosInstance } from "axios";
 import { store } from "../redux";
-import axios from "axios";
 
-export const authInterceptor = () => {
+export const authInterceptor = (axios: AxiosInstance) => {
   const addToken = (request: InternalAxiosRequestConfig) => {
     const token = store.getState().auth.token
       ? `Bearer ${store.getState().auth.token}`
@@ -10,6 +9,8 @@ export const authInterceptor = () => {
     if (token) {
       request.headers.Authorization = token;
     }
+
+    console.log(token);
     return request;
   };
 

@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "./../../store.redux";
-import { UserCredentials } from "../../../services/API/User/users.models";
 import {
   CareerState,
   Career,
@@ -10,7 +8,8 @@ import {
 // Define the initial state using that type
 const initialState: CareerState = {
   careers: [],
-  errors: null,
+  error: null,
+  loading: false,
 };
 
 export const careerSlice = createSlice({
@@ -21,9 +20,18 @@ export const careerSlice = createSlice({
     setCareers: (state, { payload }: PayloadAction<Career[]>) => {
       return { ...state, careers: payload };
     },
+    setErrors: (state, { payload: error }: PayloadAction<string>) => {
+      return { ...state, error };
+    },
+    cleanErrors: (state) => {
+      return { ...state, error: null };
+    },
+    setLoading: (state) => {
+      state.loading = !state.loading;
+    },
   },
 });
 
-export const { setCareers } = careerSlice.actions;
+export const { setCareers, setErrors, setLoading } = careerSlice.actions;
 
 export default careerSlice;

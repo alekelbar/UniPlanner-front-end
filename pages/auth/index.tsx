@@ -10,10 +10,12 @@ import * as Yup from 'yup';
 import { getNameByID } from '../../src/services/identificationAPI/index';
 import { useState } from 'react';
 import { useAppDispatch } from '../../src/redux/hooks.redux';
-import { startUserLogin } from '../../src/redux/thunks/auth.thunks';
+import { startUserLogin } from '../../src/redux/thunks/user.thunks';
 import { GetServerSideProps } from 'next';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
+import { RESPONSES } from '../../src/helpers/interfaces/response-messages';
+import Swal from 'sweetalert2';
 
 const LoginPage: React.FC = () => {
 
@@ -26,12 +28,16 @@ const LoginPage: React.FC = () => {
       id: '',
       password: '',
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
       const { id, password } = values;
-      dispatch(startUserLogin({ identification: id, password }));
+      const response = await dispatch(startUserLogin({ identification: id, password }));
 
-      router.push('/home');
+      if (response !== RESPONSES.SUCCESS) {
+        await Swal.fire('Algo salio mal 😥', response);
+        return;
+      }
+
+      router.replace('/home');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -75,11 +81,11 @@ const LoginPage: React.FC = () => {
           </Typography>
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth onChange={handleIdentification} value={formik.values.id} name='id' type={'text'} variant='filled' placeholder='Identificación' />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth onChange={handleIdentification} value={formik.values.id} name='id' type={'text'} variant='filled' placeholder='Identificación' />
               {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth onChange={formik.handleChange} value={formik.values.password} name='password' variant='filled' placeholder='Contraseña' type={'password'} />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth onChange={formik.handleChange} value={formik.values.password} name='password' variant='filled' placeholder='Contraseña' type={'password'} />
               {formik.touched.password && formik.errors.password && <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>}
             </Grid>
           </Grid>

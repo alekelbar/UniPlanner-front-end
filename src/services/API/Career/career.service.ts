@@ -1,10 +1,10 @@
 //localhost:3000/api/v1/careers/all
 
-import { AxiosError, AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 import axios from "axios";
 import { ApiVersion } from "../api-version";
 import { authInterceptor } from "../../../interceptors/auth.interceptor";
-import { CareerState, Career } from "./career.models";
+import { Career } from "./career.models";
 
 export class CareerService {
   private baseUrl: string = `localhost:3000/api/`;
@@ -15,6 +15,7 @@ export class CareerService {
     this.API = axios.create({
       baseURL: this.baseUrl + `${serviceVersion}/`,
     });
+    authInterceptor(this.API);
   }
 
   public static createService(version: ApiVersion): CareerService {

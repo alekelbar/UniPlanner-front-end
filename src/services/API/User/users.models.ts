@@ -8,7 +8,7 @@ export interface UserRegister {
   fullname: string;
   email: string;
   password: string;
-  career: string;
+  career: string[];
 }
 
 export interface UserCredentials {

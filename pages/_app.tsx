@@ -6,7 +6,6 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createEmotionCache, theme } from '../src/config';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux';
-import { authInterceptor } from '../src/interceptors/auth.interceptor';
 import { LayoutComponent } from '../src/components/common/Layout/Layout';
 import Copyright from '../src/components/Copyright';
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -15,9 +14,6 @@ const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-
-authInterceptor();
-
 export default function MyApp (props: MyAppProps) {
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;

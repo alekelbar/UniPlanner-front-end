@@ -16,10 +16,13 @@ import * as Yup from 'yup';
 
 import { ButtonLink, Link } from '../../src/components';
 import { useAppDispatch } from '../../src/redux/hooks.redux';
-import { startRegisterUser } from '../../src/redux/thunks/auth.thunks';
+import { startUserRegister } from '../../src/redux/thunks/user.thunks';
 import { getNameByID } from '../../src/services';
 import { Career } from '../../src/services/API/Career/career.models';
 import { CareerService } from '../../src/services/API/Career/career.service';
+import { RESPONSES } from '../../src/helpers/interfaces/response-messages';
+import Swal from 'sweetalert2';
+import { error } from 'console';
 
 interface Props {
   careers: Career[];
@@ -44,16 +47,23 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
       password: '',
       repassword: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const { career, email, id: identification, name: fullname, password } = values;
+      const careers = [career];
 
-      dispatch(startRegisterUser({
-        career,
+      const response = await dispatch(startUserRegister({
+        career: careers,
         email,
         identification,
         fullname,
         password
       }));
+
+      if (response !== RESPONSES.SUCCESS) {
+        await Swal.fire('Algo salio mal 😥', response);
+        return;
+      }
+
       router.push('/home');
     },
     validationSchema: Yup.object({
@@ -107,31 +117,31 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           </Grid>
           <Grid container spacing={1} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
               {formik.touched.id && formik.errors.id && (
                 <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
               {formik.touched.name && formik.errors.name && (
                 <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.email} onChange={formik.handleChange} name={'email'} variant='filled' placeholder='Correo Electronico' />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.email} onChange={formik.handleChange} name={'email'} variant='filled' placeholder='Correo Electronico' />
               {formik.touched.email && formik.errors.email && (
                 <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.password} onChange={formik.handleChange} name={'password'} variant='filled' placeholder='Contraseña' type={'password'} />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.password} onChange={formik.handleChange} name={'password'} variant='filled' placeholder='Contraseña' type={'password'} />
               {formik.touched.password && formik.errors.password && (
                 <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>
               )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField onBlur={formik.handleBlur} fullWidth value={formik.values.repassword} onChange={formik.handleChange} name={'repassword'} variant='filled' placeholder='Confirma tu contraseña' type={'password'} />
+              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.repassword} onChange={formik.handleChange} name={'repassword'} variant='filled' placeholder='Confirma tu contraseña' type={'password'} />
               {formik.touched.repassword && formik.errors.repassword && (
                 <Typography variant='caption' color={'error'}>{formik.errors.repassword}</Typography>
               )}
