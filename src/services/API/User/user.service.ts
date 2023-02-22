@@ -108,4 +108,11 @@ export class UserService {
     );
     return data;
   }
+
+  async addCareer(idUser: string, idCareer: string) {
+    const { data } = await this.API.get<Career[]>(
+      `auth/careers/${idCareer}/${idUser}`
+    );
+    return data;
+  }
 }
