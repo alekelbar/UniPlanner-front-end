@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { UserCredentials } from '../../src/services/API/User/users.models';
 import { GetServerSideProps } from 'next';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks.redux';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { useState } from 'react';
 import { Career } from '../../src/services/API/Career/career.models';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Grid, SpeedDial, SpeedDialAction } from '@mui/material';
+import { CareerCard } from '../../src/components/Career/CareerCard';
+import { Box } from '@mui/system';
+import { Add, Edit } from '@mui/icons-material';
 
 interface Props {
   parseToken: UserCredentials;
@@ -38,20 +40,39 @@ const Career: React.FC<Props> = () => {
       </Backdrop>
     );
   }
+
   return (
     <Container maxWidth="lg">
-      {
-        careersState.map(career => (
-          <Typography key={career._id} variant="h4">
-            {career.name}
-          </Typography>
-        ))
-      }
+      <Grid container mt={2}>
+        {
+          careersState.map(career => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>
+              <CareerCard title={career.name} />
+            </Grid>
+          ))
+        }
+      </Grid >
+      <AddCareerButton />
     </Container>
   );
 };
 
 export default Career;
+
+const AddCareerButton: React.FC = () => (
+  <Box>
+    <SpeedDial
+      ariaLabel="Agregar carrera"
+      sx={{ position: 'absolute', bottom: 16, right: 16 }}
+      icon={<Edit />}
+    >
+      <SpeedDialAction
+        icon={<Add />}
+        tooltipTitle={'Agregar una carrera'}
+      />
+    </SpeedDial>
+  </Box>
+);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
