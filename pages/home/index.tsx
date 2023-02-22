@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../src/redux/hooks.redux';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { useState } from 'react';
 import { Career } from '../../src/services/API/Career/career.models';
-import { Box } from '@mui/system';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 interface Props {
   parseToken: UserCredentials;
@@ -29,9 +29,14 @@ const Career: React.FC<Props> = () => {
   }, [careers]);
 
   if (loading) {
-    return <Box component={'div'}>
-      <Typography variant={'h4'}>Loading...</Typography>
-    </Box>;
+    return (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
   }
   return (
     <Container maxWidth="lg">
@@ -42,7 +47,6 @@ const Career: React.FC<Props> = () => {
           </Typography>
         ))
       }
-      <Typography>Hola mundo!</Typography>
     </Container>
   );
 };
