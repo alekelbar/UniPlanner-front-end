@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { UserCredentials } from "../../../services/API/User/users.models";
+import { UserState } from "../../../interfaces/users.interface";
 import { getLocalToken } from "../../../helpers/local-storage";
 
 // Define the initial state using that type
-const initialState: UserCredentials = getLocalToken() || {
+const initialState: UserState = getLocalToken() || {
   token: null,
   user: null,
   error: null,
@@ -15,10 +15,7 @@ export const authSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setAuth: (
-      _: UserCredentials,
-      { payload }: PayloadAction<UserCredentials>
-    ) => {
+    setAuth: (_, { payload }: PayloadAction<UserState>) => {
       return { ...payload };
     },
     onLogOut: (_) => {

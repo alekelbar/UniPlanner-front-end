@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import {
   CareerState,
   Career,
-} from "../../../services/API/Career/career.models";
+} from "../../../interfaces/career.interface";
 
 // Define the initial state using that type
 const initialState: CareerState = {
@@ -20,9 +20,6 @@ export const careerSlice = createSlice({
     setCareers: (state, { payload }: PayloadAction<Career[]>) => {
       return { ...state, careers: payload };
     },
-    setErrors: (state, { payload: error }: PayloadAction<string>) => {
-      return { ...state, error };
-    },
     cleanErrors: (state) => {
       return { ...state, error: null };
     },
@@ -32,6 +29,6 @@ export const careerSlice = createSlice({
   },
 });
 
-export const { setCareers, setErrors, setLoading } = careerSlice.actions;
+export const { setCareers, setLoading } = careerSlice.actions;
 
 export default careerSlice;

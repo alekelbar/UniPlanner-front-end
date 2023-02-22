@@ -1,11 +1,11 @@
 import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { UserCredentials } from '../../src/services/API/User/users.models';
+import { UserState } from '../../src/interfaces/users.interface';
 import { GetServerSideProps } from 'next';
 
 interface Props {
-  parseToken: UserCredentials;
+  parseToken: UserState;
 }
 
 const Profile: React.FC<Props> = () => {

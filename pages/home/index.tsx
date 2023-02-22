@@ -1,29 +1,54 @@
-import React, { useEffect } from 'react';
+import { Backdrop, CircularProgress, Grid } from '@mui/material';
 import Container from '@mui/material/Container';
-import { UserCredentials } from '../../src/services/API/User/users.models';
 import { GetServerSideProps } from 'next';
-import { useAppDispatch, useAppSelector } from '../../src/redux/hooks.redux';
-import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
-import { useState } from 'react';
-import { Career } from '../../src/services/API/Career/career.models';
-import { Backdrop, CircularProgress, Grid, SpeedDial, SpeedDialAction } from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { AddCareerButton } from '../../src/components/Career/AddCareerButton';
+import { AddCareerDialog } from '../../src/components/Career/AddCareerDialog';
 import { CareerCard } from '../../src/components/Career/CareerCard';
-import { Box } from '@mui/system';
-import { Add, Edit } from '@mui/icons-material';
+import { RESPONSES } from '../../src/interfaces/response-messages';
+import { logOut } from '../../src/helpers/local-storage';
+import { Career } from '../../src/interfaces/career.interface';
+import { UserState } from '../../src/interfaces/users.interface';
+import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
+import { onLogOut } from '../../src/redux/slices/auth/authSlice';
+import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
+import { CareerService } from '../../src/services/Career/career.service';
 
 interface Props {
-  parseToken: UserCredentials;
+  parseToken: UserState;
+  allCareers: Career[];
 }
 
-const Career: React.FC<Props> = () => {
+const Career: React.FC<Props> = ({ parseToken, allCareers }) => {
+
   const dispatch = useAppDispatch();
 
   const { careers, loading } = useAppSelector(st => st.career);
   const [careersState, setCareersState] = useState<Career[]>(careers);
 
+  const [open, setOpen] = useState(false);
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  // console.log(parseToken);
+  const router = useRouter();
 
   useEffect(() => {
-    dispatch(startLoadCareers());
+    (async () => {
+      const response = await dispatch(startLoadCareers());
+      if (response == RESPONSES.UNAUTHORIZE) {
+        dispatch(onLogOut());
+        logOut();
+        router.push('/auth');
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -43,7 +68,7 @@ const Career: React.FC<Props> = () => {
 
   return (
     <Container maxWidth="lg">
-      <Grid container mt={2}>
+      <Grid container my={2}>
         {
           careersState.map(career => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>
@@ -52,27 +77,13 @@ const Career: React.FC<Props> = () => {
           ))
         }
       </Grid >
-      <AddCareerButton />
+      <AddCareerButton onAdd={onOpen} />
+      <AddCareerDialog onClose={onClose} open={open} userCareers={careers} allCareers={allCareers} />
     </Container>
   );
 };
 
 export default Career;
-
-const AddCareerButton: React.FC = () => (
-  <Box>
-    <SpeedDial
-      ariaLabel="Agregar carrera"
-      sx={{ position: 'absolute', bottom: 16, right: 16 }}
-      icon={<Edit />}
-    >
-      <SpeedDialAction
-        icon={<Add />}
-        tooltipTitle={'Agregar una carrera'}
-      />
-    </SpeedDial>
-  </Box>
-);
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
@@ -96,9 +107,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
+
+  const service = CareerService.createService("v1");
+  const { data: allCareers } = await service.listAll();
+
   return {
     props: {
       parseToken,
+      allCareers
     }
   };
 };

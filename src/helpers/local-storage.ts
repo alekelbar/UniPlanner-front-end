@@ -1,7 +1,7 @@
-import { UserCredentials } from "../services/API/User/users.models";
+import { UserState } from "../interfaces/users.interface";
 import Cookies from "js-cookie";
 
-export const setLocalToken = (session: UserCredentials) => {
+export const setLocalToken = (session: UserState) => {
   const auth = JSON.stringify(session);
   Cookies.set("token", auth);
 };
@@ -12,4 +12,8 @@ export const getLocalToken = () => {
     return JSON.parse(token);
   }
   return null;
+};
+
+export const logOut = () => {
+  setLocalToken({ error: null, token: null, user: null });
 };

@@ -5,18 +5,18 @@ import {
   Tooltip
 } from '@mui/material';
 import Button from '@mui/material/Button';
-import { ButtonLink, Link } from '../../src/components';
+import { Link } from '../../src/components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getNameByID } from '../../src/services/identificationAPI/index';
 import { useState } from 'react';
-import { useAppDispatch } from '../../src/redux/hooks.redux';
+import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserLogin } from '../../src/redux/thunks/user.thunks';
 import { GetServerSideProps } from 'next';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import { RESPONSES } from '../../src/helpers/interfaces/response-messages';
+import { RESPONSES } from '../../src/interfaces/response-messages';
 import Swal from 'sweetalert2';
+import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
 const LoginPage: React.FC = () => {
 
@@ -68,8 +68,6 @@ const LoginPage: React.FC = () => {
       setMessageName('Identificación no encontrada');
     }
   };
-
-  console.log(formik.errors);
 
   return (
     <Grid container sx={{ display: 'grid', placeContent: 'center' }}>

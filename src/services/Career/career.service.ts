@@ -2,9 +2,9 @@
 
 import { AxiosInstance } from "axios";
 import axios from "axios";
-import { ApiVersion } from "../api-version";
-import { authInterceptor } from "../../../interceptors/auth.interceptor";
-import { Career } from "./career.models";
+import { ApiVersion } from "../../types/api-version";
+import { authInterceptor } from "../../interceptors/auth.interceptor";
+import { Career } from "../../interfaces/career.interface";
 
 export class CareerService {
   private baseUrl: string = `localhost:3000/api/`;

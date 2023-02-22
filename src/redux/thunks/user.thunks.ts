@@ -1,29 +1,24 @@
-import { UserLogin } from "../../services/API";
-import { AppDispatch, RootState } from "../store.redux";
-import { UserService } from "../../services/API/User/user.service";
-import { setAuth } from "../slices/auth/authSlice";
-import { UserRegister } from "../../services/API/User/users.models";
+import Career from "../../../pages/home/index";
+import { RESPONSES } from "../../interfaces/response-messages";
 import { setLocalToken } from "../../helpers/local-storage";
-import { RESPONSES } from "../../helpers/interfaces/response-messages";
-import {
-  setCareers,
-  setErrors,
-  setLoading,
-} from "../slices/Career/careerSlice";
+import { UserLogin, UserRegister } from "../../interfaces/users.interface";
+import { UserService } from "../../services/User/user.service";
+import { setAuth } from "../slices/auth/authSlice";
+import { setCareers, setLoading } from "../slices/Career/careerSlice";
+import { AppDispatch, RootState } from "../store";
 
 const service = UserService.createService("v1");
 
 export const startUserLogin = (login: UserLogin) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { error, token, user } = await service.login(login);
+    const registered = await service.login(login);
 
-    console.log(error, token, user);
-    if (error) {
-      return error;
+    if (registered.error) {
+      return registered.error;
     }
 
-    dispatch(setAuth({ error: null, token, user }));
-    setLocalToken({ error: null, token, user });
+    dispatch(setAuth({ ...registered, error: null }));
+    setLocalToken({ ...registered, error: null });
 
     return RESPONSES.SUCCESS;
   };
@@ -31,14 +26,15 @@ export const startUserLogin = (login: UserLogin) => {
 
 export const startUserRegister = (register: UserRegister) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { error, token, user } = await service.register(register);
+    const registered = await service.register(register);
 
-    if (error) {
-      return error;
+    if (registered.error) {
+      return registered.error;
     }
 
-    dispatch(setAuth({ error: null, token, user }));
-    setLocalToken({ error: null, token, user });
+    dispatch(setAuth({ ...registered, error: null }));
+    setLocalToken({ ...registered, error: null });
+
     return RESPONSES.SUCCESS;
   };
 };
@@ -52,14 +48,17 @@ export const startLoadCareers = () => {
     } = getState();
 
     if (!user) {
-      dispatch(setErrors("No existe ningun usuario autenticado"));
-      return RESPONSES.ERROR;
+      return RESPONSES.UNAUTHORIZE;
     }
 
     const careers = await service.getCareers(user.identification);
-    dispatch(setCareers(careers));
 
-    dispatch(setLoading());
-    return RESPONSES.SUCCESS;
+    if (typeof careers !== "string") {
+      dispatch(setCareers(careers as Career[]));
+      dispatch(setLoading());
+      return RESPONSES.SUCCESS;
+    }
+
+    return RESPONSES.UNAUTHORIZE;
   };
 };

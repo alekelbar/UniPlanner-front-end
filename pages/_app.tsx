@@ -7,7 +7,7 @@ import { createEmotionCache, theme } from '../src/config';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux';
 import { LayoutComponent } from '../src/components/common/Layout/Layout';
-import Copyright from '../src/components/Copyright';
+import Copyright from '../src/components/common/Copyright';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 

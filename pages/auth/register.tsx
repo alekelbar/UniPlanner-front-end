@@ -15,15 +15,14 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 
 
-import { ButtonLink, Link } from '../../src/components';
-import { useAppDispatch } from '../../src/redux/hooks.redux';
-import { startUserRegister } from '../../src/redux/thunks/user.thunks';
-import { getNameByID } from '../../src/services';
-import { Career } from '../../src/services/API/Career/career.models';
-import { CareerService } from '../../src/services/API/Career/career.service';
-import { RESPONSES } from '../../src/helpers/interfaces/response-messages';
 import Swal from 'sweetalert2';
-import { error } from 'console';
+import { Link } from '../../src/components';
+import { RESPONSES } from '../../src/interfaces/response-messages';
+import { Career } from '../../src/interfaces/career.interface';
+import { useAppDispatch } from '../../src/redux/hooks';
+import { startUserRegister } from '../../src/redux/thunks/user.thunks';
+import { CareerService } from '../../src/services/Career/career.service';
+import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
 interface Props {
   careers: Career[];
@@ -50,10 +49,9 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
     },
     onSubmit: async (values) => {
       const { career, email, id: identification, name: fullname, password } = values;
-      const careers = [career];
 
       const response = await dispatch(startUserRegister({
-        career: careers,
+        careers: [career],
         email,
         identification,
         fullname,

@@ -8,18 +8,18 @@ export interface UserRegister {
   fullname: string;
   email: string;
   password: string;
-  career: string[];
+  careers: string[];
 }
 
-export interface UserCredentials {
-  token: string | null;
-  user: PublicUser | null;
-  error: null | string;
-}
-
-export interface PublicUser {
+export interface UserToken {
   identification: string;
-  id: string;
-  name: string;
+  fullname: string;
   email: string;
+  password: string;
+}
+
+export interface UserState {
+  token: string | null;
+  user: UserToken | null;
+  error: null | string;
 }

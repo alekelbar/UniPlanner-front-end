@@ -1,7 +1,7 @@
 import { SchoolOutlined } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import React from 'react';
-import { SmallLogo } from '../../SmallLogo';
+import { SmallLogo } from '../SmallLogo';
 
 interface NabvarProps {
   onOpen: () => void;

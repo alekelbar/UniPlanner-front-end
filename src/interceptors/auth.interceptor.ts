@@ -9,8 +9,6 @@ export const authInterceptor = (axios: AxiosInstance) => {
     if (token) {
       request.headers.Authorization = token;
     }
-
-    console.log(token);
     return request;
   };
 
