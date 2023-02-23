@@ -25,9 +25,6 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          fontSize: '1rem',
-          fontWeight: 600,
-          borderRadius: '10px',
           padding: '5px 10px',
         },
       },

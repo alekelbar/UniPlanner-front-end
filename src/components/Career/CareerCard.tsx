@@ -9,7 +9,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ title }) => {
   return (
     <Card>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
           {title}
         </Typography>
       </CardContent>

@@ -6,8 +6,8 @@ import { LargeLogo } from '../LargeLogo';
 import { ButtonLink } from '../ButtonLink';
 import { useAppDispatch } from '../../../redux/hooks';
 import { onLogOut } from '../../../redux/slices/auth/authSlice';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import { logOut } from '../../../helpers/local-storage';
 
 interface SideBarProps {
   open: boolean,
@@ -40,7 +40,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
 
   const handleLogOut = () => {
     dispatch(onLogOut());
-    Cookies.remove('token');
+    logOut();
     router.push('/auth');
   };
 
@@ -48,7 +48,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
     <Container onClick={handleClose}>
       <Drawer
         sx={{
-          backdropFilter: 'blur(10px)',
+          backdropFilter: 'blur(3px)',
         }}
         variant='temporary'
         open={open}
@@ -59,7 +59,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
         }}
         ref={drawerRef}
       >
-        <Grid container maxWidth="lg" sx={{ width: '200px' }}>
+        <Grid container maxWidth="lg" sx={{ width: '220px' }}>
 
           <Grid xs={12} item display={'flex'} flexDirection="column" sx={{ placeItems: 'center' }}>
             <LargeLogo />

@@ -6,14 +6,15 @@ import {
   UserRegister,
 } from "../../interfaces/users.interface";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
-import Career from '../../../pages/home/index';
+import Career from "../../../pages/home/index";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
   INTERNAL_ERROR = "Tenemos un error de servidor...",
   INVALID_CREDENTIALS = "Sus credenciales son invalidas",
   INVALID_SESSION = "Su sesión expiro",
-  USER_NOT_REGISTERED = "El usuario no se encuentra registrado",
+  BAD_REQUEST = "¿Esta seguro de enviar la información adecuada?",
+  NOT_FOUND = "No se ha encontrado el recurso",
 }
 
 export class UserService {
@@ -38,10 +39,7 @@ export class UserService {
 
   async login(userLogin: UserLogin): Promise<UserState> {
     try {
-      const { data } = await this.API.post<UserState>(
-        "auth/login",
-        userLogin
-      );
+      const { data } = await this.API.post<UserState>("auth/login", userLogin);
 
       return {
         ...data,
@@ -65,7 +63,7 @@ export class UserService {
           case 400:
             return {
               ...response,
-              error: USER_EXCEPTIONS.USER_NOT_REGISTERED,
+              error: USER_EXCEPTIONS.BAD_REQUEST,
             };
         }
       }
@@ -121,7 +119,7 @@ export class UserService {
 
       switch (error.response.status) {
         case 400:
-          return USER_EXCEPTIONS.USER_NOT_REGISTERED;
+          return USER_EXCEPTIONS.BAD_REQUEST;
         case 401:
           return USER_EXCEPTIONS.INVALID_SESSION;
         default:
@@ -131,9 +129,28 @@ export class UserService {
   }
 
   async addCareer(idUser: string, idCareer: string) {
-    const { data } = await this.API.get<Career[]>(
-      `auth/careers/${idCareer}/${idUser}`
-    );
-    return data;
+    try {
+      const { data } = await this.API.post<Career[]>(
+        `auth/careers/${idCareer}/${idUser}`
+      );
+      console.log(data);
+
+      return data;
+    } catch (error: any) {
+      if (!error.response) {
+        return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          return USER_EXCEPTIONS.BAD_REQUEST;
+        case 401:
+          return USER_EXCEPTIONS.INVALID_SESSION;
+        case 404:
+          return USER_EXCEPTIONS.NOT_FOUND;
+        default:
+          return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+    }
   }
 }

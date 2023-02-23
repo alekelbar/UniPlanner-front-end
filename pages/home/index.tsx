@@ -37,7 +37,6 @@ const Career: React.FC<Props> = ({ parseToken, allCareers }) => {
     setOpen(false);
   };
 
-  // console.log(parseToken);
   const router = useRouter();
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const Career: React.FC<Props> = ({ parseToken, allCareers }) => {
 
   return (
     <Container maxWidth="lg">
-      <Grid container my={2}>
+      <Grid container my={2} spacing={5}>
         {
           careersState.map(career => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>

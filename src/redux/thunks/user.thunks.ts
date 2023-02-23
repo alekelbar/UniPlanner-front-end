@@ -62,3 +62,27 @@ export const startLoadCareers = () => {
     return RESPONSES.UNAUTHORIZE;
   };
 };
+
+export const startAddCareer = (idCareer: string) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // agregando una carrera
+    dispatch(setLoading());
+    const {
+      auth: { user },
+    } = getState();
+
+    if (!user) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    const service = UserService.createService("v1");
+    const response = service.addCareer(user.id, idCareer);
+
+    if (typeof response !== "string") {
+      dispatch(setLoading());
+      return RESPONSES.SUCCESS;
+    }
+
+    return RESPONSES.NOT_FOUND;
+  };
+};
