@@ -23,7 +23,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ title, id }) => {
         router.replace('auth');
         return;
       default:
-        await Swal.fire('Desactivación', 'La carrera fue deshabilida');
+        await Swal.fire('Desactivación', 'La carrera fue inhabilitada');
         return;
     }
   };
@@ -46,7 +46,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ title, id }) => {
           variant='text'
           color='secondary'
           onClick={handleRemove}
-        > Desactivar
+        > inhabilitar
         </Button>
       </CardActions>
     </Card>

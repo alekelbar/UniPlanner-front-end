@@ -16,7 +16,6 @@ export interface UserToken {
   id: string;
   fullname: string;
   email: string;
-  password: string;
 }
 
 export interface UserState {

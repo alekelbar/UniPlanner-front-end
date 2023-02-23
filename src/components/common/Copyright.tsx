@@ -4,10 +4,10 @@ import { Box } from '@mui/system';
 
 export default function Copyright () {
   return (
-    <Box component={'div'} sx={{ position: 'fixed', zIndex: '10', bottom: '2%', left: '2%' }}>
+    <Box component={'div'} sx={{ position: 'sticky', zIndex: '10', my: 2 }}>
       <Typography variant="body2" color="text.secondary" align="center">
         {'Copyright © '}
-        <MuiLink color="inherit" href="https://www.instagram.com/alekelbar/" target={'_blank'}>
+        <MuiLink color="inherit" href="https://linktr.ee/alekelbar" target={'_blank'}>
           alekelbar
         </MuiLink>{' '}
         {new Date().getFullYear()}.

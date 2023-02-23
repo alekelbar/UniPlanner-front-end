@@ -95,8 +95,8 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
       const { data } = await getNameByID(value);
       if (data.resultcount === 1) {
         const { nombre } = data;
-        setMessage(nombre);
-        formik.setFieldValue('name', nombre);
+        setMessage((nombre as string).toLowerCase());
+        formik.setFieldValue('name', (nombre as string).toLowerCase());
         return;
       }
       setMessage('Identificación no encontrada');
@@ -112,42 +112,98 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           <Typography variant='caption' color={'secondary'}>{Message}</Typography>
         </Typography>
         <Grid container spacing={1} flexDirection='column' sx={{ placeItems: 'center' }}>
-          <Grid item>
-          </Grid>
           <Grid container spacing={1} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <Tooltip title="No es obligatorio, pero ayuda para tu seguridad" placement='top-end'>
-                <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.id} onChange={handleIdentification} name={'id'} type={'text'} variant='filled' placeholder='Identificación' />
+              <Tooltip title="No es obligatorio que sea tu cédula real, pero ayuda para que nadie se haga pasar por tí">
+                <TextField
+                  autoComplete='off'
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  value={formik.values.id}
+                  onChange={handleIdentification}
+                  name={'id'}
+                  variant='filled'
+                  helperText="Su número de cédula"
+                  placeholder='Identificación' />
               </Tooltip>
+
               {formik.touched.id && formik.errors.id && (
                 <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
               )}
+
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Tooltip title="Si tu cédula es correcta, se autocompleta" placement='top-end'>
-                <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.name} onChange={formik.handleChange} name={'name'} variant='filled' placeholder='Nombre completo' />
+              <Tooltip title="Puedes modificar tu nombre a tu gusto">
+                <TextField
+                  autoComplete='off'
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  name={'name'}
+                  variant='filled'
+                  helperText="Su nombre completo"
+                  placeholder='Nombre completo' />
               </Tooltip>
+
               {formik.touched.name && formik.errors.name && (
                 <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
               )}
+
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.email} onChange={formik.handleChange} name={'email'} variant='filled' placeholder='Correo Electronico' />
+              <TextField
+                autoComplete='off'
+                onBlur={formik.handleBlur}
+                fullWidth
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                name={'email'}
+                variant='filled'
+                helperText="Su correo electronico"
+                placeholder='Correo Electronico'
+              />
+
               {formik.touched.email && formik.errors.email && (
                 <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
               )}
+
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.password} onChange={formik.handleChange} name={'password'} variant='filled' placeholder='Contraseña' type={'password'} />
+              <TextField
+                autoComplete='off'
+                onBlur={formik.handleBlur}
+                fullWidth
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                name={'password'}
+                variant='filled'
+                helperText="Su contraseña"
+                placeholder='Contraseña' type={'password'}
+              />
+
               {formik.touched.password && formik.errors.password && (
                 <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>
               )}
+
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth value={formik.values.repassword} onChange={formik.handleChange} name={'repassword'} variant='filled' placeholder='Confirma tu contraseña' type={'password'} />
+              <TextField
+                autoComplete='off'
+                onBlur={formik.handleBlur}
+                fullWidth
+                value={formik.values.repassword}
+                onChange={formik.handleChange}
+                name={'repassword'}
+                variant='filled'
+                helperText="Porfavor, confirme su contraseña"
+                placeholder='Confirma tu contraseña' type={'password'}
+              />
+
               {formik.touched.repassword && formik.errors.repassword && (
                 <Typography variant='caption' color={'error'}>{formik.errors.repassword}</Typography>
               )}
+
             </Grid>
           </Grid>
         </Grid>

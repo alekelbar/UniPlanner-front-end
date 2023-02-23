@@ -88,7 +88,7 @@ export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ careers, onClo
                     );
                   })}
                 </Select>
-                <Button sx={{ mt: 2 }} type='submit'>Agregar</Button>
+                <Button variant='contained' sx={{ mt: 2 }} type='submit'>Agregar</Button>
               </Box>
             )
             : (

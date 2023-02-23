@@ -63,7 +63,7 @@ export class UserService {
           case 400:
             return {
               ...response,
-              error: USER_EXCEPTIONS.BAD_REQUEST,
+              error: USER_EXCEPTIONS.INVALID_CREDENTIALS,
             };
         }
       }

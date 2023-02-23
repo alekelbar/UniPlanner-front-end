@@ -21,8 +21,8 @@ interface Page {
   icon: React.ReactNode;
 }
 const pages: Page[] = [
-  { title: 'Carreras', color: 'info', url: "", icon: <School /> },
-  { title: 'Perfil', color: 'info', url: "profile", icon: <Person /> },
+  { title: 'Carreras', color: 'secondary', url: "", icon: <School /> },
+  { title: 'Perfil', color: 'secondary', url: "profile", icon: <Person /> },
 ];
 
 export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
@@ -33,7 +33,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.clientX > 200) {
+    if (event.clientX > 150) {
       onClose();
     }
   };
@@ -59,7 +59,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
         }}
         ref={drawerRef}
       >
-        <Grid container maxWidth="lg" sx={{ width: '220px' }}>
+        <Grid container maxWidth="lg" sx={{ width: '150px' }}>
 
           <Grid xs={12} item display={'flex'} flexDirection="column" sx={{ placeItems: 'center' }}>
             <LargeLogo />
@@ -69,7 +69,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
               return (
                 <Grid item xs={12} key={page.title}>
                   <ButtonLink
-                    buttonVariant='text'
+                    buttonVariant='outlined'
                     children={
                       <>
                         <Typography variant='caption'>{page.title}</Typography>
@@ -77,10 +77,10 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
                       </>
                     }
                     href={`/home/${page.url}`}
-                    fullWidth
-                    linkSx={{ width: '100%', textDecoration: 'none' }}
+                    // fullWidth
                     buttonColor={page.color}
-                    buttonSx={{ display: 'flex', justifyContent: 'space-between' }}
+                    linkSx={{ textDecoration: 'none' }}
+                    buttonSx={{ display: 'flex', justifyContent: 'space-between', px: '5px', py: '2px', width: '95%' }}
                   />
                 </Grid>
               );
@@ -88,8 +88,8 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
             <Grid item xs={12}>
               <Button
                 fullWidth
-                variant='text'
-                sx={{ display: 'flex', justifyContent: 'space-between' }}
+                variant='contained'
+                sx={{ display: 'flex', justifyContent: 'space-between', px: '5px', py: '2px', width: '95%' }}
                 onClick={() => handleLogOut()}
                 color={'warning'}
               >

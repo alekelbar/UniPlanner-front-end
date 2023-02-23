@@ -25,7 +25,10 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
+          fontWeight: "bolder",
+          fontSize: '.8em',
           padding: '5px 10px',
+          textTransform: 'none'
         },
       },
     },
@@ -35,7 +38,8 @@ const theme = createTheme({
         root: {
           // Some CSS
           fontWeight: 700,
-          borderRadius: '10px',
+          borderRadius: '8px',
+          boxShadow: 'none',
           padding: '5px 10px',
         },
         fab: {
@@ -43,7 +47,7 @@ const theme = createTheme({
           fontSize: '20rem',
           fontWeight: 600,
           borderRadius: '10px',
-          padding: '10px 20px',
+          padding: '5px 10px',
         }
       }
     },
@@ -52,9 +56,8 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          fontSize: '1rem',
-          fontWeight: 400,
           borderRadius: '10px',
+          textTransform: 'none'
         },
       },
     }

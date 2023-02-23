@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
+import { Loading } from '../../src/components/common/Loading';
 
 interface Props {
   parseToken: UserState;
@@ -56,12 +57,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 
   if (loading) {
     return (
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Loading />
     );
   }
 

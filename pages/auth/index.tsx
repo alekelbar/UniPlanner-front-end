@@ -43,12 +43,11 @@ const LoginPage: React.FC = () => {
     validationSchema: Yup.object({
       id: Yup
         .string()
-        .required('La identificación es requerida'),
+        .required('Su identificación es requerida'),
       // .matches(/^[1-9]0\d{3}0\d{3}$/, 'el formato adecuado es X0XXX0XXX'),
       password: Yup
         .string()
-        .required('La contraseña es requerida')
-        .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'La contraseña debe ser alfanumérica y tener un mínimo de 8 caracteres')
+        .required('Su contraseña es requerida')
     })
   });
 
@@ -82,11 +81,32 @@ const LoginPage: React.FC = () => {
           </Typography>
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth onChange={handleIdentification} value={formik.values.id} name='id' type={'text'} variant='filled' placeholder='Identificación' />
+              <Tooltip title="Usuaremos los primeros 9 numeros que ingreses para tratar de identificarte">
+                <TextField
+                  autoComplete='off'
+                  onBlur={formik.handleBlur}
+                  fullWidth onChange={handleIdentification}
+                  value={formik.values.id}
+                  name='id'
+                  variant='filled'
+                  placeholder='Identificación'
+                  helperText="Su número de cédula"
+                />
+              </Tooltip>
               {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete='off' onBlur={formik.handleBlur} fullWidth onChange={formik.handleChange} value={formik.values.password} name='password' variant='filled' placeholder='Contraseña' type={'password'} />
+              <TextField
+                autoComplete='off'
+                onBlur={formik.handleBlur}
+                fullWidth onChange={formik.handleChange}
+                value={formik.values.password}
+                name='password'
+                variant='filled'
+                placeholder='Contraseña'
+                type={'password'}
+                helperText="Su contraseña"
+              />
               {formik.touched.password && formik.errors.password && <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>}
             </Grid>
           </Grid>
