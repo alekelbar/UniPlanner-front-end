@@ -20,7 +20,7 @@ interface Props {
   allCareers: Career[];
 }
 
-const Career: React.FC<Props> = ({ parseToken, allCareers }) => {
+const Career: React.FC<Props> = ({ allCareers }) => {
 
   const dispatch = useAppDispatch();
 
@@ -65,19 +65,26 @@ const Career: React.FC<Props> = ({ parseToken, allCareers }) => {
     );
   }
 
+
   return (
     <Container maxWidth="lg">
       <Grid container my={2} spacing={5}>
         {
           careersState.map(career => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>
-              <CareerCard title={career.name} />
+              <CareerCard id={career._id} title={career.name} />
             </Grid>
           ))
         }
       </Grid >
       <AddCareerButton onAdd={onOpen} />
-      <AddCareerDialog onClose={onClose} open={open} userCareers={careers} allCareers={allCareers} />
+      <AddCareerDialog
+        onClose={onClose}
+        open={open} careers={
+          allCareers.filter((e) => {
+            return !!!careers.find((c) => c._id === e._id);
+          })
+        } />
     </Container>
   );
 };

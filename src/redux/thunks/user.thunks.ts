@@ -4,7 +4,12 @@ import { setLocalToken } from "../../helpers/local-storage";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
 import { UserService } from "../../services/User/user.service";
 import { setAuth } from "../slices/auth/authSlice";
-import { setCareers, setLoading } from "../slices/Career/careerSlice";
+import {
+  addCareer,
+  removeCareer,
+  setCareers,
+  setLoading,
+} from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
 
 const service = UserService.createService("v1");
@@ -76,13 +81,39 @@ export const startAddCareer = (idCareer: string) => {
     }
 
     const service = UserService.createService("v1");
-    const response = service.addCareer(user.id, idCareer);
+    const response = await service.addCareer(user.id, idCareer);
 
     if (typeof response !== "string") {
+      dispatch(addCareer(response as Career));
       dispatch(setLoading());
       return RESPONSES.SUCCESS;
     }
 
     return RESPONSES.NOT_FOUND;
+  };
+};
+
+export const startRemoveCareer = (idCareer: string) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // agregando una carrera
+    dispatch(setLoading());
+    const {
+      auth: { user },
+    } = getState();
+
+    if (!user) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    const service = UserService.createService("v1");
+    const response = await service.removeCareer(user.id, idCareer);
+
+    if (typeof response !== "string") {
+      dispatch(removeCareer(response as Career));
+      dispatch(setLoading());
+      return RESPONSES.SUCCESS;
+    }
+
+    return response;
   };
 };

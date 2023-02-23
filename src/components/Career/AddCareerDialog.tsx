@@ -8,27 +8,22 @@ import { useFormik } from 'formik';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { startAddCareer } from '../../redux/thunks/user.thunks';
 import Swal from 'sweetalert2';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { useRouter } from 'next/router';
+import { logOut } from '../../helpers/local-storage';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 
 interface AddCareerDialogProps {
   open: boolean,
   onClose: () => void,
-  userCareers: Career[];
-  allCareers: Career[];
+  careers: Career[];
 }
 
-export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ userCareers, allCareers, onClose, open }) => {
+export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ careers, onClose, open }) => {
 
-  const careersState = allCareers.filter((e) => {
-    return !!!userCareers.find((c) => c._id === e._id);
-  });
+  const router = useRouter();
 
-  if (careersState.length === 0 && open) {
-    Swal.fire('¡Cuidado!', 'Usted ya se encuentra inscrito en todas las carreras disponibles');
-    onClose();
-    return null;
-  }
-
-  const careerSelected = careersState.at(0)?._id;
+  const careerSelected = careers.at(0) ? careers.at(0)?._id : "";
 
   const { user } = useAppSelector(st => st.auth);
 
@@ -43,8 +38,22 @@ export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ userCareers, a
 
       if (user && career) {
         const response = await dispatch(startAddCareer(career));
-        console.log(response);
-        onClose();
+        if (response === RESPONSES.UNAUTHORIZE) {
+          await Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'You are not authorized to perform this action',
+          });
+          logOut();
+          dispatch(onLogOut());
+          router.replace('/auth');
+        }
+
+        if (response !== RESPONSES.SUCCESS) {
+          Swal.fire('¡Cuidado!', response);
+          onClose();
+          return;
+        }
       }
     },
     validationSchema: Yup.object({
@@ -57,31 +66,38 @@ export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ userCareers, a
     <>
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>
-          <Typography component={'span'} variant='button'>Carreras</Typography>
+          <Typography component={'span'} variant='button'>Carreras disponibles</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            <Typography component='span' variant='body1'>Selecciona la carrera que desees</Typography>
-          </DialogContentText>
-          <Box component={'form'} onSubmit={formik.handleSubmit}>
-            <Select
-              fullWidth
-              sx={{ mt: 1 }}
-              value={formik.values.career}
-              label="career"
-              name={'career'}
-              onChange={formik.handleChange}
-            >
-              {careersState?.map(career => {
-                return (
-                  <MenuItem key={career._id} value={career._id}>
-                    {career.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <Button type='submit'>Agregar</Button>
-          </Box>
+          {careerSelected !== ""
+            ? (
+              <Box component={'form'} onSubmit={formik.handleSubmit}>
+                <Select
+                  fullWidth
+                  sx={{ mt: 1 }}
+                  value={formik.values.career}
+                  label="career"
+                  name={'career'}
+                  onChange={formik.handleChange}
+                >
+                  {careers?.map(career => {
+                    return (
+                      <MenuItem key={career._id} value={career._id}>
+                        {career.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+                <Button sx={{ mt: 2 }} type='submit'>Agregar</Button>
+              </Box>
+            )
+            : (
+              <DialogContentText>
+                Parece que ya te encuentras registrado en todas las carreras
+              </DialogContentText>
+            )
+          }
+
         </DialogContent>
       </Dialog>
     </>

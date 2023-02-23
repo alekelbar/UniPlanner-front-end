@@ -130,10 +130,34 @@ export class UserService {
 
   async addCareer(idUser: string, idCareer: string) {
     try {
-      const { data } = await this.API.post<Career[]>(
+      const { data } = await this.API.post<Career>(
         `auth/careers/${idCareer}/${idUser}`
       );
-      console.log(data);
+
+      return data;
+    } catch (error: any) {
+      if (!error.response) {
+        return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          return USER_EXCEPTIONS.BAD_REQUEST;
+        case 401:
+          return USER_EXCEPTIONS.INVALID_SESSION;
+        case 404:
+          return USER_EXCEPTIONS.NOT_FOUND;
+        default:
+          return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+    }
+  }
+
+  async removeCareer(idUser: string, idCareer: string) {
+    try {
+      const { data } = await this.API.delete<Career>(
+        `auth/careers/${idCareer}/${idUser}`
+      );
 
       return data;
     } catch (error: any) {
