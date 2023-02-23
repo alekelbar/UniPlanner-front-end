@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import { Avatar, Divider, Paper, TextField, Tooltip, IconButton } from '@mui/material';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { UserState } from '../../src/interfaces/users.interface';
+import { Stack, Box } from '@mui/system';
+import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
-import { Paper, TextField, Grid, Tooltip, Box } from '@mui/material';
-import { Stack } from '@mui/system';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import { Label } from '@mui/icons-material';
-import Button from '@mui/material/Button';
+import { startUpdateUser } from '../../src/redux/thunks/user.thunks';
+import { RESPONSES } from '../../src/interfaces/response-messages';
+import Swal from 'sweetalert2';
 
 interface Props {
   parseToken: UserState;
@@ -20,9 +22,6 @@ interface Props {
 const Profile: React.FC<Props> = ({ parseToken }) => {
 
   const dispatch = useAppDispatch();
-
-  const [Message, setMessage] = useState("");
-
 
   const router = useRouter();
 
@@ -37,70 +36,55 @@ const Profile: React.FC<Props> = ({ parseToken }) => {
 
     onSubmit: async (values) => {
       const { email, id: identification, name: fullname } = values;
-      console.log(values);
 
-      // const response = await dispatch(startUserRegister({
-      //   careers: [career],
-      //   email,
-      //   identification,
-      //   fullname,
-      //   password
-      // }));
+      const response = await dispatch(startUpdateUser({
+        email,
+        fullname,
+        identification
+      }));
 
-      // if (response !== RESPONSES.SUCCESS) {
-      //   await Swal.fire('Algo salio mal 😥', response);
-      //   return;
-      // }
+      if (response !== RESPONSES.SUCCESS) {
 
-      // router.push('/home');
+        if (response === RESPONSES.UNAUTHORIZE) {
+          await Swal.fire('Algo salio mal 😥', response);
+          router.push('/auth');
+          return;
+        }
+
+        await Swal.fire('Algo salio mal 😥', response);
+        return;
+      }
+
+      await Swal.fire('Tú información fue actualizada con exito 🥰');
+
     },
     validationSchema: Yup.object({
       id: Yup
         .string()
-        .required('La identificación es requerida'),
-      // .matches(/^[1-9]0\d{3}0\d{3}$/, 'el formato adecuado es X0XXX0XXX'),
-      name: Yup.string().required('Su nombre es requerido').min(10, 'Su nombre debe ser más largo'),
+        .required('La identificación es requerida')
+        .min(8, 'Su atributo identificador debe ser de almenos 8 caracteres'),
+      name: Yup.string().required('Su nombre es requerido').min(8, 'Su nombre debe ser más largo'),
       email: Yup.string().email('Formato incorrecto').required('Su correo electrónico es requerido'),
     }),
   });
 
-  const handleIdentification = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    formik.setFieldValue('id', value);
-
-    if (value.length == 9) {
-      //  TODO: petición HTPP para la cedula...
-      const { data } = await getNameByID(value);
-      if (data.resultcount === 1) {
-        const { nombre } = data;
-        setMessage(nombre);
-        formik.setFieldValue('name', nombre);
-        return;
-      }
-      setMessage('Identificación no encontrada');
-    }
-  };
-
-
   return (
     <Container maxWidth="md" sx={{ mt: 2, display: 'block' }}>
       <Paper component={'form'} onSubmit={formik.handleSubmit} sx={{ py: 4, px: 2 }}>
-        <Stack spacing={5} direction="column" sx={{ placeItems: 'center' }}>
-          <Typography align='center' variant="subtitle1" component={'h2'}>
-            Información de perfil
-          </Typography>
-          <Tooltip title={'Validamos tu cedula con los primeros 9 digitos.'}>
-            <TextField
-              autoComplete='off'
-              onBlur={formik.handleBlur}
-              fullWidth value={formik.values.id}
-              onChange={formik.handleChange}
-              name={'id'}
-              type={'text'}
-              variant='filled'
-              helperText="Su Cédula"
-            />
-          </Tooltip>
+        <Stack spacing={1} direction="column" sx={{ placeItems: 'center' }}>
+          <IconButton>
+            <Avatar />
+          </IconButton>
+          <TextField
+            autoComplete='off'
+            onBlur={formik.handleBlur}
+            fullWidth value={formik.values.id}
+            onChange={formik.handleChange}
+            name={'id'}
+            type={'text'}
+            variant='filled'
+            helperText="Cédula"
+          />
           {formik.touched.id && formik.errors.id && (
             <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
           )}
@@ -111,7 +95,7 @@ const Profile: React.FC<Props> = ({ parseToken }) => {
             onChange={formik.handleChange}
             name={'name'}
             variant='filled'
-            helperText="Su nombre"
+            helperText="Nombre"
           />
           {formik.touched.name && formik.errors.name && (
             <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
@@ -123,7 +107,7 @@ const Profile: React.FC<Props> = ({ parseToken }) => {
             onChange={formik.handleChange}
             name={'email'}
             variant='filled'
-            helperText="Su dirección de correo electronico"
+            helperText="Dirección de correo electronico"
           />
           {formik.touched.email && formik.errors.email && (
             <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>

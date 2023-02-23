@@ -23,3 +23,4 @@ export interface UserState {
   user: UserToken | null;
   error: null | string;
 }
+

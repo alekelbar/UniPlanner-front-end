@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { UserState } from "../../../interfaces/users.interface";
+import { UserState, UserToken } from "../../../interfaces/users.interface";
 import { getLocalToken } from "../../../helpers/local-storage";
 
 // Define the initial state using that type
@@ -21,9 +21,12 @@ export const authSlice = createSlice({
     onLogOut: (_) => {
       return initialState;
     },
+    onUpdateUser: (state, { payload }: PayloadAction<UserToken>) => {
+      return { ...state, user: { ...payload } };
+    },
   },
 });
 
-export const { setAuth, onLogOut } = authSlice.actions;
+export const { setAuth, onLogOut, onUpdateUser } = authSlice.actions;
 
 export default authSlice;

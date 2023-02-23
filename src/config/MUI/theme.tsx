@@ -56,7 +56,6 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          borderRadius: '10px',
           textTransform: 'none'
         },
       },

@@ -3,7 +3,7 @@ import { RESPONSES } from "../../interfaces/response-messages";
 import { setLocalToken } from "../../helpers/local-storage";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
 import { UserService } from "../../services/User/user.service";
-import { setAuth } from "../slices/auth/authSlice";
+import { onUpdateUser, setAuth } from "../slices/auth/authSlice";
 import {
   addCareer,
   removeCareer,
@@ -11,6 +11,8 @@ import {
   setLoading,
 } from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
+import { UpdateUser } from "../../models/users/update-user";
+import { User } from "../../models";
 
 const service = UserService.createService("v1");
 
@@ -114,6 +116,29 @@ export const startRemoveCareer = (idCareer: string) => {
       return RESPONSES.SUCCESS;
     }
 
+    return response;
+  };
+};
+
+export const startUpdateUser = (updateUser: UpdateUser) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const {
+      auth: { user },
+    } = getState();
+
+    if (!user) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    const service = UserService.createService("v1");
+    const response = await service.updateUser(updateUser, user.id);
+
+    if (typeof response !== "string") {
+      const { email, fullname, identification, _id } = response as User;
+      dispatch(onUpdateUser({ email, fullname, identification, id: _id }));
+      setLocalToken(getState().auth);
+      return RESPONSES.SUCCESS;
+    }
     return response;
   };
 };

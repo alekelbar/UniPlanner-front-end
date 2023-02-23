@@ -33,7 +33,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.clientX > 150) {
+    if (event.clientX > 240) {
       onClose();
     }
   };
@@ -59,7 +59,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
         }}
         ref={drawerRef}
       >
-        <Grid container maxWidth="lg" sx={{ width: '150px' }}>
+        <Grid container maxWidth="lg" sx={{ width: '240px' }}>
 
           <Grid xs={12} item display={'flex'} flexDirection="column" sx={{ placeItems: 'center' }}>
             <LargeLogo />
@@ -72,15 +72,26 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
                     buttonVariant='outlined'
                     children={
                       <>
-                        <Typography variant='caption'>{page.title}</Typography>
+                        <Typography
+                          variant='subtitle1'
+                        >
+                          {page.title}
+                        </Typography>
                         {page.icon}
                       </>
                     }
                     href={`/home/${page.url}`}
-                    // fullWidth
                     buttonColor={page.color}
-                    linkSx={{ textDecoration: 'none' }}
-                    buttonSx={{ display: 'flex', justifyContent: 'space-between', px: '5px', py: '2px', width: '95%' }}
+                    linkSx={{
+                      textDecoration: 'none',
+                    }}
+                    fullWidth
+                    buttonSx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      px: '5px',
+                      py: '2px',
+                    }}
                   />
                 </Grid>
               );
@@ -89,11 +100,20 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
               <Button
                 fullWidth
                 variant='contained'
-                sx={{ display: 'flex', justifyContent: 'space-between', px: '5px', py: '2px', width: '95%' }}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  px: '5px',
+                  py: '2px',
+                }}
                 onClick={() => handleLogOut()}
                 color={'warning'}
               >
-                <Typography variant='caption'>{'Salir'}</Typography>
+                <Typography
+                  variant='subtitle1'
+                >
+                  {'Salir'}
+                </Typography>
                 <Logout />
               </Button>
             </Grid>

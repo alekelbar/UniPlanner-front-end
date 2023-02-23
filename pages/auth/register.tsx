@@ -68,8 +68,8 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
     validationSchema: Yup.object({
       id: Yup
         .string()
-        .required('La identificación es requerida'),
-      // .matches(/^[1-9]0\d{3}0\d{3}$/, 'el formato adecuado es X0XXX0XXX'),
+        .required('La identificación es requerida')
+        .min(8, 'Su atributo identificador debe ser de almenos 8 caracteres'),
       password: Yup
         .string()
         .required('La contraseña es requerida')
@@ -80,7 +80,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
         .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, 'La contraseña debe ser alfanumérica y tener un mínimo de 8 caracteres')
         .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
 
-      name: Yup.string().required('Su nombre es requerido').min(10, 'Su nombre debe ser más largo'),
+      name: Yup.string().required('Su nombre es requerido').min(8, 'Su nombre debe ser más largo'),
       email: Yup.string().email('Formato incorrecto').required('Su correo electrónico es requerido'),
       career: Yup.string().min(1, 'Porfavor seleccione una carrera').required('Su carrera es requerida')
     }),

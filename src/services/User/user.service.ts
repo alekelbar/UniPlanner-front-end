@@ -7,6 +7,7 @@ import {
 } from "../../interfaces/users.interface";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import Career from "../../../pages/home/index";
+import { UpdateUser, User } from "../../models";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -15,6 +16,7 @@ export enum USER_EXCEPTIONS {
   INVALID_SESSION = "Su sesión expiro",
   BAD_REQUEST = "¿Esta seguro de enviar la información adecuada?",
   NOT_FOUND = "No se ha encontrado el recurso",
+  ALREADY_EXIST = "Ya se encuentra registrado un usuario con ese documento",
 }
 
 export class UserService {
@@ -172,6 +174,33 @@ export class UserService {
           return USER_EXCEPTIONS.INVALID_SESSION;
         case 404:
           return USER_EXCEPTIONS.NOT_FOUND;
+        default:
+          return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+    }
+  }
+
+  async updateUser(updateUser: UpdateUser, id: string) {
+    console.log(updateUser);
+
+    try {
+      const { data } = await this.API.patch<User>(
+        `auth/user/${id}`,
+        updateUser
+      );
+
+      return data;
+    } catch (error: any) {
+      if (!error.response) {
+        return USER_EXCEPTIONS.INTERNAL_ERROR;
+      }
+      
+      console.log(error.response);
+      switch (error.response.status) {
+        case 400:
+          return USER_EXCEPTIONS.ALREADY_EXIST;
+        case 401:
+          return USER_EXCEPTIONS.INVALID_SESSION;
         default:
           return USER_EXCEPTIONS.INTERNAL_ERROR;
       }
