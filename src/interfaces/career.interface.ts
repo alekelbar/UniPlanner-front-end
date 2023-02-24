@@ -5,6 +5,7 @@ export interface Career {
 
 export interface CareerState {
   careers: Career[];
-  error: null | string;
+  error: string | null;
   loading: boolean;
+  selected: Career | null;
 }

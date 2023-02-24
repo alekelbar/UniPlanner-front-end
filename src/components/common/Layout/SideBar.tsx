@@ -20,7 +20,7 @@ interface Page {
   icon: React.ReactNode;
 }
 const pages: Page[] = [
-  { title: 'Carreras', color: 'text.primary', url: "career", icon: <School sx={{ color: 'text.primary' }} /> },
+  { title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
   { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
 ];
 

@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
         return;
       }
 
-      router.replace('/home/career');
+      router.replace('/home/careers');
     },
     validationSchema: Yup.object({
       id: Yup

@@ -7,6 +7,7 @@ const initialState: CareerState = {
   careers: [],
   error: null,
   loading: false,
+  selected: null,
 };
 
 export const careerSlice = createSlice({
@@ -29,10 +30,13 @@ export const careerSlice = createSlice({
     removeCareer: (state, { payload }: PayloadAction<Career>) => {
       state.careers = state.careers.filter((e) => e._id !== payload._id);
     },
+    setSelectedCareer: (state, { payload }: PayloadAction<Career>) => {
+      state.selected = payload;
+    },
   },
 });
 
-export const { setCareers, setLoading, addCareer, removeCareer } =
+export const { setCareers, setLoading, addCareer, removeCareer, setSelectedCareer } =
   careerSlice.actions;
 
 export default careerSlice;

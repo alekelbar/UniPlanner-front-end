@@ -68,7 +68,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
         {
           careersState.map(career => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>
-              <CareerCard id={career._id} title={career.name} />
+              <CareerCard career={career} />
             </Grid>
           ))
         }

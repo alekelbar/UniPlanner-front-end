@@ -53,6 +53,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
           onClose();
           return;
         }
+        onClose();
       }
     },
     validationSchema: Yup.object({

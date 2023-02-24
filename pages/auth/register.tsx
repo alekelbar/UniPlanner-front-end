@@ -63,7 +63,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
         return;
       }
 
-      router.push('/home/career');
+      router.push('/home/careers');
     },
     validationSchema: Yup.object({
       id: Yup
