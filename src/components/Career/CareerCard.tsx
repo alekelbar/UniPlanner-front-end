@@ -1,18 +1,16 @@
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
-import React from 'react';
+import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
 import { startRemoveCareer } from '../../redux/thunks/user.thunks';
-import { useRouter } from 'next/router';
-import Swal from 'sweetalert2';
 
 interface CareerCardProps {
   title: string;
   id: string;
 }
 
-export const CareerCard: React.FC<CareerCardProps> = ({ title, id }) => {
-
+export function CareerCard ({ title, id }: CareerCardProps) : JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -51,4 +49,4 @@ export const CareerCard: React.FC<CareerCardProps> = ({ title, id }) => {
       </CardActions>
     </Card>
   );
-};
+}

@@ -1,12 +1,11 @@
 import { School } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import React from 'react';
 
 interface NabvarProps {
   onOpen: () => void;
 }
 
-export const Navbar: React.FC<NabvarProps> = ({ onOpen }) => {
+export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
 
   return (
     <AppBar position='static'>
@@ -22,4 +21,4 @@ export const Navbar: React.FC<NabvarProps> = ({ onOpen }) => {
       </Toolbar>
     </AppBar>
   );
-};
+}

@@ -1,19 +1,18 @@
-import { Avatar, Divider, Paper, TextField, Tooltip, IconButton } from '@mui/material';
+import { Avatar, IconButton, Paper, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Stack, Box } from '@mui/system';
+import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
-import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 import { startUpdateUser } from '../../src/redux/thunks/user.thunks';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import Swal from 'sweetalert2';
 
 interface Props {
   parseToken: UserState;

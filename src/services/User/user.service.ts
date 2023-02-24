@@ -1,13 +1,11 @@
 import axios, { AxiosInstance } from "axios";
-import { ApiVersion } from "../../types/api-version";
-import {
-  UserLogin,
-  UserState,
-  UserRegister,
-} from "../../interfaces/users.interface";
-import { authInterceptor } from "../../interceptors/auth.interceptor";
 import Career from "../../../pages/home/career";
+import { authInterceptor } from "../../interceptors/auth.interceptor";
+import {
+  UserLogin, UserRegister, UserState
+} from "../../interfaces/users.interface";
 import { UpdateUser, User } from "../../models";
+import { ApiVersion } from "../../types/api-version";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",

@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import Container from '@mui/material/Container';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -6,15 +6,15 @@ import React, { useEffect, useState } from 'react';
 import { AddCareerButton } from '../../src/components/Career/AddCareerButton';
 import { AddCareerDialog } from '../../src/components/Career/AddCareerDialog';
 import { CareerCard } from '../../src/components/Career/CareerCard';
-import { RESPONSES } from '../../src/interfaces/response-messages';
+import { Loading } from '../../src/components/common/Loading';
 import { logOut } from '../../src/helpers/local-storage';
 import { Career } from '../../src/interfaces/career.interface';
+import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
-import { Loading } from '../../src/components/common/Loading';
 
 interface Props {
   parseToken: UserState;

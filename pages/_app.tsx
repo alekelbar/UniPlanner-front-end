@@ -1,13 +1,13 @@
-import Head from 'next/head';
-import { AppProps } from 'next/app';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
-import { createEmotionCache, theme } from '../src/config';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
 import { Provider } from 'react-redux';
-import { store } from '../src/redux';
-import { LayoutComponent } from '../src/components/common/Layout/Layout';
 import Copyright from '../src/components/common/Copyright';
+import { LayoutComponent } from '../src/components/common/Layout/Layout';
+import { createEmotionCache, theme } from '../src/config';
+import { store } from '../src/redux';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 

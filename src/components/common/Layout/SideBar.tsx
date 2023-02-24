@@ -1,13 +1,11 @@
 import { Logout, Person, School } from '@mui/icons-material';
-import { Drawer, Grid, Typography, Button, Divider, IconButton, Stack } from '@mui/material';
+import { Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
+import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
-import { LargeLogo } from '../LargeLogo';
-import { ButtonLink } from '../ButtonLink';
+import { logOut } from '../../../helpers/local-storage';
 import { useAppDispatch } from '../../../redux/hooks';
 import { onLogOut } from '../../../redux/slices/auth/authSlice';
-import { useRouter } from 'next/router';
-import { logOut } from '../../../helpers/local-storage';
 import Link from '../Link';
 
 interface SideBarProps {
@@ -26,8 +24,7 @@ const pages: Page[] = [
   { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
 ];
 
-export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
-
+export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -129,4 +126,4 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
     </Container >
 
   );
-};
+}

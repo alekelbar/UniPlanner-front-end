@@ -1,5 +1,5 @@
-import { UserState } from "../interfaces/users.interface";
 import Cookies from "js-cookie";
+import { UserState } from "../interfaces/users.interface";
 
 export const setLocalToken = (session: UserState) => {
   const auth = JSON.stringify(session);

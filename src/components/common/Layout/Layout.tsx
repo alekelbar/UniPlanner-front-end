@@ -1,15 +1,13 @@
-import React from 'react';
-import { SideBar } from './SideBar';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { Navbar } from './navbar';
+import { SideBar } from './SideBar';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export const LayoutComponent: React.FC<LayoutProps> = ({ children }) => {
-
+export function LayoutComponent ({ children }: LayoutProps): JSX.Element {
   const { pathname } = useRouter();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -35,4 +33,4 @@ export const LayoutComponent: React.FC<LayoutProps> = ({ children }) => {
       {children}
     </>
   );
-};
+}

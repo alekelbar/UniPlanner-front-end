@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { UserState, UserToken } from "../../../interfaces/users.interface";
+import { createSlice } from "@reduxjs/toolkit";
 import { getLocalToken } from "../../../helpers/local-storage";
+import { UserState, UserToken } from "../../../interfaces/users.interface";
 
 // Define the initial state using that type
 const initialState: UserState = getLocalToken() || {

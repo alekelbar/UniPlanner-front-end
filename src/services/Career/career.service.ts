@@ -1,10 +1,9 @@
 //localhost:3000/api/v1/careers/all
 
-import { AxiosInstance } from "axios";
-import axios from "axios";
-import { ApiVersion } from "../../types/api-version";
+import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { Career } from "../../interfaces/career.interface";
+import { ApiVersion } from "../../types/api-version";
 
 export class CareerService {
   private baseUrl: string = `localhost:3000/api/`;

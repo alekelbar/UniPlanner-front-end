@@ -2,16 +2,16 @@ import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, MenuItem
 import { Box } from '@mui/system';
 import React from 'react';
 
-import { Career } from '../../interfaces/career.interface';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { startAddCareer } from '../../redux/thunks/user.thunks';
-import Swal from 'sweetalert2';
-import { RESPONSES } from '../../interfaces/response-messages';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
+import { Career } from '../../interfaces/career.interface';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { startAddCareer } from '../../redux/thunks/user.thunks';
 
 interface AddCareerDialogProps {
   open: boolean,
@@ -19,8 +19,7 @@ interface AddCareerDialogProps {
   careers: Career[];
 }
 
-export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ careers, onClose, open }) => {
-
+export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProps): JSX.Element {
   const router = useRouter();
 
   const careerSelected = careers.at(0) ? careers.at(0)?._id : "";
@@ -102,4 +101,5 @@ export const AddCareerDialog: React.FC<AddCareerDialogProps> = ({ careers, onClo
       </Dialog>
     </>
   );
-};
+}
+

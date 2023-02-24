@@ -1,4 +1,4 @@
-import { InternalAxiosRequestConfig, AxiosInstance } from "axios";
+import { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { store } from "../redux";
 
 export const authInterceptor = (axios: AxiosInstance) => {

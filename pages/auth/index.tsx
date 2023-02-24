@@ -1,21 +1,18 @@
 import {
-  Grid, TextField,
-  Typography,
-  Divider,
-  Tooltip
+  Divider, Grid, TextField, Tooltip, Typography
 } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Link } from '../../src/components';
+import { Box } from '@mui/system';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import { Link } from '../../src/components';
+import { RESPONSES } from '../../src/interfaces/response-messages';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserLogin } from '../../src/redux/thunks/user.thunks';
-import { GetServerSideProps } from 'next';
-import { Box } from '@mui/system';
-import { useRouter } from 'next/router';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import Swal from 'sweetalert2';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
 const LoginPage: React.FC = () => {
