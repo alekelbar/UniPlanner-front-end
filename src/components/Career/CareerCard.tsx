@@ -44,7 +44,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ title, id }) => {
         </Button>
         <Button
           variant='text'
-          color='secondary'
+          color='primary'
           onClick={handleRemove}
         > inhabilitar
         </Button>

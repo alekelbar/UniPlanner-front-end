@@ -63,7 +63,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
         return;
       }
 
-      router.push('/home');
+      router.push('/home/career');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -114,7 +114,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
         <Grid container spacing={1} flexDirection='column' sx={{ placeItems: 'center' }}>
           <Grid container spacing={1} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <Tooltip title="No es obligatorio que sea tu cédula real, pero ayuda para que nadie se haga pasar por tí">
+              <Tooltip title="Te recomendamos usar tú cedula para identificarte" placement='top'>
                 <TextField
                   autoComplete='off'
                   onBlur={formik.handleBlur}
@@ -123,7 +123,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
                   onChange={handleIdentification}
                   name={'id'}
                   variant='filled'
-                  helperText="Su número de cédula"
+                  helperText="Un identificador único"
                   placeholder='Identificación' />
               </Tooltip>
 
@@ -243,9 +243,9 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           <Box mt={1}>
             <Link
               href='/auth'
-              sx={{ listStyle: 'none', mt: .5 }}
+              sx={{ listStyle: 'none', mt: .5, color: 'text.secondary' }}
             >
-              <Typography variant='caption' align='center'>
+              <Typography variant='body1' align='center'>
                 ¿Ya te encuentras registrado?
               </Typography>
             </Link>
@@ -268,7 +268,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (Object.keys(parseToken).length >= 3 && parseToken.token !== null) {
       return {
         redirect: {
-          destination: '/home',
+          destination: '/home/career',
           permanent: false,
         },
       };

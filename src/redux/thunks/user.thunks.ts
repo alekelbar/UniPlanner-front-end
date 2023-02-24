@@ -1,4 +1,4 @@
-import Career from "../../../pages/home/index";
+import Career from "../../../pages/home/career";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { setLocalToken } from "../../helpers/local-storage";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";

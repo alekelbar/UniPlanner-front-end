@@ -1,5 +1,6 @@
 import { Roboto } from "@next/font/google";
 import { createTheme } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
 
 export const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -11,13 +12,24 @@ export const roboto = Roboto({
 // Create a theme instance.
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#A31E32",
+      main: '#a31e32',
+      light: "#da535b",
+      dark: "#6d000c",
     },
+    secondary: {
+      main: '#455a64',
+      light: "#718792",
+      dark: "#1c313a",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "#ffffff"
+    }
   },
   typography: {
-    fontFamily: roboto.style.fontFamily,
+    fontFamily: [roboto.style.fontFamily].join(','),
   },
   components: {
     MuiButton: {
@@ -25,9 +37,6 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          fontWeight: "bolder",
-          fontSize: '.8em',
-          padding: '5px 10px',
           textTransform: 'none'
         },
       },
@@ -37,17 +46,9 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          fontWeight: 700,
-          borderRadius: '8px',
-          boxShadow: 'none',
-          padding: '5px 10px',
         },
         fab: {
           // Some CSS
-          fontSize: '20rem',
-          fontWeight: 600,
-          borderRadius: '10px',
-          padding: '5px 10px',
         }
       }
     },
@@ -56,7 +57,8 @@ const theme = createTheme({
         // Name of the slot
         root: {
           // Some CSS
-          textTransform: 'none'
+          textTransform: 'none',
+          fontFamily: 'Roboto'
         },
       },
     }

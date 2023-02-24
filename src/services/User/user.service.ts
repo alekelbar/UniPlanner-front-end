@@ -6,7 +6,7 @@ import {
   UserRegister,
 } from "../../interfaces/users.interface";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
-import Career from "../../../pages/home/index";
+import Career from "../../../pages/home/career";
 import { UpdateUser, User } from "../../models";
 
 export enum USER_EXCEPTIONS {

@@ -1,5 +1,5 @@
 import { Logout, Person, School } from '@mui/icons-material';
-import { Drawer, Grid, Typography, Button } from '@mui/material';
+import { Drawer, Grid, Typography, Button, Divider, IconButton, Stack } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useRef } from 'react';
 import { LargeLogo } from '../LargeLogo';
@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { onLogOut } from '../../../redux/slices/auth/authSlice';
 import { useRouter } from 'next/router';
 import { logOut } from '../../../helpers/local-storage';
+import Link from '../Link';
 
 interface SideBarProps {
   open: boolean,
@@ -17,12 +18,12 @@ interface SideBarProps {
 interface Page {
   title: string,
   url: string,
-  color: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning" | undefined,
+  color: string;
   icon: React.ReactNode;
 }
 const pages: Page[] = [
-  { title: 'Carreras', color: 'secondary', url: "", icon: <School /> },
-  { title: 'Perfil', color: 'secondary', url: "profile", icon: <Person /> },
+  { title: 'Carreras', color: 'text.primary', url: "career", icon: <School sx={{ color: 'text.primary' }} /> },
+  { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
 ];
 
 export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
@@ -33,7 +34,7 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.clientX > 240) {
+    if (event.clientX > 175) {
       onClose();
     }
   };
@@ -59,40 +60,40 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
         }}
         ref={drawerRef}
       >
-        <Grid container maxWidth="lg" sx={{ width: '240px' }}>
+        <Grid container maxWidth="lg" sx={{ width: '175px' }}>
 
           <Grid xs={12} item display={'flex'} flexDirection="column" sx={{ placeItems: 'center' }}>
-            <LargeLogo />
+            <Typography
+              variant='h1'
+            >
+              GE
+            </Typography>
           </Grid>
           <Grid container spacing={1} >
             {pages.map(page => {
               return (
                 <Grid item xs={12} key={page.title}>
-                  <ButtonLink
-                    buttonVariant='outlined'
-                    children={
-                      <>
-                        <Typography
-                          variant='subtitle1'
-                        >
-                          {page.title}
-                        </Typography>
-                        {page.icon}
-                      </>
-                    }
+                  <Link
                     href={`/home/${page.url}`}
-                    buttonColor={page.color}
-                    linkSx={{
+                    sx={{
+                      width: '100%',
+                      display: 'block',
+                      color: page.color,
                       textDecoration: 'none',
+                      backgroundColor: (router.pathname.includes(page.url)) ? ({ palette: { primary } }) => primary.main : "",
                     }}
-                    fullWidth
-                    buttonSx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      px: '5px',
-                      py: '2px',
-                    }}
-                  />
+                  >
+                    <Stack sx={{ placeItems: 'center', p: 2 }}>
+                      <Typography
+                        sx={{
+                          color: page.color,
+                        }}
+                        align="center"
+                      >{page.title}</Typography>
+                      {page.icon}
+                    </Stack>
+                  </Link>
+                  <Divider />
                 </Grid>
               );
             })}
@@ -104,18 +105,23 @@ export const SideBar: React.FC<SideBarProps> = ({ onClose, open }) => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   px: '5px',
-                  py: '2px',
+                  py: '10px',
                 }}
                 onClick={() => handleLogOut()}
-                color={'warning'}
+                color={'secondary'}
               >
                 <Typography
                   variant='subtitle1'
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'white'
+                  }}
                 >
                   {'Salir'}
                 </Typography>
                 <Logout />
               </Button>
+              <Divider />
             </Grid>
           </Grid>
         </Grid>

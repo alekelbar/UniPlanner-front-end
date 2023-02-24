@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
         return;
       }
 
-      router.replace('/home');
+      router.replace('/home/career');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -77,12 +77,12 @@ const LoginPage: React.FC = () => {
             Ingreso
             <Divider sx={{ mt: 1 }} />
             <Tooltip title="Tú cedula solo es una medida de seguridad, pero puedes acceder con otro numero que te identifiqué solo a tí." placement='top-end'>
-              <Typography variant='caption' color={'secondary'}>{messageName}</Typography>
+              <Typography variant='caption' color={'text.primary'}>{messageName}</Typography>
             </Tooltip>
           </Typography>
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12} sm={6}>
-              <Tooltip title="Usuaremos los primeros 9 numeros que ingreses para tratar de identificarte">
+              <Tooltip title="Te recomendamos usar tú cedula para identificarte" placement='top'>
                 <TextField
                   autoComplete='off'
                   onBlur={formik.handleBlur}
@@ -91,7 +91,7 @@ const LoginPage: React.FC = () => {
                   name='id'
                   variant='filled'
                   placeholder='Identificación'
-                  helperText="Su número de cédula"
+                  helperText="Un identificador único"
                 />
               </Tooltip>
               {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>}
@@ -121,9 +121,9 @@ const LoginPage: React.FC = () => {
           <Box mt={1}>
             <Link
               href='/auth/register'
-              sx={{ listStyle: 'none', mt: .5, width: '100' }}
+              sx={{ listStyle: 'none', mt: .5, width: '100', color: 'text.secondary' }}
             >
-              <Typography variant='caption' align='center'>
+              <Typography variant='body1' align='center'>
                 ¿Todavía no tienes una cuenta?
               </Typography>
             </Link>
@@ -146,7 +146,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (Object.keys(parseToken).length >= 3 && parseToken.token !== null) {
       return {
         redirect: {
-          destination: '/home',
+          destination: '/home/career',
           permanent: false,
         },
       };
