@@ -136,29 +136,17 @@ export default LoginPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
   if (token) {
-    const parseToken = JSON.parse(token);
-
-    if (Object.keys(parseToken).length >= 3 && parseToken.token !== null) {
-      return {
-        redirect: {
-          destination: '/home/career',
-          permanent: false,
-        },
-      };
-    }
-
     return {
-      props: {
-        parseToken,
-      }
+      redirect: {
+        destination: '/home/careers',
+        permanent: false,
+      },
     };
   }
 
   return {
     props: {
-
     },
   };
 };

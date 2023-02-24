@@ -89,19 +89,7 @@ export default Career;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
   if (!token) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false,
-      },
-    };
-  }
-
-  const parseToken = JSON.parse(token);
-
-  if (Object.keys(parseToken).length < 3 || parseToken.token === null) {
     return {
       redirect: {
         destination: '/auth',
@@ -115,7 +103,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      parseToken,
       allCareers
     }
   };

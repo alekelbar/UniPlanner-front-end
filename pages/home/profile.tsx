@@ -124,21 +124,8 @@ const Profile: React.FC<Props> = ({ parseToken }) => {
 export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
   const { token } = ctx.req.cookies;
-
   if (!token) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false,
-      },
-    };
-  }
-
-  const parseToken = JSON.parse(token);
-
-  if (Object.keys(parseToken).length < 3) {
     return {
       redirect: {
         destination: '/auth',
@@ -149,7 +136,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      parseToken,
     }
   };
 };

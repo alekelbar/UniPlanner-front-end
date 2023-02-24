@@ -1,13 +1,19 @@
 import Cookies from "js-cookie";
+import { CoursesState } from "../interfaces/course.interface";
 import { UserState } from "../interfaces/users.interface";
 export enum StorageKeys {
-  token = 'token',
-  courses = ''
+  token = "token",
+  courses = "",
 }
 
 export const setLocalToken = (session: UserState, key: string) => {
   const auth = JSON.stringify(session);
   Cookies.set(key, auth);
+};
+
+export const setLocalCourses = (session: CoursesState, key: string) => {
+  const auth = JSON.stringify(session);
+  localStorage.setItem(key, auth);
 };
 
 export const getLocalToken = () => {
@@ -19,5 +25,5 @@ export const getLocalToken = () => {
 };
 
 export const logOut = () => {
-  setLocalToken({ error: null, token: null, user: null }, "token");
+  Cookies.remove("token");
 };

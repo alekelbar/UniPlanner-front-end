@@ -259,20 +259,14 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
 export default RegisterPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
   const { token } = ctx.req.cookies;
-
   if (token) {
-    const parseToken = JSON.parse(token);
-
-    if (Object.keys(parseToken).length >= 3 && parseToken.token !== null) {
-      return {
-        redirect: {
-          destination: '/home/career',
-          permanent: false,
-        },
-      };
-    }
+    return {
+      redirect: {
+        destination: '/home/careers',
+        permanent: false,
+      },
+    };
   }
 
   const service = CareerService.createService("v1");

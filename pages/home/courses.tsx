@@ -10,7 +10,7 @@ interface CoursesProps {
 }
 
 export default function Courses ({ parseToken }: CoursesProps) {
-  
+
   const { selected } = useAppSelector(st => st.career);
   const router = useRouter();
 
@@ -34,7 +34,6 @@ export default function Courses ({ parseToken }: CoursesProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
   if (!token) {
     return {
       redirect: {
@@ -44,21 +43,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const parseToken = JSON.parse(token);
-
-  if (Object.keys(parseToken).length < 3 || parseToken.token === null) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false,
-      },
-    };
-  }
-
-
   return {
     props: {
-      parseToken,
     }
   };
 };
