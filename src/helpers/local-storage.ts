@@ -1,9 +1,13 @@
 import Cookies from "js-cookie";
 import { UserState } from "../interfaces/users.interface";
+export enum StorageKeys {
+  token = 'token',
+  courses = ''
+}
 
-export const setLocalToken = (session: UserState) => {
+export const setLocalToken = (session: UserState, key: string) => {
   const auth = JSON.stringify(session);
-  Cookies.set("token", auth);
+  Cookies.set(key, auth);
 };
 
 export const getLocalToken = () => {
@@ -15,5 +19,5 @@ export const getLocalToken = () => {
 };
 
 export const logOut = () => {
-  setLocalToken({ error: null, token: null, user: null });
+  setLocalToken({ error: null, token: null, user: null }, "token");
 };

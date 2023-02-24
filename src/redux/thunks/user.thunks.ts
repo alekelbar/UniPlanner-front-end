@@ -11,8 +11,8 @@ import {
   setLoading,
 } from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
-import { UpdateUser } from "../../models/users/update-user";
-import { User } from "../../models";
+import { UpdateUser } from "../../types/users/update-user";
+import { User } from '../../types/users/user';
 
 const service = UserService.createService("v1");
 
@@ -25,7 +25,7 @@ export const startUserLogin = (login: UserLogin) => {
     }
 
     dispatch(setAuth({ ...registered, error: null }));
-    setLocalToken({ ...registered, error: null });
+    setLocalToken({ ...registered, error: null }, "token");
 
     return RESPONSES.SUCCESS;
   };
@@ -40,7 +40,7 @@ export const startUserRegister = (register: UserRegister) => {
     }
 
     dispatch(setAuth({ ...registered, error: null }));
-    setLocalToken({ ...registered, error: null });
+    setLocalToken({ ...registered, error: null }, "token");
 
     return RESPONSES.SUCCESS;
   };
@@ -136,7 +136,7 @@ export const startUpdateUser = (updateUser: UpdateUser) => {
     if (typeof response !== "string") {
       const { email, fullname, identification, _id } = response as User;
       dispatch(onUpdateUser({ email, fullname, identification, id: _id }));
-      setLocalToken(getState().auth);
+      setLocalToken(getState().auth, "token");
       return RESPONSES.SUCCESS;
     }
     return response;

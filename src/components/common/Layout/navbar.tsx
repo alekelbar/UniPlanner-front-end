@@ -1,5 +1,6 @@
 import { School } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import Link from '../Link';
 
 interface NabvarProps {
   onOpen: () => void;
@@ -16,7 +17,9 @@ export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
           <School />
         </IconButton>
         <Typography variant="button" color="inherit">
-          Gestión de entregables
+          <Link href={'/home/careers'} sx={{ color: 'text.primary' }}>
+            Gestión de entregables
+          </Link>
         </Typography>
       </Toolbar>
     </AppBar>
