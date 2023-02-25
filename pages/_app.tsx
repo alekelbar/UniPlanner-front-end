@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Copyright from '../src/components/common/Copyright';
 import { LayoutComponent } from '../src/components/common/Layout/Layout';
@@ -17,6 +18,7 @@ interface MyAppProps extends AppProps {
 export default function MyApp (props: MyAppProps) {
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const router = useRouter();
   return (
     <Provider store={store}>
       <CacheProvider value={emotionCache}>

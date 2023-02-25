@@ -33,7 +33,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
       console.log(values);
       const { courseDescription, credits, name } = values;
       const response = await dispatch(startUpdateCourse(name, courseDescription, credits));
-      
+
       if (response !== RESPONSES.SUCCESS) {
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
@@ -51,7 +51,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
     validationSchema: Yup.object({
       name: Yup
         .string()
-        .min(10, "Trata de utilizar al menos 10 caracteres")
+        .min(5, "Trata de utilizar al menos 5 caracteres")
         .required(),
       courseDescription: Yup
         .string()
@@ -80,7 +80,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
             component={'p'}
             variant='subtitle1'
             align='center'>
-            Llevas un nuevo curso? 😆
+            ¿Vas a actualizar ese curso? 😆
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -130,7 +130,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     type="submit"
                     variant="contained"
                     color="secondary">
-                    Agregar
+                    Actualizar
                   </Button>
                 </Stack>
               )

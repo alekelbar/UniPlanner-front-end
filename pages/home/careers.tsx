@@ -14,7 +14,8 @@ import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
-import { AddFloatButton } from '../../src/components/common/AddFloatButton';
+import { FloatButton } from '../../src/components/common/FloatButton';
+import { Add } from '@mui/icons-material';
 
 interface Props {
   parseToken: UserState;
@@ -74,7 +75,10 @@ const Career: React.FC<Props> = ({ allCareers }) => {
           ))
         }
       </Grid >
-      <AddFloatButton onAdd={onOpen} />
+      <FloatButton
+        onAction={onOpen}
+        icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
+        sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddCareerDialog
         onClose={onClose}
         open={open} careers={

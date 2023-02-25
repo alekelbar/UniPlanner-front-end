@@ -45,7 +45,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
     validationSchema: Yup.object({
       name: Yup
         .string()
-        .min(10, "Trata de utilizar al menos 10 caracteres")
+        .min(5, "Trata de utilizar al menos 5 caracteres")
         .required("Oye, oye, necesitamos el nombre del curso"),
       courseDescription: Yup
         .string()

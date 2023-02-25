@@ -1,5 +1,5 @@
 import { School } from '@mui/icons-material';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
 import Link from '../Link';
 
 interface NabvarProps {
@@ -17,9 +17,11 @@ export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
           <School />
         </IconButton>
         <Typography variant="button" color="inherit">
-          <Link href={'/home/careers'} sx={{ color: 'text.primary' }}>
-            Gestión de entregables
-          </Link>
+          <Tooltip title='Volver a las carreras' placement='bottom'>
+            <Link href={'/home/careers'} sx={{ color: 'text.primary' }}>
+              Gestión de entregables
+            </Link>
+          </Tooltip>
         </Typography>
       </Toolbar>
     </AppBar>

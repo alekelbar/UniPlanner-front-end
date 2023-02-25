@@ -1,10 +1,11 @@
+import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Pagination, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Loading } from '../../src/components';
-import { AddFloatButton } from '../../src/components/common/AddFloatButton';
+import { FloatButton } from '../../src/components/common/FloatButton';
 import GoHome from '../../src/components/common/Layout/GoHome';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
@@ -129,7 +130,10 @@ export default function Courses ({ }: CoursesProps) {
           </Grid>
         </Grid>
       </Paper>
-      <AddFloatButton onAdd={onOpenCreate} />
+      <FloatButton
+        onAction={onOpenCreate}
+        icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
+        sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddCourseDialog onClose={onCloseCreate} open={openCreate} />
       <EditCourseDialog onClose={onCloseEdit} open={openEdit} />
     </Stack>
