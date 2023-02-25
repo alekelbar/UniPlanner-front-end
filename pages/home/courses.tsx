@@ -26,7 +26,12 @@ export default function Courses ({ }: CoursesProps) {
 
   const { selected } = useAppSelector(st => st.career);
   const coursesState = useAppSelector(st => st.courses);
-  const { actualPage, handleChangePage, totalPages, setTotalPages } = usePagination(coursesState.count);
+  const {
+    actualPage,
+    handleChangePage,
+    totalPages,
+    setTotalPages,
+  } = usePagination(coursesState.count);
 
   const [courses, setCourses] = useState<Course[]>(coursesState.courses);
   const [openCreate, setOpenCreate] = useState(false);
@@ -49,26 +54,26 @@ export default function Courses ({ }: CoursesProps) {
     setOpenEdit(false);
   };
 
+  const reload = async (page: number) => {
+    if (selected) {
+      const response = await dispatch(startLoadCourses(selected._id, page));
 
-  useEffect(() => {
-    // TODO: Realizar el dispatch que carga los cursos correspondientes a la carrera
-    (async () => {
-      if (selected) {
-        const response = await dispatch(startLoadCourses(selected._id, actualPage));
+      if (response !== RESPONSES.SUCCESS) {
 
-        if (response !== RESPONSES.SUCCESS) {
-
-          if (response === RESPONSES.UNAUTHORIZE) {
-            router.push('/auth');
-            await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
-            return;
-          }
-
-          await Swal.fire('Algo salio mal 😥', response);
+        if (response === RESPONSES.UNAUTHORIZE) {
+          router.push('/auth');
+          await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
           return;
         }
+
+        await Swal.fire('Algo salio mal 😥', response);
+        return;
       }
-    })();
+    }
+  };
+
+  useEffect(() => {
+    reload(actualPage);
   }, [actualPage]);
 
   useEffect(() => {
@@ -81,6 +86,7 @@ export default function Courses ({ }: CoursesProps) {
         : Math.trunc(coursesState.count / 5);
 
     setTotalPages(pages);
+
   }, [coursesState]);
 
   if (!selected) return <GoHome />;
@@ -94,28 +100,13 @@ export default function Courses ({ }: CoursesProps) {
       }}>
         <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{selected.name}</Typography>
       </Box>
-      <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
-        <Grid item>
-          <Pagination
-            page={actualPage}
-            sx={{
-              width: "100%",
-              [theme.breakpoints.up("md")]: {
-                fontSize: "large"
-              },
-            }}
-            size="large"
-            count={totalPages}
-            onChange={handleChangePage}
-          />
-        </Grid>
-      </Grid>
       <Paper variant='elevation'>
         <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
-          {courses.map(course => {
+          {courses.map((course, index) => {
+            if (index >= 5) return null;
             return (
               <Grid item xs={12} sm={4} key={course._id + course.name}>
-                <CourseCard onOpenEdit={onOpenEdit} course={course} />
+                <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
                 <Divider variant='fullWidth' />
               </Grid>
             );

@@ -13,9 +13,10 @@ import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
 interface CourseCardProps {
   course: Course;
   onOpenEdit: () => void;
+  reload: (page: number) => void;
 }
 
-export default function CourseCard ({ course, onOpenEdit }: CourseCardProps): JSX.Element {
+export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardProps): JSX.Element {
   const { courseDescription, name, credits } = course;
 
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export default function CourseCard ({ course, onOpenEdit }: CourseCardProps): JS
       return;
     }
     await Swal.fire('Listo, ese curso se marcho de nuestra vidas 🐶');
+    reload(1);
   };
 
   return (

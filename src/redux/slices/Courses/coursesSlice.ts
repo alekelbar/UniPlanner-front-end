@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import { stat } from "fs/promises";
 import { Course, CoursesState } from "../../../interfaces/course.interface";
 
 // Define the initial state using that type
@@ -30,6 +31,7 @@ export const coursesSlice = createSlice({
       state.courses = state.courses.filter(
         (course) => course._id !== payload._id
       );
+      state.count -= 1;
     },
     updateCourse: (state, { payload }: PayloadAction<Course>) => {
       state.courses = state.courses.map((course) =>
@@ -44,6 +46,7 @@ export const coursesSlice = createSlice({
     },
     addCourse: (state, { payload }: PayloadAction<Course>) => {
       state.courses.push(payload);
+      state.count += 1;
     },
     setSelected: (state, { payload }: PayloadAction<Course>) => {
       state.selected = payload;
