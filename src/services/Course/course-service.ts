@@ -74,4 +74,27 @@ export class CourseService {
       }
     }
   }
+
+  public async createCourse(course: Course) {
+    try {
+      const response = await this.API.post<Course>(`courses`, course);
+
+      return response;
+    } catch (error: any) {
+      if (!error.response) {
+        return RESPONSES.INTERNAL_SERVER_ERROR;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          return RESPONSES.BAD_REQUEST;
+        case 401:
+          return RESPONSES.UNAUTHORIZE;
+        case 404:
+          return RESPONSES.NOT_FOUND;
+        default:
+          return RESPONSES.INTERNAL_SERVER_ERROR;
+      }
+    }
+  }
 }

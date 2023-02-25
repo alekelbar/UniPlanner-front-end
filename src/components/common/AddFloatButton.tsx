@@ -8,7 +8,7 @@ interface AddFloatButtonProps {
 
 export function AddFloatButton ({ onAdd }: AddFloatButtonProps): JSX.Element {
   return (
-    <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>
+    <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
       <Fab onClick={onAdd} sx={{ width: { md: '6em' }, height: { md: '6em' } }}>
         <Add sx={{ fontSize: { md: '2.5em' } }} />
       </Fab>

@@ -3,7 +3,6 @@ import Container from '@mui/material/Container';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { AddCareerButton } from '../../src/components/Career/AddCareerButton';
 import { AddCareerDialog } from '../../src/components/Career/AddCareerDialog';
 import { CareerCard } from '../../src/components/Career/CareerCard';
 import { Loading } from '../../src/components/common/Loading';
@@ -15,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
+import { AddFloatButton } from '../../src/components/common/AddFloatButton';
 
 interface Props {
   parseToken: UserState;
@@ -74,7 +74,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
           ))
         }
       </Grid >
-      <AddCareerButton onAdd={onOpen} />
+      <AddFloatButton onAdd={onOpen} />
       <AddCareerDialog
         onClose={onClose}
         open={open} careers={

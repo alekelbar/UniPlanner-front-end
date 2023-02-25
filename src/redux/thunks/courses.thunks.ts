@@ -1,13 +1,14 @@
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CourseService } from "../../services/Course/course-service";
 import {
+  addCourse,
   removeCourse,
   setCourses,
   startLoadingCourses,
   stopLoadingCourses,
 } from "../slices/Courses/coursesSlice";
 import { AppDispatch, RootState } from "../store";
-import { Course } from '../../interfaces/course.interface';
+import { Course } from "../../interfaces/course.interface";
 
 export const startLoadCourses = (careerId: string, page: number) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -52,6 +53,43 @@ export const startRemoveCourse = (course: Course) => {
 
     if (typeof response !== "string") {
       dispatch(removeCourse(response.data));
+      dispatch(stopLoadingCourses());
+      return RESPONSES.SUCCESS;
+    }
+
+    return response;
+  };
+};
+
+export const startAddCourse = (
+  name: string,
+  courseDescription: string,
+  credits: number
+) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // cargando LOS CURSOS...
+    dispatch(startLoadingCourses());
+    const {
+      auth: { user },
+      career: { selected },
+    } = getState();
+
+    if (!user || !selected) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    const service = CourseService.createService("v1");
+    const course: Course = {
+      name,
+      courseDescription,
+      credits,
+      career: selected._id,
+      user: user.id,
+    };
+    const response = await service.createCourse(course);
+
+    if (typeof response !== "string") {
+      dispatch(addCourse(response.data));
       dispatch(stopLoadingCourses());
       return RESPONSES.SUCCESS;
     }

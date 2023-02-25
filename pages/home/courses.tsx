@@ -14,6 +14,8 @@ import { RESPONSES } from '../../src/interfaces/response-messages';
 import Swal from 'sweetalert2';
 import { CareerState } from '../../src/interfaces/career.interface';
 import CourseCard from '../../src/components/Courses/CourseCard';
+import { AddFloatButton } from '../../src/components/common/AddFloatButton';
+import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 
 interface CoursesProps {
 
@@ -29,6 +31,16 @@ export default function Courses ({ }: CoursesProps) {
   const { actualPage, handleChangePage, totalPages, setTotalPages } = usePagination(1);
 
   const [courses, setCourses] = useState<Course[]>(coursesState.courses);
+
+  const [open, setOpen] = useState(false);
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
 
   useEffect(() => {
@@ -95,6 +107,8 @@ export default function Courses ({ }: CoursesProps) {
           </Grid>
         </Grid>
       </Paper>
+      <AddFloatButton onAdd={onOpen} />
+      <AddCourseDialog onClose={onClose} open={open}/>
     </Stack>
   );
 }

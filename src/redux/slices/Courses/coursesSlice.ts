@@ -40,6 +40,9 @@ export const coursesSlice = createSlice({
     setSelectedCourse: (state, { payload }: PayloadAction<Course>) => {
       state.selectedCourse = payload;
     },
+    addCourse: (state, { payload }: PayloadAction<Course>) => {
+      state.courses.push(payload);
+    },
   },
 });
 
@@ -47,6 +50,7 @@ export const {
   errorCourses,
   setCourses,
   stopLoadingCourses,
+  addCourse,
   removeCourse,
   startLoadingCourses,
   setSelectedCourse,
