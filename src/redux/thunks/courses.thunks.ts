@@ -6,6 +6,7 @@ import {
   setCourses,
   startLoadingCourses,
   stopLoadingCourses,
+  updateCourse,
 } from "../slices/Courses/coursesSlice";
 import { AppDispatch, RootState } from "../store";
 import { Course } from "../../interfaces/course.interface";
@@ -90,6 +91,46 @@ export const startAddCourse = (
 
     if (typeof response !== "string") {
       dispatch(addCourse(response.data));
+      dispatch(stopLoadingCourses());
+      return RESPONSES.SUCCESS;
+    }
+
+    return response;
+  };
+};
+
+export const startUpdateCourse = (
+  name: string,
+  courseDescription: string,
+  credits: number
+) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // cargando LOS CURSOS...
+    dispatch(startLoadingCourses());
+    const {
+      auth: { user },
+      career: { selected: selectedCareer },
+      courses: { selected: selectedCourse },
+    } = getState();
+
+    if (!user || !selectedCareer || !selectedCourse) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    const service = CourseService.createService("v1");
+    const course: Course = {
+      name,
+      courseDescription,
+      credits,
+      career: selectedCareer._id,
+      user: user.id,
+    };
+
+    const { _id: id } = selectedCourse;
+    const response = await service.updateCourse(id as string, course);
+
+    if (typeof response !== "string") {
+      dispatch(updateCourse(response.data));
       dispatch(stopLoadingCourses());
       return RESPONSES.SUCCESS;
     }

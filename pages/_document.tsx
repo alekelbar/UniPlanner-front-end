@@ -13,6 +13,10 @@ export default class MyDocument extends Document {
           <meta name="theme-font" content={roboto.className} />
           <link rel="shortcut icon" href="/favicon.ico" />
           <meta name="emotion-insertion-point" content="" />
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+          />
           {(this.props as any).emotionStyleTags}
         </Head>
         <body>

@@ -7,13 +7,15 @@ import { Course } from '../../interfaces/course.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { setSelected } from '../../redux/slices/Courses/coursesSlice';
 import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
 
 interface CourseCardProps {
   course: Course;
+  onOpenEdit: () => void;
 }
 
-export default function CourseCard ({ course }: CourseCardProps): JSX.Element {
+export default function CourseCard ({ course, onOpenEdit }: CourseCardProps): JSX.Element {
   const { courseDescription, name, credits } = course;
 
   const dispatch = useAppDispatch();
@@ -61,6 +63,12 @@ export default function CourseCard ({ course }: CourseCardProps): JSX.Element {
             color='warning'
             onClick={handleDelete}>
             Eliminar
+          </Button>
+          <Button
+            variant='outlined'
+            color='info'
+            onClick={() => { onOpenEdit(); dispatch(setSelected(course)); }}>
+            Actualizar
           </Button>
         </CardActions>
       </CardContent>

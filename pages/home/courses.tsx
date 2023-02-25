@@ -1,21 +1,19 @@
-import { Box, Grid, Pagination, Paper, Stack, Toolbar, Typography, useTheme } from '@mui/material';
-import { Container } from '@mui/system';
+import { Box, Grid, Pagination, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { Loading } from '../../src/components';
+import { AddFloatButton } from '../../src/components/common/AddFloatButton';
 import GoHome from '../../src/components/common/Layout/GoHome';
+import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
+import CourseCard from '../../src/components/Courses/CourseCard';
+import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';
 import usePagination from '../../src/hooks/pagination';
 import { Course } from '../../src/interfaces/course.interface';
-import { useAppSelector, useAppDispatch } from '../../src/redux/hooks';
-import { startLoadingCourses } from '../../src/redux/slices/Courses/coursesSlice';
-import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import Swal from 'sweetalert2';
-import { CareerState } from '../../src/interfaces/career.interface';
-import CourseCard from '../../src/components/Courses/CourseCard';
-import { AddFloatButton } from '../../src/components/common/AddFloatButton';
-import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
+import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
+import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
 
 interface CoursesProps {
 
@@ -31,15 +29,24 @@ export default function Courses ({ }: CoursesProps) {
   const { actualPage, handleChangePage, totalPages, setTotalPages } = usePagination(1);
 
   const [courses, setCourses] = useState<Course[]>(coursesState.courses);
+  const [openCreate, setOpenCreate] = useState(false);
 
-  const [open, setOpen] = useState(false);
-
-  const onOpen = () => {
-    setOpen(true);
+  const onOpenCreate = () => {
+    setOpenCreate(true);
   };
 
-  const onClose = () => {
-    setOpen(false);
+  const onCloseCreate = () => {
+    setOpenCreate(false);
+  };
+
+  const [openEdit, setOpenEdit] = useState(false);
+
+  const onOpenEdit = () => {
+    setOpenEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setOpenEdit(false);
   };
 
 
@@ -84,8 +91,8 @@ export default function Courses ({ }: CoursesProps) {
         <Grid container direction={'row'} justifyContent="center" alignItems={'center'}>
           {courses.map(course => {
             return (
-              <Grid item xs={12} sm={4} key={course._id}>
-                <CourseCard course={course} />
+              <Grid item xs={12} sm={4} key={course._id + course.name}>
+                <CourseCard onOpenEdit={onOpenEdit} course={course} />
               </Grid>
             );
           })}
@@ -107,8 +114,9 @@ export default function Courses ({ }: CoursesProps) {
           </Grid>
         </Grid>
       </Paper>
-      <AddFloatButton onAdd={onOpen} />
-      <AddCourseDialog onClose={onClose} open={open}/>
+      <AddFloatButton onAdd={onOpenCreate} />
+      <AddCourseDialog onClose={onCloseCreate} open={openCreate} />
+      <EditCourseDialog onClose={onCloseEdit} open={openEdit} />
     </Stack>
   );
 }

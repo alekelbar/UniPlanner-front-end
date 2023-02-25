@@ -5,10 +5,10 @@ import { Course, CoursesState } from "../../../interfaces/course.interface";
 // Define the initial state using that type
 const initialState: CoursesState = {
   courses: [],
-  selectedCourse: null,
   loading: true,
   error: null,
   count: 0,
+  selected: null,
 };
 
 export const coursesSlice = createSlice({
@@ -31,17 +31,22 @@ export const coursesSlice = createSlice({
         (course) => course._id !== payload._id
       );
     },
+    updateCourse: (state, { payload }: PayloadAction<Course>) => {
+      state.courses = state.courses.map((course) =>
+        course._id === payload._id ? payload : course
+      );
+    },
     startLoadingCourses: (state) => {
       state.loading = true;
     },
     errorCourses: (state, { payload }: PayloadAction<string>) => {
       state.error = payload;
     },
-    setSelectedCourse: (state, { payload }: PayloadAction<Course>) => {
-      state.selectedCourse = payload;
-    },
     addCourse: (state, { payload }: PayloadAction<Course>) => {
       state.courses.push(payload);
+    },
+    setSelected: (state, { payload }: PayloadAction<Course>) => {
+      state.selected = payload;
     },
   },
 });
@@ -52,8 +57,9 @@ export const {
   stopLoadingCourses,
   addCourse,
   removeCourse,
+  updateCourse,
   startLoadingCourses,
-  setSelectedCourse,
+  setSelected,
 } = coursesSlice.actions;
 
 export default coursesSlice;

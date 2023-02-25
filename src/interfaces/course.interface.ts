@@ -9,10 +9,10 @@ export interface Course {
 
 export interface CoursesState {
   courses: Array<Course>;
-  selectedCourse: Course | null;
   loading: boolean;
   error: string | null;
   count: number;
+  selected: Course | null;
 }
 
 export interface PaginatedCourses {

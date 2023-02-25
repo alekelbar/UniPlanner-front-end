@@ -1,14 +1,13 @@
-import { Dialog, DialogContent, DialogTitle, TextField, Typography, Button } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
 
+import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useAppDispatch } from '../../redux/hooks';
-import { Box, Stack } from '@mui/system';
-import { Course } from '../../interfaces/course.interface';
-import { startAddCourse } from '../../redux/thunks/courses.thunks';
-import { RESPONSES } from '../../interfaces/response-messages';
-import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { useAppDispatch } from '../../redux/hooks';
+import { startAddCourse } from '../../redux/thunks/courses.thunks';
 
 interface AddCourseDialogProps {
   open: boolean,
@@ -47,11 +46,11 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
       name: Yup
         .string()
         .min(10, "Trata de utilizar al menos 10 caracteres")
-        .required(),
+        .required("Oye, oye, necesitamos el nombre del curso"),
       courseDescription: Yup
         .string()
         .min(10, "Trata de utilizar al menos 10 caracteres")
-        .required(),
+        .required("Oye, oye, necesitamos la descripción del curso"),
       credits: Yup.number()
         .positive("debe ser un numero positivo")
         .required('Porfavor, agrega los creditos que vale este curso'),
