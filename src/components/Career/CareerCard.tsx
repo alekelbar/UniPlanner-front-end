@@ -43,13 +43,13 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
       <CardActions>
         <Button
           variant='contained'
-          color='primary'
+          color='secondary'
           onClick={handleSelectedCareer}
         > Ver cursos
         </Button>
         <Button
           variant='text'
-          color='primary'
+          color='warning'
           onClick={handleRemove}
         > inhabilitar
         </Button>

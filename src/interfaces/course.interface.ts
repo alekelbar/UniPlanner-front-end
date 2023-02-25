@@ -1,4 +1,5 @@
 export interface Course {
+  _id: string;
   name: string;
   courseDescription: string;
   credits: number;
@@ -11,4 +12,10 @@ export interface CoursesState {
   selectedCourse: Course | null;
   loading: boolean;
   error: string | null;
+  count: number;
+}
+
+export interface PaginatedCourses {
+  courses: Array<Course>;
+  count: number;
 }

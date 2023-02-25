@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slices/auth/authSlice";
 import careerSlice from "./slices/Career/careerSlice";
+import coursesSlice from "./slices/Courses/coursesSlice";
 // ...
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     career: careerSlice.reducer,
+    courses: coursesSlice.reducer,
   },
 });
 

@@ -2,9 +2,11 @@ import axios, { AxiosInstance } from "axios";
 import Career from "../../../pages/home/careers";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import {
-  UserLogin, UserRegister, UserState
+  UserLogin,
+  UserRegister,
+  UserState,
 } from "../../interfaces/users.interface";
-import { UpdateUser, User } from "../../models";
+import type { User, UpdateUser } from "../../types";
 import { ApiVersion } from "../../types/api-version";
 
 export enum USER_EXCEPTIONS {
@@ -192,7 +194,7 @@ export class UserService {
       if (!error.response) {
         return USER_EXCEPTIONS.INTERNAL_ERROR;
       }
-      
+
       console.log(error.response);
       switch (error.response.status) {
         case 400:

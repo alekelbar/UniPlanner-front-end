@@ -25,7 +25,8 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 
   const dispatch = useAppDispatch();
 
-  const { careers, loading } = useAppSelector(st => st.career);
+  const careerState = useAppSelector(st => st.career);
+  const { careers, loading } = careerState;
   const [careersState, setCareersState] = useState<Career[]>(careers);
 
   const [open, setOpen] = useState(false);

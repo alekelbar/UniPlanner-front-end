@@ -6,8 +6,9 @@ import { Course, CoursesState } from "../../../interfaces/course.interface";
 const initialState: CoursesState = {
   courses: [],
   selectedCourse: null,
-  loading: false,
+  loading: true,
   error: null,
+  count: 0,
 };
 
 export const coursesSlice = createSlice({
@@ -15,11 +16,23 @@ export const coursesSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    loadCourses: (state, { payload }: PayloadAction<Course[]>) => {
-      state.courses = payload;
+    setCourses: (
+      state,
+      { payload }: PayloadAction<{ courses: Course[]; count: number }>
+    ) => {
+      state.courses = payload.courses;
+      state.count = payload.count;
     },
-    loadingCourses: (state) => {
-      state.loading = !state.loading;
+    stopLoadingCourses: (state) => {
+      state.loading = false;
+    },
+    removeCourse: (state, { payload }: PayloadAction<Course>) => {
+      state.courses = state.courses.filter(
+        (course) => course._id !== payload._id
+      );
+    },
+    startLoadingCourses: (state) => {
+      state.loading = true;
     },
     errorCourses: (state, { payload }: PayloadAction<string>) => {
       state.error = payload;
@@ -30,7 +43,13 @@ export const coursesSlice = createSlice({
   },
 });
 
-export const { errorCourses, loadCourses, loadingCourses, setSelectedCourse } =
-  coursesSlice.actions;
+export const {
+  errorCourses,
+  setCourses,
+  stopLoadingCourses,
+  removeCourse,
+  startLoadingCourses,
+  setSelectedCourse,
+} = coursesSlice.actions;
 
 export default coursesSlice;

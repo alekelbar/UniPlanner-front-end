@@ -8,7 +8,8 @@ import {
   addCareer,
   removeCareer,
   setCareers,
-  setLoading,
+  StartLoadingCareer,
+  StopLoadingCareer,
 } from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
 import { UpdateUser } from "../../types/users/update-user";
@@ -49,7 +50,7 @@ export const startUserRegister = (register: UserRegister) => {
 export const startLoadCareers = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando las carreras...
-    dispatch(setLoading());
+    dispatch(StartLoadingCareer());
     const {
       auth: { user },
     } = getState();
@@ -62,7 +63,7 @@ export const startLoadCareers = () => {
 
     if (typeof careers !== "string") {
       dispatch(setCareers(careers as Career[]));
-      dispatch(setLoading());
+      dispatch(StopLoadingCareer());
       return RESPONSES.SUCCESS;
     }
 
@@ -73,7 +74,7 @@ export const startLoadCareers = () => {
 export const startAddCareer = (idCareer: string) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // agregando una carrera
-    dispatch(setLoading());
+    dispatch(StartLoadingCareer());
     const {
       auth: { user },
     } = getState();
@@ -87,7 +88,7 @@ export const startAddCareer = (idCareer: string) => {
 
     if (typeof response !== "string") {
       dispatch(addCareer(response as Career));
-      dispatch(setLoading());
+      dispatch(StopLoadingCareer());
       return RESPONSES.SUCCESS;
     }
 
@@ -98,7 +99,7 @@ export const startAddCareer = (idCareer: string) => {
 export const startRemoveCareer = (idCareer: string) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // agregando una carrera
-    dispatch(setLoading());
+    dispatch(StartLoadingCareer());
     const {
       auth: { user },
     } = getState();
@@ -112,7 +113,7 @@ export const startRemoveCareer = (idCareer: string) => {
 
     if (typeof response !== "string") {
       dispatch(removeCareer(response as Career));
-      dispatch(setLoading());
+      dispatch(StopLoadingCareer());
       return RESPONSES.SUCCESS;
     }
 

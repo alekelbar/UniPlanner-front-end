@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { CareerState, Career } from "../../../interfaces/career.interface";
+import { createSlice } from "@reduxjs/toolkit";
+import { Career, CareerState } from "../../../interfaces/career.interface";
 
 // Define the initial state using that type
 const initialState: CareerState = {
   careers: [],
   error: null,
-  loading: false,
+  loading: true,
   selected: null,
 };
 
@@ -21,8 +21,11 @@ export const careerSlice = createSlice({
     cleanErrors: (state) => {
       return { ...state, error: null };
     },
-    setLoading: (state) => {
-      state.loading = !state.loading;
+    StopLoadingCareer: (state) => {
+      state.loading = false;
+    },
+    StartLoadingCareer: (state) => {
+      state.loading = true;
     },
     addCareer: (state, { payload }: PayloadAction<Career>) => {
       state.careers.push(payload);
@@ -36,7 +39,13 @@ export const careerSlice = createSlice({
   },
 });
 
-export const { setCareers, setLoading, addCareer, removeCareer, setSelectedCareer } =
-  careerSlice.actions;
+export const {
+  setCareers,
+  StopLoadingCareer,
+  StartLoadingCareer,
+  addCareer,
+  removeCareer,
+  setSelectedCareer,
+} = careerSlice.actions;
 
 export default careerSlice;

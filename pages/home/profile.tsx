@@ -9,22 +9,24 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { Loading } from '../../src/components';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
-import { useAppDispatch } from '../../src/redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startUpdateUser } from '../../src/redux/thunks/user.thunks';
 
 interface Props {
   parseToken: UserState;
 }
 
-const Profile: React.FC<Props> = ({ parseToken }) => {
+const Profile: React.FC<Props> = () => {
 
   const dispatch = useAppDispatch();
 
   const router = useRouter();
 
-  const { user } = parseToken;
+  const { user } = useAppSelector(st => st.auth);
+
 
   const formik = useFormik({
     initialValues: {
@@ -66,6 +68,9 @@ const Profile: React.FC<Props> = ({ parseToken }) => {
       email: Yup.string().email('Formato incorrecto').required('Su correo electrónico es requerido'),
     }),
   });
+
+  if (!user) return <Loading />;
+
 
   return (
     <Container maxWidth="md" sx={{ mt: 2, display: 'block' }}>
