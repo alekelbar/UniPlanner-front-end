@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 export default function usePagination (limit: number, page: number = 1) {
+  
   const [actualPage, setActualPage] = useState<number>(page);
   const [totalPages, setTotalPages] = useState<number>(limit);
 

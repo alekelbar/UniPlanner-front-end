@@ -41,7 +41,7 @@ export default function CourseCard ({ course, onOpenEdit }: CourseCardProps): JS
   };
 
   return (
-    <Card sx={{ maxWidth: 400 }}>
+    <Card sx={{ maxWidth: 400 }} variant='elevation'>
       <CardContent>
         <Typography variant="h6" component="h2" gutterBottom>
           {name}

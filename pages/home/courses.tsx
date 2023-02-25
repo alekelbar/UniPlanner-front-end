@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ export default function Courses ({ }: CoursesProps) {
 
   const { selected } = useAppSelector(st => st.career);
   const coursesState = useAppSelector(st => st.courses);
-  const { actualPage, handleChangePage, totalPages, setTotalPages } = usePagination(1);
+  const { actualPage, handleChangePage, totalPages, setTotalPages } = usePagination(coursesState.count);
 
   const [courses, setCourses] = useState<Course[]>(coursesState.courses);
   const [openCreate, setOpenCreate] = useState(false);
@@ -59,8 +59,8 @@ export default function Courses ({ }: CoursesProps) {
         if (response !== RESPONSES.SUCCESS) {
 
           if (response === RESPONSES.UNAUTHORIZE) {
-            await Swal.fire('Parece que no tienes autorización para ver esto... 😥', response);
             router.push('/auth');
+            await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
             return;
           }
 
@@ -69,11 +69,18 @@ export default function Courses ({ }: CoursesProps) {
         }
       }
     })();
-  }, []);
+  }, [actualPage]);
 
   useEffect(() => {
     setCourses(coursesState.courses);
-    setTotalPages(Math.trunc(coursesState.count / 5));
+
+    // Cálculo para la paginación
+    const pages: number =
+      (coursesState.count % 5 !== 0)
+        ? Math.trunc(coursesState.count / 5) + 1
+        : Math.trunc(coursesState.count / 5);
+
+    setTotalPages(pages);
   }, [coursesState]);
 
   if (!selected) return <GoHome />;
@@ -87,12 +94,29 @@ export default function Courses ({ }: CoursesProps) {
       }}>
         <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{selected.name}</Typography>
       </Box>
-      <Paper sx={{}}>
-        <Grid container direction={'row'} justifyContent="center" alignItems={'center'}>
+      <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
+        <Grid item>
+          <Pagination
+            page={actualPage}
+            sx={{
+              width: "100%",
+              [theme.breakpoints.up("md")]: {
+                fontSize: "large"
+              },
+            }}
+            size="large"
+            count={totalPages}
+            onChange={handleChangePage}
+          />
+        </Grid>
+      </Grid>
+      <Paper variant='elevation'>
+        <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
           {courses.map(course => {
             return (
               <Grid item xs={12} sm={4} key={course._id + course.name}>
                 <CourseCard onOpenEdit={onOpenEdit} course={course} />
+                <Divider variant='fullWidth' />
               </Grid>
             );
           })}
@@ -107,7 +131,7 @@ export default function Courses ({ }: CoursesProps) {
                   fontSize: "large"
                 },
               }}
-              size="small"
+              size="large"
               count={totalPages}
               onChange={handleChangePage}
             />
