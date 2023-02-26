@@ -88,7 +88,7 @@ const Profile: React.FC<Props> = () => {
             name={'id'}
             type={'text'}
             variant='filled'
-            helperText="Cédula"
+            helperText="Su usuario"
           />
           {formik.touched.id && formik.errors.id && (
             <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>

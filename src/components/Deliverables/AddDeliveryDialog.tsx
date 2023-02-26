@@ -95,7 +95,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
             component={'p'}
             variant='subtitle1'
             align='center'>
-            ¿Una nueva entrega? 😆
+            ¿Tienes una nueva entrega? 😊
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -179,7 +179,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               name={'status'}>
               <MenuItem value={DELIVERABLE_STATUS.PENDING}>{DELIVERABLE_STATUS.PENDING}</MenuItem>
               <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
-              <MenuItem value={DELIVERABLE_STATUS.REVIEWED}>{DELIVERABLE_STATUS.REVIEWED}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
               <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>

@@ -7,6 +7,7 @@ import {
   stopLoadingDeliveries,
   addDelivery,
   removeDelivery,
+  updateDeliverable,
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";
 
@@ -68,7 +69,7 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
   };
 };
 
-export const startremoveDelivery = (deliverable: Deliverable) => {
+export const startRemoveDelivery = (deliverable: Deliverable) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
@@ -87,6 +88,37 @@ export const startremoveDelivery = (deliverable: Deliverable) => {
     if (typeof response !== "string") {
       const deliverie = response.data;
       dispatch(removeDelivery(deliverie));
+      dispatch(stopLoadingDeliveries());
+      return RESPONSES.SUCCESS;
+    }
+
+    return response;
+  };
+};
+
+export const startUpdateDelivery = (deliverable: Deliverable) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // cargando LOS CURSOS...
+    dispatch(startLoadingDeliveries());
+
+    const {
+      auth: { user },
+      courses: { selected: selectedCourse },
+      deliveries: { selected: selectedDeliveries },
+    } = getState();
+
+    if (!user || !selectedCourse || !selectedDeliveries) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+
+    deliverable._id = selectedDeliveries._id;
+
+    const service = DeliverableService.createService("v1");
+    const response = await service.updateDeliverable(deliverable);
+
+    if (typeof response !== "string") {
+      const deliverie = response.data;
+      dispatch(updateDeliverable(deliverie));
       dispatch(stopLoadingDeliveries());
       return RESPONSES.SUCCESS;
     }

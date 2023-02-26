@@ -70,7 +70,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
             component={'p'}
             variant='subtitle1'
             align='center'>
-            ¿Llevas un nuevo curso? 😆
+            ¿Llevas un nuevo curso? 😊
           </Typography>
         </DialogTitle>
         <DialogContent>

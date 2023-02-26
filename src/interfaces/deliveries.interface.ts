@@ -31,5 +31,4 @@ export interface DeliverableState {
 export enum DELIVERABLE_STATUS {
   SEND = "Enviado",
   PENDING = "Pendiente",
-  REVIEWED = "Calificado",
 }

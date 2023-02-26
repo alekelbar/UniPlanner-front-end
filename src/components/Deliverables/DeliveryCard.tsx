@@ -9,14 +9,16 @@ import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.int
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
-import { startremoveDelivery } from '../../redux/thunks/deliverables-thunks';
+import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
+import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
   reload: (page: number) => void;
+  onOpenEdit: () => void;
 }
 
-export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.Element {
+export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardProps): JSX.Element {
   const deadline = parseISO(deliverable.deadline.toString());
 
   let create_at: Date | null = null;
@@ -58,7 +60,7 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
   };
 
   const handleRemove = async () => {
-    const deleted = await dispatch(startremoveDelivery(deliverable));
+    const deleted = await dispatch(startRemoveDelivery(deliverable));
     if (deleted !== RESPONSES.SUCCESS) {
       switch (deleted) {
         case RESPONSES.UNAUTHORIZE:
@@ -122,7 +124,8 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
               <Button
                 fullWidth
                 variant='outlined'
-                color='success'>
+                color='success'
+                onClick={() => { dispatch(setSelectedDelivery(deliverable)); onOpenEdit(); }}>
                 Actualizar
               </Button>
             </Grid>

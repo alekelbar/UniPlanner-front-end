@@ -48,10 +48,19 @@ export const deliveriesSlice = createSlice({
     setSelectedDelivery: (state, { payload }: PayloadAction<Deliverable>) => {
       state.selected = payload;
     },
+    updateDeliverable: (state, { payload }: PayloadAction<Deliverable>) => {
+      state.deliverables = state.deliverables.map((deliverable) => {
+        if (deliverable._id === payload._id) {
+          return payload;
+        }
+        return deliverable;
+      });
+    },
   },
 });
 
 export const {
+  updateDeliverable,
   addDelivery,
   loadDeliveries,
   removeDelivery,

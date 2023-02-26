@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { startAddCourse, startUpdateCourse } from '../../redux/thunks/courses.thunks';
+import { startUpdateCourse } from '../../redux/thunks/courses.thunks';
 
 interface EditCourseDialogProps {
   open: boolean,
@@ -80,7 +80,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
             component={'p'}
             variant='subtitle1'
             align='center'>
-            ¿Vas a actualizar ese curso? 😆
+            ¿Vas a actualizar ese curso? 😊
           </Typography>
         </DialogTitle>
         <DialogContent>

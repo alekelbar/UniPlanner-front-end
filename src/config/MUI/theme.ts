@@ -61,6 +61,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& input": {
+            autoComplete: "off",
+          },
+        },
+      },
+    },
   },
 });
 

@@ -19,6 +19,7 @@ import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks'
 import { validateToken } from '../../src/services/auth/validate-token';
 import usePagination from '../../src/hooks/pagination';
 import isInteger from '../../src/helpers/isInteger';
+import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
 
 interface DeliveriesProps {
 
@@ -49,6 +50,16 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
 
   const onCloseCreate = () => {
     setOpenCreate(false);
+  };
+
+  const [openEdit, setOpenEdit] = useState(false);
+
+  const onOpenEdit = () => {
+    setOpenEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setOpenEdit(false);
   };
 
 
@@ -134,7 +145,7 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
                 if (index >= 5) return null;
                 return (
                   <Grid item xs={12} sm={4} key={delivery._id + delivery.name} mb={5}>
-                    <DeliveryCard reload={reload} deliverable={delivery} key={index} />
+                    <DeliveryCard onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} key={index} />
                     <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
                   </Grid>
                 );
@@ -151,7 +162,7 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddDeliveryDialog onClose={onCloseCreate} open={openCreate} />
-      {/* <EditCourseDialog onClose={onCloseEdit} open={openEdit} /> */}
+      <EditDeliverableDialog onClose={onCloseEdit} open={openEdit} />
     </Stack>
   );
 }
