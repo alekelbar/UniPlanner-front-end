@@ -53,7 +53,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
             return;
         }
       }
-      console.log(response);
       formik.resetForm(initialValues);
       onClose();
     },

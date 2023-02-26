@@ -6,6 +6,7 @@ import {
   startLoadingDeliveries,
   stopLoadingDeliveries,
   addDelivery,
+  removeDelivery,
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";
 
@@ -59,6 +60,33 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
     if (typeof response !== "string") {
       const deliverie = response.data;
       dispatch(addDelivery(deliverie));
+      dispatch(stopLoadingDeliveries());
+      return RESPONSES.SUCCESS;
+    }
+
+    return response;
+  };
+};
+
+export const startremoveDelivery = (deliverable: Deliverable) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // cargando LOS CURSOS...
+    dispatch(startLoadingDeliveries());
+
+    const {
+      auth: { user },
+      courses: { selected: selectedCourse },
+    } = getState();
+
+    if (!user || !selectedCourse) {
+      return RESPONSES.UNAUTHORIZE;
+    }
+    const service = DeliverableService.createService("v1");
+    const response = await service.removeDeliverables(deliverable);
+
+    if (typeof response !== "string") {
+      const deliverie = response.data;
+      dispatch(removeDelivery(deliverie));
       dispatch(stopLoadingDeliveries());
       return RESPONSES.SUCCESS;
     }

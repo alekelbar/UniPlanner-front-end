@@ -2,16 +2,25 @@ import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } 
 import { Stack } from '@mui/system';
 import { format, formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
+import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import { logOut } from '../../helpers/local-storage';
 import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
-import { useAppSelector } from '../../redux';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { useAppDispatch, useAppSelector } from '../../redux';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { startremoveDelivery } from '../../redux/thunks/deliverables-thunks';
 import GoHome from '../common/Layout/GoHome';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
+  reload: (page: number) => void;
 }
 
-export function DeliveryCard ({ deliverable }: DeliveryCardProps): JSX.Element {
+export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.Element {
   const deadline = parseISO(deliverable.deadline.toString());
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const makeStatusDate = () => {
     if (deliverable.status === DELIVERABLE_STATUS.PENDING) {
@@ -40,6 +49,26 @@ export function DeliveryCard ({ deliverable }: DeliveryCardProps): JSX.Element {
         Entregado
       </Typography>
     );
+  };
+
+  const handleRemove = async () => {
+    const deleted = await dispatch(startremoveDelivery(deliverable));
+    if (deleted !== RESPONSES.SUCCESS) {
+      switch (deleted) {
+        case RESPONSES.UNAUTHORIZE:
+          await Swal.fire('Parece que no estas autorizado para ver esto 🔒');
+          dispatch(onLogOut());
+          logOut();
+          router.push('/auth');
+          break;
+        case RESPONSES.BAD_REQUEST:
+          await Swal.fire('Parece ser que este curso tiene todavía algunos entregables 😱');
+          break;
+      }
+      return;
+    }
+    await Swal.fire('Listo, ese curso se marcho de nuestra vidas 🐶');
+    reload(1);
   };
 
 
@@ -74,13 +103,29 @@ export function DeliveryCard ({ deliverable }: DeliveryCardProps): JSX.Element {
         <CardActions>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} lg={4}>
-              <Button fullWidth variant='outlined' color='success'>Actualizar</Button>
+              <Button
+                fullWidth
+                variant='outlined'
+                color='success'>
+                Actualizar
+              </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Button fullWidth variant='outlined' color='warning'>Eliminar</Button>
+              <Button
+                fullWidth
+                variant='outlined'
+                color='warning'
+                onClick={handleRemove}>
+                Eliminar
+              </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Button fullWidth variant='outlined' color='info'>Tareas</Button>
+              <Button
+                fullWidth
+                variant='contained'
+                color='secondary'>
+                Tareas
+              </Button>
             </Grid>
           </Grid>
         </CardActions>

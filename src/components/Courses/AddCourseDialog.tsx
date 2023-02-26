@@ -14,9 +14,11 @@ interface AddCourseDialogProps {
   onClose: () => void,
 }
 
+
 export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
 
   const formik = useFormik({
     initialValues: {
@@ -40,6 +42,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
             return;
         }
       }
+      formik.resetForm();
       onClose();
     },
     validationSchema: Yup.object({
@@ -67,7 +70,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
             component={'p'}
             variant='subtitle1'
             align='center'>
-            Llevas un nuevo curso? 😆
+            ¿Llevas un nuevo curso? 😆
           </Typography>
         </DialogTitle>
         <DialogContent>

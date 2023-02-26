@@ -99,7 +99,7 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
                 if (index >= 5) return null;
                 return (
                   <Grid item xs={12} sm={4} key={delivery._id + delivery.name}>
-                    <DeliveryCard deliverable={delivery} key={index} />
+                    <DeliveryCard reload={reload} deliverable={delivery} key={index} />
                     <Divider variant='fullWidth' />
                   </Grid>
                 );

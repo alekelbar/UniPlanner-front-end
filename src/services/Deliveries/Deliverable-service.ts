@@ -78,4 +78,28 @@ export class DeliverableService {
       }
     }
   }
+
+  async removeDeliverables(deriverable: Deliverable) {
+    try {
+      const deliverable = await this.API.delete<Deliverable>(
+        `deliverables/${deriverable._id}`
+      );
+
+      return deliverable;
+    } catch (error: any) {
+      console.log(error);
+      if (!error.response) {
+        return RESPONSES.INTERNAL_SERVER_ERROR;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          return RESPONSES.BAD_REQUEST;
+        case 401:
+          return RESPONSES.UNAUTHORIZE;
+        default:
+          return RESPONSES.INTERNAL_SERVER_ERROR;
+      }
+    }
+  }
 }
