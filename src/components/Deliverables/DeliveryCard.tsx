@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } 
 import { Stack } from '@mui/system';
 import { format, formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
-import { Deliverable } from '../../interfaces/deliveries.interface';
+import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { useAppSelector } from '../../redux';
 import GoHome from '../common/Layout/GoHome';
 
@@ -11,13 +11,10 @@ interface DeliveryCardProps {
 }
 
 export function DeliveryCard ({ deliverable }: DeliveryCardProps): JSX.Element {
-
-
   const deadline = parseISO(deliverable.deadline.toString());
-  console.log(formatDistance(deadline, new Date(), { locale: es }));
 
   const makeStatusDate = () => {
-    if (deliverable.status === 'Pendiente') {
+    if (deliverable.status === DELIVERABLE_STATUS.PENDING) {
       if (isAfter(new Date(), deadline)) {
         return (
           <Typography variant="body2" sx={{
@@ -57,18 +54,21 @@ export function DeliveryCard ({ deliverable }: DeliveryCardProps): JSX.Element {
         }
       />
       <CardContent>
-        <Typography color="text.primary">
+        <Typography sx={{
+          color: (theme) => theme.palette.text.secondary
+        }}>
           Estado: {deliverable.status}
         </Typography>
         {makeStatusDate()}
-        <Typography color="text.primary">
+        <Typography sx={{
+          color: (theme) => theme.palette.text.secondary
+        }}>
           Calificación: {deliverable.note}
         </Typography>
-        <Typography color="text.primary">
+        <Typography sx={{
+          color: (theme) => theme.palette.text.secondary
+        }}>
           Porcentaje: {deliverable.percent}%
-        </Typography>
-        <Typography color="text.primary">
-          Curso: {deliverable.course}
         </Typography>
 
         <CardActions>

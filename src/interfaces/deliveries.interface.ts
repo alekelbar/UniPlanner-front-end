@@ -9,15 +9,15 @@ export interface CreateDeliverable {
 }
 
 export interface Deliverable {
-  _id: string;
-  createdAt: Date;
+  _id?: string;
+  createdAt?: Date;
   name: string;
   description: string;
   deadline: Date;
   status: string;
   note: number;
   percent: number;
-  course: string;
+  course?: string;
 }
 
 export interface DeliverableState {
@@ -26,4 +26,10 @@ export interface DeliverableState {
   error: string | null;
   selected: Deliverable | null;
   count: number;
+}
+
+export enum DELIVERABLE_STATUS {
+  SEND = "Enviado",
+  PENDING = "Pendiente",
+  REVIEWED = "Calificado",
 }

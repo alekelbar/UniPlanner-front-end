@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
@@ -6,7 +7,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { GoHome } from '../../src/components';
+import { FloatButton } from '../../src/components/common/FloatButton';
 import { DeliveryCard } from '../../src/components/Deliverables/DeliveryCard';
+import AddDeliveryDialog from '../../src/components/Deliverables/AddDeliveryDialog';
 import { logOut } from '../../src/helpers/local-storage';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
@@ -28,6 +31,17 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
   const { deliverables } = useAppSelector(st => st.deliveries);
 
   const [deliveries, setDeliveries] = useState(deliverables);
+
+  // Manejo de estado de los modales...
+  const [openCreate, setOpenCreate] = useState(false);
+
+  const onOpenCreate = () => {
+    setOpenCreate(true);
+  };
+
+  const onCloseCreate = () => {
+    setOpenCreate(false);
+  };
 
 
   const reload = async (page: number = 1) => {
@@ -90,8 +104,9 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
                   </Grid>
                 );
               })
-              : <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
+              :
+              <Grid item xs={12} sm={12}>
+                <Typography align='center' variant='subtitle1' p={5}>No hay entregas disponibles</Typography>
               </Grid>
           }
         </Grid>
@@ -112,12 +127,12 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
           </Grid>
         </Grid> */}
       </Paper>
-      {/* <FloatButton
+      <FloatButton
         onAction={onOpenCreate}
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
-      <AddCourseDialog onClose={onCloseCreate} open={openCreate} />
-      <EditCourseDialog onClose={onCloseEdit} open={openEdit} /> */}
+      <AddDeliveryDialog onClose={onCloseCreate} open={openCreate} />
+      {/* <EditCourseDialog onClose={onCloseEdit} open={openEdit} /> */}
     </Stack>
   );
 }

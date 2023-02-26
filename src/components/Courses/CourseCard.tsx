@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
@@ -50,9 +50,13 @@ export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardPr
           color: (theme) => theme.palette.primary.contrastText,
         }}
         subheader={
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            Credits: {credits}
-          </Typography>
+          <Tooltip title='Cantidad de creditos correspondientes a esta materia' placement='top-start'>
+            <Typography variant="subtitle1" sx={{
+              color: (theme) => theme.palette.info.main,
+            }} gutterBottom>
+              Credits: {credits}
+            </Typography>
+          </Tooltip>
         }
       />
       <CardContent>
