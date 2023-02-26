@@ -43,7 +43,7 @@ export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardPr
   };
 
   return (
-    <Card sx={{ maxWidth: 400 }} variant='elevation'>
+    <Card sx={{ maxWidth: 350 }} variant='elevation'>
       <CardHeader
         title={name}
         sx={{

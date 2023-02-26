@@ -27,14 +27,14 @@ export class DeliverableService {
 
   async getDeliverables(course: Course, page: number) {
     try {
-      const deliverables = await this.API.get<Deliverable[]>(
-        `deliverables/course/${course._id}`,
-        {
-          params: {
-            page: page - 1,
-          },
-        }
-      );
+      const deliverables = await this.API.get<{
+        count: number;
+        deliverables: Deliverable[];
+      }>(`deliverables/course/${course._id}`, {
+        params: {
+          page: page - 1,
+        },
+      });
 
       return deliverables;
     } catch (error: any) {

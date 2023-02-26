@@ -28,8 +28,8 @@ export const startLoadDeliveries = (page: number) => {
     const response = await service.getDeliverables(selectedCourse, page);
 
     if (typeof response !== "string") {
-      const deliveries = response.data;
-      dispatch(loadDeliveries(deliveries));
+      const data = response.data;
+      dispatch(loadDeliveries(data));
       dispatch(stopLoadingDeliveries());
       return RESPONSES.SUCCESS;
     }

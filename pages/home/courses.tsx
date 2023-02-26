@@ -10,6 +10,7 @@ import GoHome from '../../src/components/common/Layout/GoHome';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
 import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';
+import isInteger from '../../src/helpers/isInteger';
 import usePagination from '../../src/hooks/pagination';
 import { Course } from '../../src/interfaces/course.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
@@ -85,9 +86,9 @@ export default function Courses ({ }: CoursesProps) {
 
     // Cálculo para la paginación
     const pages: number =
-      (coursesState.count % 5 !== 0)
-        ? Math.trunc(coursesState.count / 5) + 1
-        : Math.trunc(coursesState.count / 5);
+      isInteger(coursesState.count / 5)
+        ? coursesState.count / 5
+        : Math.floor(coursesState.count / 5) + 1;
 
     setTotalPages(pages);
 
@@ -99,29 +100,10 @@ export default function Courses ({ }: CoursesProps) {
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.primary.main,
+        backgroundColor: ({ palette }) => palette.primary.dark,
         zIndex: '10'
       }}>
         <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{selected.name}</Typography>
-      </Box>
-      <Paper variant='elevation'>
-        <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
-          {
-            courses.length
-              ? courses.map((course, index) => {
-                if (index >= 5) return null;
-                return (
-                  <Grid item xs={12} sm={4} key={course._id + course.name}>
-                    <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
-                    <Divider variant='fullWidth' />
-                  </Grid>
-                );
-              })
-              : <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
-              </Grid>
-          }
-        </Grid>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
             <Pagination
@@ -132,11 +114,30 @@ export default function Courses ({ }: CoursesProps) {
                   fontSize: "large"
                 },
               }}
-              size="large"
+              size="small"
               count={totalPages}
               onChange={handleChangePage}
             />
           </Grid>
+        </Grid>
+      </Box>
+      <Paper variant='elevation'>
+        <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
+          {
+            courses.length
+              ? courses.map((course, index) => {
+                if (index >= 5) return null;
+                return (
+                  <Grid item xs={12} sm={4} key={course._id + course.name} mb={5}>
+                    <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
+                    <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
+                  </Grid>
+                );
+              })
+              : <Grid item xs={12} sm={12}>
+                <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
+              </Grid>
+          }
         </Grid>
       </Paper>
       <FloatButton

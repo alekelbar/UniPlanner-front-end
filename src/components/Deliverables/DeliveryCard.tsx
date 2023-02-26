@@ -10,7 +10,6 @@ import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startremoveDelivery } from '../../redux/thunks/deliverables-thunks';
-import GoHome from '../common/Layout/GoHome';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
@@ -19,6 +18,13 @@ interface DeliveryCardProps {
 
 export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.Element {
   const deadline = parseISO(deliverable.deadline.toString());
+
+  let create_at: Date | null = null;
+
+  if (deliverable.createdAt) {
+    create_at = parseISO(deliverable.createdAt.toString());
+  }
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -29,7 +35,7 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
           <Typography variant="body2" sx={{
             color: (theme) => theme.palette.error.main
           }}>
-            No entregado
+            No entregado | {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
           </Typography>
         );
       }
@@ -37,7 +43,7 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
         <Typography variant="body2" sx={{
           color: (theme) => theme.palette.warning.main
         }}>
-          Tiempo: {formatDistance(deadline, new Date(), { locale: es })}
+          Se entrega: {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
         </Typography>
       );
     }
@@ -77,9 +83,20 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
       <CardHeader
         title={deliverable.name}
         subheader={
-          <Typography variant="body2" component="p">
-            {deliverable.description}
-          </Typography>
+          <>
+            <Typography variant="body2" component="p">
+              {deliverable.description}
+            </Typography>
+            <Typography variant='caption' sx={{
+              color: (theme) => theme.palette.info.main
+            }}>
+              Creado: {
+                create_at
+                  ? formatDistance(create_at, new Date(), { locale: es, addSuffix: true })
+                  : "Desconocido"
+              }
+            </Typography>
+          </>
         }
       />
       <CardContent>
@@ -99,7 +116,6 @@ export function DeliveryCard ({ deliverable, reload }: DeliveryCardProps): JSX.E
         }}>
           Porcentaje: {deliverable.percent}%
         </Typography>
-
         <CardActions>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} lg={4}>

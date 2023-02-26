@@ -19,8 +19,17 @@ export const deliveriesSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    loadDeliveries: (state, { payload }: PayloadAction<Deliverable[]>) => {
-      state.deliverables = payload;
+    loadDeliveries: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        count: number;
+        deliverables: Deliverable[];
+      }>
+    ) => {
+      state.deliverables = payload.deliverables;
+      state.count = payload.count;
     },
     startLoadingDeliveries: (state) => {
       state.loading = true;
@@ -48,7 +57,7 @@ export const {
   removeDelivery,
   setSelectedDelivery,
   startLoadingDeliveries,
-  stopLoadingDeliveries
+  stopLoadingDeliveries,
 } = deliveriesSlice.actions;
 
 export default deliveriesSlice;

@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -17,20 +17,28 @@ import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
+import usePagination from '../../src/hooks/pagination';
+import isInteger from '../../src/helpers/isInteger';
 
 interface DeliveriesProps {
 
 }
 
 export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
-  const theme = useTheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { selected: selectedCourse } = useAppSelector(st => st.courses);
-  const { deliverables } = useAppSelector(st => st.deliveries);
+  const deliverablesState = useAppSelector(st => st.deliveries);
 
-  const [deliveries, setDeliveries] = useState(deliverables);
+  const {
+    actualPage,
+    handleChangePage,
+    totalPages,
+    setTotalPages,
+  } = usePagination(deliverablesState.count);
+
+  const [deliveries, setDeliveries] = useState(deliverablesState.deliverables);
 
   // Manejo de estado de los modales...
   const [openCreate, setOpenCreate] = useState(false);
@@ -65,8 +73,22 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    setDeliveries(deliverables);
-  }, [deliverables]);
+    reload(actualPage);
+  }, [actualPage]);
+
+
+  useEffect(() => {
+    setDeliveries(deliverablesState.deliverables);
+
+    // Cálculo para la paginación
+    const pages: number =
+      isInteger(deliverablesState.count / 5)
+        ? deliverablesState.count / 5
+        : Math.floor(deliverablesState.count / 5) + 1;
+
+    setTotalPages(pages);
+
+  }, [deliverablesState]);
 
 
   if (!selectedCourse) return <GoHome />;
@@ -76,7 +98,7 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.primary.main,
+        backgroundColor: ({ palette }) => palette.primary.dark,
         zIndex: '10'
       }}>
         <Typography
@@ -85,6 +107,19 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
           variant='subtitle1'>
           {selectedCourse.name}
         </Typography>
+        <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
+          <Grid item>
+            <Pagination
+              page={actualPage}
+              sx={{
+                width: "100%"
+              }}
+              size="small"
+              count={totalPages}
+              onChange={handleChangePage}
+            />
+          </Grid>
+        </Grid>
       </Box>
       <Paper variant='elevation'>
         <Grid
@@ -98,9 +133,9 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
               ? deliveries.map((delivery, index) => {
                 if (index >= 5) return null;
                 return (
-                  <Grid item xs={12} sm={4} key={delivery._id + delivery.name}>
+                  <Grid item xs={12} sm={4} key={delivery._id + delivery.name} mb={5}>
                     <DeliveryCard reload={reload} deliverable={delivery} key={index} />
-                    <Divider variant='fullWidth' />
+                    <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
                   </Grid>
                 );
               })
@@ -110,22 +145,6 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
               </Grid>
           }
         </Grid>
-        {/* <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
-          <Grid item>
-            <Pagination
-              page={actualPage}
-              sx={{
-                width: "100%",
-                [theme.breakpoints.up("md")]: {
-                  fontSize: "large"
-                },
-              }}
-              size="large"
-              count={totalPages}
-              onChange={handleChangePage}
-            />
-          </Grid>
-        </Grid> */}
       </Paper>
       <FloatButton
         onAction={onOpenCreate}
