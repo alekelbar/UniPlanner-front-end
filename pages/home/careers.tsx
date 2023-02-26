@@ -16,6 +16,7 @@ import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
 import { FloatButton } from '../../src/components/common/FloatButton';
 import { Add } from '@mui/icons-material';
+import { validateToken } from '../../src/services/auth/validate-token';
 
 interface Props {
   parseToken: UserState;
@@ -94,21 +95,26 @@ export default Career;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false,
-      },
-    };
+
+  if (token) {
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      const service = CareerService.createService("v1");
+      const { data: allCareers } = await service.listAll();
+      return {
+        props: {
+          allCareers
+        }
+      };
+    }
   }
 
-  const service = CareerService.createService("v1");
-  const { data: allCareers } = await service.listAll();
-
   return {
-    props: {
-      allCareers
-    }
+    redirect: {
+      destination: '/auth',
+      permanent: false,
+    },
   };
 };

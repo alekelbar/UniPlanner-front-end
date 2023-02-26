@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
@@ -7,7 +7,7 @@ import { Course } from '../../interfaces/course.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
-import { setSelected } from '../../redux/slices/Courses/coursesSlice';
+import { setSelectedCourse } from '../../redux/slices/Courses/coursesSlice';
 import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
 
 interface CourseCardProps {
@@ -44,20 +44,29 @@ export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardPr
 
   return (
     <Card sx={{ maxWidth: 400 }} variant='elevation'>
+      <CardHeader
+        title={name}
+        sx={{
+          color: (theme) => theme.palette.primary.contrastText,
+        }}
+        subheader={
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            Credits: {credits}
+          </Typography>
+        }
+      />
       <CardContent>
-        <Typography variant="h6" component="h2" gutterBottom>
-          {name}
-        </Typography>
         <Typography variant="body1" color="text.secondary" gutterBottom>
           {courseDescription}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-          Credits: {credits}
         </Typography>
         <Button
           fullWidth variant='contained'
           color='secondary'
-        >Ver entregables
+          onClick={() => {
+            dispatch(setSelectedCourse(course));
+            router.push('/home/deliveries');
+          }}
+        >Entregables
         </Button>
         <CardActions>
           <Button
@@ -68,8 +77,8 @@ export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardPr
           </Button>
           <Button
             variant='outlined'
-            color='info'
-            onClick={() => { onOpenEdit(); dispatch(setSelected(course)); }}>
+            color='success'
+            onClick={() => { onOpenEdit(); dispatch(setSelectedCourse(course)); }}>
             Actualizar
           </Button>
         </CardActions>

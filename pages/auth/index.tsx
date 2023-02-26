@@ -11,8 +11,10 @@ import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { Link } from '../../src/components';
 import { RESPONSES } from '../../src/interfaces/response-messages';
+import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserLogin } from '../../src/redux/thunks/user.thunks';
+import { validateToken } from '../../src/services/auth/validate-token';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
 const LoginPage: React.FC = () => {
@@ -136,12 +138,18 @@ export default LoginPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
+
   if (token) {
-    return {
-      redirect: {
-        destination: '/home/careers',
-        permanent: false,
-      },
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      return {
+        redirect: {
+          destination: '/home/careers',
+          permanent: false,
+        },
+      };
     };
   }
 
@@ -149,4 +157,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
     },
   };
+  
 };

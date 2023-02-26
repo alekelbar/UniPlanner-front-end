@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./slices/auth/authSlice";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
+import deliveriesSlice from "./slices/Deliveries/deliveriesSlice";
 // ...
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     auth: authSlice.reducer,
     career: careerSlice.reducer,
     courses: coursesSlice.reducer,
+    deliveries: deliveriesSlice.reducer
   },
 });
 

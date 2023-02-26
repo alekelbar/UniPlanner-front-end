@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { Career } from '../../interfaces/career.interface';
@@ -35,25 +35,25 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
 
   return (
     <Card>
+      <CardHeader
+        title={name}
+      />
       <CardContent>
-        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-          {name}
-        </Typography>
+        <CardActions>
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={handleSelectedCareer}
+          > Cursos
+          </Button>
+          <Button
+            variant='outlined'
+            color='warning'
+            onClick={handleRemove}
+          > inhabilitar
+          </Button>
+        </CardActions>
       </CardContent>
-      <CardActions>
-        <Button
-          variant='contained'
-          color='secondary'
-          onClick={handleSelectedCareer}
-        > Ver cursos
-        </Button>
-        <Button
-          variant='text'
-          color='warning'
-          onClick={handleRemove}
-        > inhabilitar
-        </Button>
-      </CardActions>
     </Card>
   );
 }

@@ -13,8 +13,10 @@ import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog'
 import usePagination from '../../src/hooks/pagination';
 import { Course } from '../../src/interfaces/course.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
+import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
+import { validateToken } from '../../src/services/auth/validate-token';
 
 interface CoursesProps {
 
@@ -27,6 +29,7 @@ export default function Courses ({ }: CoursesProps) {
 
   const { selected } = useAppSelector(st => st.career);
   const coursesState = useAppSelector(st => st.courses);
+
   const {
     actualPage,
     handleChangePage,
@@ -103,15 +106,21 @@ export default function Courses ({ }: CoursesProps) {
       </Box>
       <Paper variant='elevation'>
         <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
-          {courses.map((course, index) => {
-            if (index >= 5) return null;
-            return (
-              <Grid item xs={12} sm={4} key={course._id + course.name}>
-                <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
-                <Divider variant='fullWidth' />
+          {
+            courses.length
+              ? courses.map((course, index) => {
+                if (index >= 5) return null;
+                return (
+                  <Grid item xs={12} sm={4} key={course._id + course.name}>
+                    <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
+                    <Divider variant='fullWidth' />
+                  </Grid>
+                );
+              })
+              : <Grid item xs={12} sm={12}>
+                <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
               </Grid>
-            );
-          })}
+          }
         </Grid>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
@@ -140,19 +149,25 @@ export default function Courses ({ }: CoursesProps) {
   );
 }
 
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false,
-      },
-    };
+
+  if (token) {
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      return {
+        props: {
+        }
+      };
+    }
   }
 
   return {
-    props: {}
+    redirect: {
+      destination: '/auth',
+      permanent: false,
+    },
   };
 };

@@ -23,6 +23,8 @@ import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserRegister } from '../../src/redux/thunks/user.thunks';
 import { CareerService } from '../../src/services/Career/career.service';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
+import { UserState } from '../../src/interfaces/users.interface';
+import { validateToken } from '../../src/services/auth/validate-token';
 
 interface Props {
   careers: Career[];
@@ -260,17 +262,22 @@ export default RegisterPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
+
   if (token) {
-    return {
-      redirect: {
-        destination: '/home/careers',
-        permanent: false,
-      },
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      return {
+        redirect: {
+          destination: '/home/careers',
+          permanent: false,
+        },
+      };
     };
   }
-
+  
   const service = CareerService.createService("v1");
-
   const { data } = await service.listAll();
 
   return {
@@ -278,5 +285,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       careers: data
     }
   };
-
 };
