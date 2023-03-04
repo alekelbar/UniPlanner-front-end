@@ -104,8 +104,6 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
 
   if (!selectedCourse) return <GoHome />;
 
-  console.log(deliveries);
-
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box position='sticky' top={0} sx={{

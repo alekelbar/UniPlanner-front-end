@@ -181,8 +181,6 @@ export class UserService {
   }
 
   async updateUser(updateUser: UpdateUser, id: string) {
-    console.log(updateUser);
-
     try {
       const { data } = await this.API.patch<User>(
         `auth/user/${id}`,
@@ -194,8 +192,6 @@ export class UserService {
       if (!error.response) {
         return USER_EXCEPTIONS.INTERNAL_ERROR;
       }
-
-      console.log(error.response);
       switch (error.response.status) {
         case 400:
           return USER_EXCEPTIONS.ALREADY_EXIST;

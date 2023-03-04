@@ -38,7 +38,6 @@ export class DeliverableService {
 
       return deliverables;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -63,7 +62,6 @@ export class DeliverableService {
 
       return deliverable;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -87,7 +85,6 @@ export class DeliverableService {
 
       return deliverable;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -112,7 +109,6 @@ export class DeliverableService {
 
       return updated;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }

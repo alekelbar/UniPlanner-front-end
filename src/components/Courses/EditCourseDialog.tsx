@@ -30,7 +30,6 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
       credits: selectedCourse?.credits || 4,
     },
     onSubmit: async (values) => {
-      console.log(values);
       const { courseDescription, credits, name } = values;
       const response = await dispatch(startUpdateCourse(name, courseDescription, credits));
 

@@ -104,7 +104,6 @@ export class CourseService {
 
       return response;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }

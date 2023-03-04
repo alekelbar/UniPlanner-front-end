@@ -41,7 +41,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         status,
       }));
       if (response !== RESPONSES.SUCCESS) {
-        console.log(response);
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
             await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');

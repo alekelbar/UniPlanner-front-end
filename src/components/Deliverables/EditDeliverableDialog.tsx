@@ -35,7 +35,6 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
     },
     onSubmit: async (values) => {
       const { deadline, description, name, note, percent, status } = values;
-      console.log(values);
       const response = await dispatch(startUpdateDelivery({
         deadline: new Date(deadline),
         description,
@@ -45,7 +44,6 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         status,
       }));
       if (response !== RESPONSES.SUCCESS) {
-        console.log(response);
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
             await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
