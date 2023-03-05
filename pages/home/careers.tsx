@@ -12,7 +12,7 @@ import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
-import { startLoadCareers } from '../../src/redux/thunks/user.thunks';
+import { startLoadCareers } from '../../src/redux/thunks/careers-thunks';
 import { CareerService } from '../../src/services/Career/career.service';
 import { FloatButton } from '../../src/components/common/FloatButton';
 import { Add } from '@mui/icons-material';
@@ -29,6 +29,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 
   const careerState = useAppSelector(st => st.career);
   const { careers, loading } = careerState;
+  
   const [careersState, setCareersState] = useState<Career[]>(careers);
 
   const [open, setOpen] = useState(false);
@@ -94,18 +95,30 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 export default Career;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
   const { token } = ctx.req.cookies;
 
   if (token) {
     const parseToken: UserState = JSON.parse(token);
     const tokenString = parseToken.token;
 
+    
     if ((await validateToken(tokenString))) {
       const service = CareerService.createService("v1");
-      const { data: allCareers } = await service.listAll();
+      const response = await service.listAll();
+      
+      if (typeof response === "string") {
+        return {
+          redirect: {
+            destination: '/auth',
+            permanent: false,
+          },
+        };
+      }
+      
       return {
         props: {
-          allCareers
+          allCareers: response.data
         }
       };
     }

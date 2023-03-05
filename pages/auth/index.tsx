@@ -13,7 +13,7 @@ import { Link } from '../../src/components';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
-import { startUserLogin } from '../../src/redux/thunks/user.thunks';
+import { startUserLogin } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
         return;
       }
 
-      router.replace('/home/careers');
+      router.push('/home/careers');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -157,5 +157,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
     },
   };
-  
+
 };

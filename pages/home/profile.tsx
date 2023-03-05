@@ -13,7 +13,7 @@ import { Loading } from '../../src/components';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
-import { startUpdateUser } from '../../src/redux/thunks/user.thunks';
+import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
 
 interface Props {

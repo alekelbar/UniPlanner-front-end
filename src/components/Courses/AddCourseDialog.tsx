@@ -27,7 +27,6 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
       credits: 4,
     },
     onSubmit: async (values) => {
-      console.log(values);
       const { courseDescription, credits, name } = values;
       const response = await dispatch(startAddCourse(name, courseDescription, credits));
       if (response !== RESPONSES.SUCCESS) {
@@ -87,7 +86,8 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Ingrese el nombre del curso"
-              placeholder='Nombre' />
+              placeholder='Nombre' 
+              autoComplete='off'/>
             {formik.touched.name && formik.errors.name && (
               <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
             )}
@@ -97,7 +97,8 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Ingrese la descripción del curso"
-              placeholder='Descripción' />
+              placeholder='Descripción' 
+              autoComplete='off'/>
             {formik.touched.courseDescription && formik.errors.courseDescription && (
               <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
             )}
@@ -107,12 +108,12 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Agregue el valor en creditos del curso"
-              placeholder='Credito' />
+              placeholder='Credito' 
+              autoComplete='off'/>
             {formik.touched.credits && formik.errors.credits && (
               <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
             )}
             <Button
-              onClick={() => console.log('agregando curso...')}
               type="submit"
               variant="contained"
               color="secondary">

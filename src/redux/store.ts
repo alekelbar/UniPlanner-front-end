@@ -3,6 +3,7 @@ import authSlice from "./slices/auth/authSlice";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
 import deliveriesSlice from "./slices/Deliveries/deliveriesSlice";
+import { TaskSlice } from "./slices/Tasks/task-slice";
 // ...
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     auth: authSlice.reducer,
     career: careerSlice.reducer,
     courses: coursesSlice.reducer,
-    deliveries: deliveriesSlice.reducer
+    deliveries: deliveriesSlice.reducer,
+    tasks: TaskSlice.reducer
   },
 });
 

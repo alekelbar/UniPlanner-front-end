@@ -26,14 +26,15 @@ export const startLoadCourses = (careerId: string, page: number) => {
     const service = CourseService.createService("v1");
     const response = await service.getUserCourse(user.id, careerId, page);
 
-    if (typeof response !== "string") {
-      const { count, courses } = response.data;
-      dispatch(setCourses({ courses, count }));
+    if (typeof response === "string") {
       dispatch(stopLoadingCourses());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    const { count, courses } = response.data;
+    dispatch(setCourses({ courses, count }));
+    dispatch(stopLoadingCourses());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -52,13 +53,14 @@ export const startRemoveCourse = (course: Course) => {
     const service = CourseService.createService("v1");
     const response = await service.removeCourse(course);
 
-    if (typeof response !== "string") {
-      dispatch(removeCourse(response.data));
+    if (typeof response === "string") {
       dispatch(stopLoadingCourses());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    dispatch(removeCourse(response.data));
+    dispatch(stopLoadingCourses());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -89,13 +91,14 @@ export const startAddCourse = (
     };
     const response = await service.createCourse(course);
 
-    if (typeof response !== "string") {
-      dispatch(addCourse(response.data));
+    if (typeof response === "string") {
       dispatch(stopLoadingCourses());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    dispatch(addCourse(response.data));
+    dispatch(stopLoadingCourses());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -129,12 +132,13 @@ export const startUpdateCourse = (
     const { _id: id } = selectedCourse;
     const response = await service.updateCourse(id as string, course);
 
-    if (typeof response !== "string") {
-      dispatch(updateCourse(response.data));
+    if (typeof response === "string") {
       dispatch(stopLoadingCourses());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    dispatch(updateCourse(response.data));
+    dispatch(stopLoadingCourses());
+    return RESPONSES.SUCCESS;
   };
 };

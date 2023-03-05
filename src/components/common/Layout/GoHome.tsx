@@ -3,7 +3,7 @@ import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 
 
-export default function GoHome () {
+export default function GoHome (): JSX.Element {
   const router = useRouter();
   return (
     <Container sx={{ py: 4 }}>

@@ -1,45 +1,44 @@
-import { useTheme } from '@emotion/react';
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Pagination, Paper, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Box, Divider, Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { GoHome, Loading } from '../../src/components';
 import { FloatButton } from '../../src/components/common/FloatButton';
-import { DeliveryCard } from '../../src/components/Deliverables/DeliveryCard';
-import AddDeliveryDialog from '../../src/components/Deliverables/AddDeliveryDialog';
+import AddTaskDialog from '../../src/components/Tasks/AddTaskDialog';
+import EditTaskDialog from '../../src/components/Tasks/EditTaskDialog';
+import TaskCard from '../../src/components/Tasks/TaskCard';
+import isInteger from '../../src/helpers/isInteger';
 import { logOut } from '../../src/helpers/local-storage';
+import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
-import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks';
+import { startLoadTasks } from '../../src/redux/thunks/tasks-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
-import usePagination from '../../src/hooks/pagination';
-import isInteger from '../../src/helpers/isInteger';
-import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
 
-interface DeliveriesProps {
+
+interface TaskProps {
 
 }
 
-export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
+export default function Tasks ({ }: TaskProps): JSX.Element {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { selected: selectedCourse } = useAppSelector(st => st.courses);
-  const deliverablesState = useAppSelector(st => st.deliveries);
+  const { selected: selectedDelivery } = useAppSelector(st => st.deliveries);
+  const taskState = useAppSelector(st => st.tasks);
 
   const {
     actualPage,
     handleChangePage,
     totalPages,
     setTotalPages,
-  } = usePagination(deliverablesState.count);
+  } = usePagination(taskState.count);
 
-  const [deliveries, setDeliveries] = useState(deliverablesState.deliverables);
+  const [tasks, setTasks] = useState(taskState.tasks);
 
   // Manejo de estado de los modales...
   const [openCreate, setOpenCreate] = useState(false);
@@ -62,10 +61,9 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
     setOpenEdit(false);
   };
 
-
   const reload = async (page: number = 1) => {
-    if (selectedCourse) {
-      const response = await dispatch(startLoadDeliveries(page));
+    if (selectedDelivery) {
+      const response = await dispatch(startLoadTasks(page));
       if (response !== RESPONSES.SUCCESS) {
         if (response === RESPONSES.UNAUTHORIZE) {
           dispatch(onLogOut);
@@ -80,30 +78,25 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
   };
 
   useEffect(() => {
-    reload();
-  }, []);
-
-  useEffect(() => {
     reload(actualPage);
   }, [actualPage]);
 
 
   useEffect(() => {
-    setDeliveries(deliverablesState.deliverables);
-
+    setTasks(taskState.tasks);
     // Cálculo para la paginación
     const pages: number =
-      isInteger(deliverablesState.count / 5)
-        ? deliverablesState.count / 5
-        : Math.floor(deliverablesState.count / 5) + 1;
+      isInteger(taskState.count / 5)
+        ? taskState.count / 5
+        : Math.floor(taskState.count / 5) + 1;
 
     setTotalPages(pages);
 
-  }, [deliverablesState]);
+  }, [taskState]);
 
+  if (!selectedDelivery) <GoHome />;
 
-  if (!selectedCourse) return <GoHome />;
-  if (deliverablesState.loading) return <Loading />;
+  if (taskState.loading) <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
@@ -115,7 +108,7 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {selectedCourse.name}
+          {selectedDelivery?.name}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
@@ -139,19 +132,19 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
           justifyContent="start"
           alignItems={'center'}>
           {
-            deliveries.length
-              ? deliveries.map((delivery, index) => {
+            tasks.length
+              ? tasks.map((task, index) => {
                 if (index >= 5) return null;
                 return (
-                  <Grid item xs={12} sm={4} key={delivery._id + delivery.name} mb={5}>
-                    <DeliveryCard onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} key={index} />
+                  <Grid item xs={12} sm={4} key={task._id + task.name} mb={5}>
+                    <TaskCard onOpenEdit={onOpenEdit} reload={reload} task={task} key={task._id + task.name} />
                     <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
                   </Grid>
                 );
               })
               :
               <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay entregas disponibles</Typography>
+                <Typography align='center' variant='subtitle1' p={5}>No hay tareas disponibles</Typography>
               </Grid>
           }
         </Grid>
@@ -160,11 +153,12 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
         onAction={onOpenCreate}
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
-      <AddDeliveryDialog onClose={onCloseCreate} open={openCreate} />
-      <EditDeliverableDialog onClose={onCloseEdit} open={openEdit} />
+      <AddTaskDialog onClose={onCloseCreate} open={openCreate} />
+      <EditTaskDialog onClose={onCloseEdit} open={openEdit} />
     </Stack>
   );
 }
+
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

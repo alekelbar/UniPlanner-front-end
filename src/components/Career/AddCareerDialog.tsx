@@ -11,7 +11,7 @@ import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
-import { startAddCareer } from '../../redux/thunks/user.thunks';
+import { startAddCareer } from '../../redux/thunks/careers-thunks';
 
 interface AddCareerDialogProps {
   open: boolean,

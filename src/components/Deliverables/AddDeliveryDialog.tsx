@@ -112,7 +112,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onChange={formik.handleChange}
               value={formik.values.deadline}
               type={'date'}
-              onBlur={formik.handleBlur} />
+              onBlur={formik.handleBlur}
+              autoComplete='off' />
             {formik.touched.deadline && formik.errors.deadline && (
               <Typography variant='caption' color={'error'}>{formik.errors.deadline}</Typography>
             )}
@@ -125,7 +126,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               type={'text'}
               placeholder="¿Cual es el nombre del entregable?"
               helperText="Entregable"
-              onBlur={formik.handleBlur} />
+              onBlur={formik.handleBlur}
+              autoComplete='off' />
             {formik.touched.name && formik.errors.name && (
               <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
             )}
@@ -140,7 +142,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               multiline
               placeholder="¿Cual es la description del entregable?"
               helperText="Descripción"
-              onBlur={formik.handleBlur} />
+              onBlur={formik.handleBlur}
+              autoComplete='off' />
             {formik.touched.description && formik.errors.description && (
               <Typography variant='caption' color={'error'}>{formik.errors.description}</Typography>
             )}
@@ -153,7 +156,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               type={'number'}
               placeholder="¿Cual es la calificación del entregable?"
               helperText="Calificación"
-              onBlur={formik.handleBlur} />
+              onBlur={formik.handleBlur}
+              autoComplete='off' />
             {formik.touched.note && formik.errors.note && (
               <Typography variant='caption' color={'error'}>{formik.errors.note}</Typography>
             )}
@@ -166,7 +170,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               type={'number'}
               placeholder="¿Cual es el porcentaje del entregable?"
               helperText="Porcentaje"
-              onBlur={formik.handleBlur} />
+              onBlur={formik.handleBlur}
+              autoComplete='off' />
             {formik.touched.percent && formik.errors.percent && (
               <Typography variant='caption' color={'error'}>{formik.errors.percent}</Typography>
             )}
@@ -174,8 +179,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
             <Select
               value={formik.values.status}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              name={'status'}>
+              name={'status'}
+              onBlur={formik.handleBlur}>
               <MenuItem value={DELIVERABLE_STATUS.PENDING}>{DELIVERABLE_STATUS.PENDING}</MenuItem>
               <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
             </Select>

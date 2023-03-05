@@ -5,7 +5,7 @@ import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
-import { startRemoveCareer } from '../../redux/thunks/user.thunks';
+import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
 
 interface CareerCardProps {
   career: Career;

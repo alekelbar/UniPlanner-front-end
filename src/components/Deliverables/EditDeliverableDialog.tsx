@@ -1,7 +1,7 @@
 
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import * as Yup from 'yup';
 import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
@@ -130,7 +130,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onChange={formik.handleChange}
                     value={formik.values.deadline}
                     type={'date'}
-                    onBlur={formik.handleBlur} />
+                    onBlur={formik.handleBlur}
+                    autoComplete='off' />
                   {formik.touched.deadline && formik.errors.deadline && (
                     <Typography variant='caption' color={'error'}>{formik.errors.deadline}</Typography>
                   )}
@@ -143,7 +144,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     type={'text'}
                     placeholder="¿Cual es el nombre del entregable?"
                     helperText="Entregable"
-                    onBlur={formik.handleBlur} />
+                    onBlur={formik.handleBlur}
+                    autoComplete='off' />
                   {formik.touched.name && formik.errors.name && (
                     <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
                   )}
@@ -158,7 +160,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     multiline
                     placeholder="¿Cual es la description del entregable?"
                     helperText="Descripción"
-                    onBlur={formik.handleBlur} />
+                    onBlur={formik.handleBlur}
+                    autoComplete='off' />
                   {formik.touched.description && formik.errors.description && (
                     <Typography variant='caption' color={'error'}>{formik.errors.description}</Typography>
                   )}
@@ -171,7 +174,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     type={'number'}
                     placeholder="¿Cual es la calificación del entregable?"
                     helperText="Calificación"
-                    onBlur={formik.handleBlur} />
+                    onBlur={formik.handleBlur}
+                    autoComplete='off' />
                   {formik.touched.note && formik.errors.note && (
                     <Typography variant='caption' color={'error'}>{formik.errors.note}</Typography>
                   )}
@@ -184,7 +188,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     type={'number'}
                     placeholder="¿Cual es el porcentaje del entregable?"
                     helperText="Porcentaje"
-                    onBlur={formik.handleBlur} />
+                    onBlur={formik.handleBlur}
+                    autoComplete='off' />
                   {formik.touched.percent && formik.errors.percent && (
                     <Typography variant='caption' color={'error'}>{formik.errors.percent}</Typography>
                   )}
@@ -206,7 +211,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     type='submit'
                     color='success'
                     variant='contained'>
-                    Crear
+                    Actualizar
                   </Button>
                 </Stack>
               )

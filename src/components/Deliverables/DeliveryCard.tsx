@@ -1,13 +1,12 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import { format, formatDistance, isAfter, parseISO } from 'date-fns';
+import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
 import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { useAppDispatch, useAppSelector } from '../../redux';
+import { useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
@@ -122,6 +121,18 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardP
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} lg={4}>
               <Button
+                onClick={() => {
+                  dispatch(setSelectedDelivery(deliverable));
+                  router.push('/home/tasks');
+                }}
+                fullWidth
+                variant='contained'
+                color='secondary'>
+                Tareas
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <Button
                 fullWidth
                 variant='outlined'
                 color='success'
@@ -136,14 +147,6 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardP
                 color='warning'
                 onClick={handleRemove}>
                 Eliminar
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <Button
-                fullWidth
-                variant='contained'
-                color='secondary'>
-                Tareas
               </Button>
             </Grid>
           </Grid>

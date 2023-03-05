@@ -20,7 +20,7 @@ import { Link } from '../../src/components';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { Career } from '../../src/interfaces/career.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
-import { startUserRegister } from '../../src/redux/thunks/user.thunks';
+import { startUserRegister } from '../../src/redux/thunks/user-thunks';
 import { CareerService } from '../../src/services/Career/career.service';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 import { UserState } from '../../src/interfaces/users.interface';
