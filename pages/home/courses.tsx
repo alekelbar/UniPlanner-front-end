@@ -112,7 +112,7 @@ export default function Courses ({ }: CoursesProps) {
         backgroundColor: ({ palette }) => palette.primary.dark,
         zIndex: '10'
       }}>
-        <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{`Curso de la carrera | ${selected.name}`}</Typography>
+        <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{`Cursos de la carrera | ${selected.name}`}</Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
             <Pagination

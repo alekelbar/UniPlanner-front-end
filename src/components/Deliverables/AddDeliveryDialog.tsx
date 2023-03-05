@@ -144,6 +144,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onChange={formik.handleChange}
               value={formik.values.name}
               type={'text'}
+              rows={2}
+              multiline
               placeholder="¿Cual es el nombre del entregable?"
               helperText="Entregable"
               onBlur={formik.handleBlur}
@@ -158,7 +160,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onChange={formik.handleChange}
               value={formik.values.description}
               type={'text'}
-              rows={6}
+              rows={3}
               multiline
               placeholder="¿Cual es la description del entregable?"
               helperText="Descripción"

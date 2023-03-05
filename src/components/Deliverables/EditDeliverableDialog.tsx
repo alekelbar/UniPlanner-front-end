@@ -165,7 +165,9 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     placeholder="¿Cual es el nombre del entregable?"
                     helperText="Entregable"
                     onBlur={formik.handleBlur}
-                    autoComplete='off' />
+                    autoComplete='off'
+                    rows={2}
+                    multiline />
                   {formik.touched.name && formik.errors.name && (
                     <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
                   )}

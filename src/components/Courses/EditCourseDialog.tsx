@@ -120,7 +120,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     onBlur={formik.handleBlur}
                     helperText="Ingrese el nombre del curso"
                     placeholder='Nombre'
-                    autoComplete='off' />
+                    autoComplete='off'
+                    rows={2}
+                    multiline
+                    type={"text"} />
                   {formik.touched.name && formik.errors.name && (
                     <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
                   )}
@@ -131,7 +134,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     onBlur={formik.handleBlur}
                     helperText="Ingrese la descripción del curso"
                     placeholder='Descripción'
-                    autoComplete='off' />
+                    autoComplete='off'
+                    rows={2}
+                    multiline
+                    type={"text"} />
                   {formik.touched.courseDescription && formik.errors.courseDescription && (
                     <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
                   )}
@@ -142,7 +148,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     onBlur={formik.handleBlur}
                     helperText="Agregue el valor en creditos del curso"
                     placeholder='Credito'
-                    autoComplete='off' />
+                    autoComplete='off'
+                    rows={2}
+                    multiline
+                    type={"text"} />
                   {formik.touched.credits && formik.errors.credits && (
                     <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
                   )}

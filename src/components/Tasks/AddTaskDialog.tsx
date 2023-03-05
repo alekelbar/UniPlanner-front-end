@@ -116,6 +116,8 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               type={'text'}
               onBlur={formik.handleBlur}
               autoComplete="off"
+              rows={2}
+              multiline
               placeholder="Nombre"
               helperText="¿Como va a nombrar a esta tarea?" />
 
@@ -131,6 +133,8 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               type={'text'}
               onBlur={formik.handleBlur}
               autoComplete="off"
+              rows={2}
+              multiline
               placeholder="Descripción"
               helperText="¿Como describe esta tarea?" />
 
