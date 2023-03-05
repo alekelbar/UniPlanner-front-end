@@ -105,7 +105,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
     if (selected) {
       formik.setFieldValue('description', selected?.description);
       formik.setFieldValue('name', selected?.name);
-      formik.setFieldValue('deadline', format(selectedDeadline, 'yyyy-MM-dd').slice(0, 10));
+      formik.setFieldValue('deadline', format(selectedDeadline, `yyyy-MM-dd'T'HH:mm`));
       formik.setFieldValue('note', selected?.note);
       formik.setFieldValue('percent', selected?.percent);
       formik.setFieldValue('status', selected?.status);
@@ -149,7 +149,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     name="deadline"
                     onChange={formik.handleChange}
                     value={formik.values.deadline}
-                    type={'date'}
+                    type={'datetime-local'}
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.deadline && formik.errors.deadline && (

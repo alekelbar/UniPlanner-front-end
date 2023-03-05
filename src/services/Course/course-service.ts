@@ -2,21 +2,20 @@ import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { PaginatedCourses, Course } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { ApiVersion } from "../../types/api-version";
 
 export class CourseService {
   private baseUrl: string = `http://localhost:3000/api`;
   private API: AxiosInstance;
   private static instance: CourseService | null = null;
 
-  private constructor(serviceVersion: ApiVersion) {
+  private constructor(serviceVersion: string) {
     this.API = axios.create({
       baseURL: this.baseUrl + `/${serviceVersion}/`,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: ApiVersion): CourseService {
+  public static createService(version: string): CourseService {
     if (!this.instance) {
       this.instance = new CourseService(version);
       return this.instance;

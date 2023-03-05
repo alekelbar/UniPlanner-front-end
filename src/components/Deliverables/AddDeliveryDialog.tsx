@@ -131,7 +131,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               name="deadline"
               onChange={formik.handleChange}
               value={formik.values.deadline}
-              type={'date'}
+              type={'datetime-local'}
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.deadline && formik.errors.deadline && (

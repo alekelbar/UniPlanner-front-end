@@ -10,6 +10,7 @@ import {
 } from "../slices/Courses/coursesSlice";
 import { AppDispatch, RootState } from "../store";
 import { Course } from "../../interfaces/course.interface";
+import { API_VERSION } from "../../types";
 
 export const startLoadCourses = (careerId: string, page: number) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -23,7 +24,7 @@ export const startLoadCourses = (careerId: string, page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService("v1");
+    const service = CourseService.createService(API_VERSION);
     const response = await service.getUserCourse(user.id, careerId, page);
 
     if (typeof response === "string") {
@@ -50,7 +51,7 @@ export const startRemoveCourse = (course: Course) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService("v1");
+    const service = CourseService.createService(API_VERSION);
     const response = await service.removeCourse(course);
 
     if (typeof response === "string") {
@@ -81,7 +82,7 @@ export const startAddCourse = (
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService("v1");
+    const service = CourseService.createService(API_VERSION);
     const course: Course = {
       name,
       courseDescription,
@@ -120,7 +121,7 @@ export const startUpdateCourse = (
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService("v1");
+    const service = CourseService.createService(API_VERSION);
     const course: Course = {
       name,
       courseDescription,

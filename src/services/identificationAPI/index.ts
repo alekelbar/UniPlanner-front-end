@@ -1,1 +1,1 @@
-export * from './cedula.service';
+export * from './cedula-service';

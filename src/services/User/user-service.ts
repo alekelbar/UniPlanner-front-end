@@ -8,7 +8,6 @@ import {
   UserState,
 } from "../../interfaces/users.interface";
 import type { User, UpdateUser } from "../../types";
-import { ApiVersion } from "../../types/api-version";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -25,14 +24,14 @@ export class UserService {
   private API: AxiosInstance;
   private static instance: UserService | null = null;
 
-  private constructor(serviceVersion: ApiVersion) {
+  private constructor(serviceVersion: string) {
     this.API = axios.create({
       baseURL: this.baseUrl + `/${serviceVersion}/`,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: ApiVersion): UserService {
+  public static createService(version: string): UserService {
     if (!this.instance) {
       this.instance = new UserService(version);
       return this.instance;

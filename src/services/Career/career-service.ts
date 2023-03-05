@@ -4,21 +4,20 @@ import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { Career } from "../../interfaces/career.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { ApiVersion } from "../../types/api-version";
 
 export class CareerService {
   private baseUrl: string = `http://localhost:3000/api/`;
   private API: AxiosInstance;
   private static instance: CareerService | null = null;
 
-  private constructor(serviceVersion: ApiVersion) {
+  private constructor(serviceVersion: string) {
     this.API = axios.create({
       baseURL: this.baseUrl + `${serviceVersion}/`,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: ApiVersion): CareerService {
+  public static createService(version: string): CareerService {
     if (!this.instance) {
       this.instance = new CareerService(version);
       return this.instance;

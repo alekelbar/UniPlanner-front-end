@@ -15,7 +15,7 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserLogin } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
-import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
+import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 
 
 const LoginPage: React.FC = () => {

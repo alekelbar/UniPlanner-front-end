@@ -13,10 +13,11 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/careers-thunks';
-import { CareerService } from '../../src/services/Career/career.service';
+import { CareerService } from '../../src/services/Career/career-service';
 import { FloatButton } from '../../src/components/common/FloatButton';
 import { Add } from '@mui/icons-material';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { API_VERSION } from '../../src/types';
 
 interface Props {
   parseToken: UserState;
@@ -104,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 
     if ((await validateToken(tokenString))) {
-      const service = CareerService.createService("v1");
+      const service = CareerService.createService(API_VERSION);
       const response = await service.listAll();
 
       if (typeof response === "string") {

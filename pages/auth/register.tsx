@@ -21,10 +21,11 @@ import { RESPONSES } from '../../src/interfaces/response-messages';
 import { Career } from '../../src/interfaces/career.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserRegister } from '../../src/redux/thunks/user-thunks';
-import { CareerService } from '../../src/services/Career/career.service';
-import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
+import { CareerService } from '../../src/services/Career/career-service';
+import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 import { UserState } from '../../src/interfaces/users.interface';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { API_VERSION } from '../../src/types';
 
 interface Props {
   careers: Career[];
@@ -290,7 +291,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const service = CareerService.createService("v1");
+  const service = CareerService.createService(API_VERSION);
   const response = await service.listAll();
 
   return {
