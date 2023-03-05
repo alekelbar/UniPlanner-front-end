@@ -103,9 +103,9 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
 
   }, [taskState]);
 
-  if (!selectedDelivery) <GoHome />;
+  if (!selectedDelivery) return <GoHome />;
 
-  if (taskState.loading) <Loading />;
+  if (taskState.loading) return <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
@@ -117,7 +117,7 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {selectedDelivery?.name}
+          {`Tareas del entregable | ${selectedDelivery?.name}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
