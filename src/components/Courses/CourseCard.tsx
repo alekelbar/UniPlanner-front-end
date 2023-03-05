@@ -14,36 +14,40 @@ interface CourseCardProps {
   course: Course;
   onOpenEdit: () => void;
   reload: (page: number) => void;
+  actualPage: number;
 }
 
-export default function CourseCard ({ course, onOpenEdit, reload }: CourseCardProps): JSX.Element {
+export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: CourseCardProps): JSX.Element {
   const { courseDescription, name, credits } = course;
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleDelete = async () => {
-    const deleted = await dispatch(startRemoveCourse(course));
-    if (deleted !== RESPONSES.SUCCESS) {
-      switch (deleted) {
+    const response = await dispatch(startRemoveCourse(course));
+    if (response !== RESPONSES.SUCCESS) {
+      let responseText = "";
+      switch (response) {
         case RESPONSES.UNAUTHORIZE:
-          await Swal.fire('Parece que no estas autorizado para ver esto 🔒');
-          dispatch(onLogOut());
+          responseText = "Parece que no tiene autorización para estar aquí 🔒";
+          router.push("/auth");
+          dispatch(onLogOut);
           logOut();
-          router.push('/auth');
-          break;
+          return;
         case RESPONSES.BAD_REQUEST:
-          await Swal.fire('Parece ser que este curso tiene todavía algunos entregables 😱');
-          break;
+          responseText = 'Parece que todavía tienes algunas entregas 🔒';
       }
-      return;
+      await Swal.fire({
+        title: "Una disculpa",
+        text: responseText,
+        icon: 'info'
+      });
     }
-    await Swal.fire('Listo, ese curso se marcho de nuestra vidas 🐶');
-    reload(1);
+    reload(actualPage);
   };
 
   return (
-    <Card sx={{ maxWidth: 350 }} variant='elevation'>
+    <Card variant='elevation'>
       <CardHeader
         title={name}
         sx={{

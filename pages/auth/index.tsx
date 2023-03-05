@@ -17,6 +17,7 @@ import { startUserLogin } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
 import { getNameByID } from '../../src/services/identificationAPI/cedula.service';
 
+
 const LoginPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
@@ -33,7 +34,20 @@ const LoginPage: React.FC = () => {
       const response = await dispatch(startUserLogin({ identification: id, password }));
 
       if (response !== RESPONSES.SUCCESS) {
-        await Swal.fire('Algo salio mal 😥', response);
+        let responsesMessage = "";
+        switch (response) {
+          case RESPONSES.UNAUTHORIZE:
+            responsesMessage = "Parece que su credenciales son invalidas 🔒";
+            break;
+          default:
+            responsesMessage = "Ocurrio un error con el servidor";
+            break;
+        }
+        await Swal.fire({
+          title: "Hubo un inconveniente 😊",
+          icon: 'info',
+          text: responsesMessage,
+        });
         return;
       }
 

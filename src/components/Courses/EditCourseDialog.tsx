@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
@@ -6,8 +6,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startUpdateCourse } from '../../redux/thunks/courses.thunks';
 
 interface EditCourseDialogProps {
@@ -22,6 +24,9 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
   const { selected } = useAppSelector(st => st.courses);
 
   const [selectedCourse, setSelectedCourse] = useState(selected);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const formik = useFormik({
     initialValues: {
@@ -34,16 +39,24 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
       const response = await dispatch(startUpdateCourse(name, courseDescription, credits));
 
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
-            // router.push("/auth");
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
+            router.push("/auth");
+            dispatch(onLogOut);
+            logOut();
             onClose();
             return;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que este curso ya existe 🔒');
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
       onClose();
     },
@@ -72,6 +85,12 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -128,7 +147,6 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
                   )}
                   <Button
-                    onClick={() => console.log('agregando curso...')}
                     type="submit"
                     variant="contained"
                     color="secondary">

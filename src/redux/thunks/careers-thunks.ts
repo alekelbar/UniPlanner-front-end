@@ -26,7 +26,6 @@ export const startLoadCareers = () => {
     const service = CareerService.createService("v1");
     const careers = await service.getCareers(user.identification);
     
-    console.log(careers);
     if (typeof careers === "string") {
       dispatch(StopLoadingCareer());
       return RESPONSES.UNAUTHORIZE;

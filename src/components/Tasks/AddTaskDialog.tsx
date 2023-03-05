@@ -4,11 +4,13 @@ import React from 'react';
 import { useAppDispatch } from '../../redux';
 import * as Yup from 'yup';
 import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
-import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { startCreateTask } from '../../redux/thunks/tasks-thunks';
 import { RESPONSES } from '../../interfaces/response-messages';
 import Swal from 'sweetalert2';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { logOut } from '../../helpers/local-storage';
 
 interface AddTaskDialogProps {
   open: boolean,
@@ -25,6 +27,9 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
   JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const formik = useFormik({
     initialValues,
@@ -37,16 +42,24 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
       }));
 
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
             router.push("/auth");
-            onClose();
-            return;
+            dispatch(onLogOut());
+            logOut();
+            break;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que este entregable ya existe 🔒');
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
+            break;
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
 
       formik.resetForm(initialValues);
@@ -70,6 +83,12 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -120,6 +139,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
             )}
 
             <Select
+              fullWidth
               value={formik.values.status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

@@ -1,13 +1,15 @@
-import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
 import { useAppDispatch, useAppSelector } from '../../redux';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startUpdateTask } from '../../redux/thunks/tasks-thunks';
 
 interface EditTaskDialogProps {
@@ -26,6 +28,9 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
   const router = useRouter();
   const { selected } = useAppSelector(st => st.tasks);
   const [selectedTask, setSelectedTask] = useState(selected);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const formik = useFormik({
     initialValues,
@@ -40,18 +45,25 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
       }));
 
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
             router.push("/auth");
-            onClose();
-            return;
+            dispatch(onLogOut());
+            logOut();
+            break;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que ocurrio un error🔒', response);
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
+            break;
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
-
       formik.resetForm(initialValues);
       onClose();
     },
@@ -81,6 +93,13 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
+
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -131,6 +150,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
             )}
 
             <Select
+              fullWidth
               value={formik.values.status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

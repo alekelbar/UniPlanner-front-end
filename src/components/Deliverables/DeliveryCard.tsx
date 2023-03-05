@@ -13,11 +13,12 @@ import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
-  reload: (page: number) => void;
+  reload: (page?: number) => void;
   onOpenEdit: () => void;
+  actualPage: number;
 }
 
-export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardProps): JSX.Element {
+export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: DeliveryCardProps): JSX.Element {
   const deadline = parseISO(deliverable.deadline.toString());
 
   let create_at: Date | null = null;
@@ -59,23 +60,28 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardP
   };
 
   const handleRemove = async () => {
-    const deleted = await dispatch(startRemoveDelivery(deliverable));
-    if (deleted !== RESPONSES.SUCCESS) {
-      switch (deleted) {
+    const response = await dispatch(startRemoveDelivery(deliverable));
+    if (response !== RESPONSES.SUCCESS) {
+      let responseText = "";
+
+      switch (response) {
         case RESPONSES.UNAUTHORIZE:
-          await Swal.fire('Parece que no estas autorizado para ver esto 🔒');
+          responseText = "Parece que no tiene autorización para estar aquí 🔒";
+          router.push("/auth");
           dispatch(onLogOut());
           logOut();
-          router.push('/auth');
           break;
         case RESPONSES.BAD_REQUEST:
-          await Swal.fire('Parece ser que este curso tiene todavía algunos entregables 😱');
+          responseText = 'Parece que todavía te quedan algunas tareas 🔒';
           break;
       }
-      return;
+      await Swal.fire({
+        title: "Una disculpa",
+        text: responseText,
+        icon: 'info'
+      });
     }
-    await Swal.fire('Listo, ese curso se marcho de nuestra vidas 🐶');
-    reload(1);
+    reload(actualPage);
   };
 
 
@@ -101,11 +107,6 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit }: DeliveryCardP
         }
       />
       <CardContent>
-        <Typography sx={{
-          color: (theme) => theme.palette.text.secondary
-        }}>
-          Estado: {deliverable.status}
-        </Typography>
         {makeStatusDate()}
         <Typography sx={{
           color: (theme) => theme.palette.text.secondary

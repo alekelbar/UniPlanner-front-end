@@ -4,7 +4,7 @@ import { Box, Divider, Grid, Pagination, Paper, Typography } from '@mui/material
 import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import { GoHome, Loading } from '../../src/components';
 import { FloatButton } from '../../src/components/common/FloatButton';
@@ -80,15 +80,20 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
   };
 
   useEffect(() => {
-    reload();
-  }, []);
-
-  useEffect(() => {
     reload(actualPage);
   }, [actualPage]);
 
 
   useEffect(() => {
+
+    if (deliverablesState.deliverables.length === 0 && actualPage > 1) {
+      reload(actualPage - 1);
+    }
+
+    if (deliverablesState.deliverables.length > 5) {
+      reload(actualPage);
+    }
+
     setDeliveries(deliverablesState.deliverables);
 
     // Cálculo para la paginación
@@ -131,31 +136,29 @@ export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
           </Grid>
         </Grid>
       </Box>
-      <Paper variant='elevation'>
-        <Grid
-          container
-          spacing={2}
-          direction={'row'}
-          justifyContent="start"
-          alignItems={'center'}>
-          {
-            deliveries.length
-              ? deliveries.map((delivery, index) => {
-                if (index >= 5) return null;
-                return (
-                  <Grid item xs={12} sm={4} key={delivery._id + delivery.name} mb={5}>
-                    <DeliveryCard onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} key={index} />
-                    <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
-                  </Grid>
-                );
-              })
-              :
-              <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay entregas disponibles</Typography>
-              </Grid>
-          }
-        </Grid>
-      </Paper>
+      <Grid
+        container
+        gap={1}
+        p={2}
+        direction={'row'}
+        justifyContent="center"
+        alignItems={'center'}>
+        {
+          deliveries.length
+            ? deliveries.map((delivery) => {
+              return (
+                <Grid item xs={12} sm={5} md={6} lg={3} key={delivery._id + delivery.name}>
+                  <DeliveryCard actualPage={actualPage} onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} />
+                  <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
+                </Grid>
+              );
+            })
+            :
+            <Grid item xs={12} sm={12}>
+              <Typography align='center' variant='subtitle1' p={5}>No hay entregas disponibles</Typography>
+            </Grid>
+        }
+      </Grid>
       <FloatButton
         onAction={onOpenCreate}
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}

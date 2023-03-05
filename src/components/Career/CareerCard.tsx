@@ -1,9 +1,11 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
+import { logOut } from '../../helpers/local-storage';
 import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
 import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
 
@@ -18,14 +20,26 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
 
   const handleRemove = async () => {
     const response = await dispatch(startRemoveCareer(_id));
-    switch (response) {
-      case RESPONSES.UNAUTHORIZE:
-        router.replace('auth');
-        return;
-      default:
-        await Swal.fire('Desactivación', 'La carrera fue inhabilitada');
-        return;
+    if (response !== RESPONSES.SUCCESS) {
+      let responseText = "";
+      switch (response) {
+        case RESPONSES.UNAUTHORIZE:
+          responseText = "Parece que no tiene autorización para estar aquí 🔒";
+          router.push("/auth");
+          dispatch(onLogOut);
+          logOut();
+          return;
+        case RESPONSES.BAD_REQUEST:
+          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
+          return;
+      }
+      await Swal.fire({
+        title: "Una disculpa",
+        text: responseText,
+        icon: 'info'
+      });
     }
+    return;
   };
 
   const handleSelectedCareer = () => {

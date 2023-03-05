@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import Career from "../../../pages/home/careers";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
+import { RESPONSES } from "../../interfaces/response-messages";
 import {
   UserLogin,
   UserRegister,
@@ -39,70 +40,44 @@ export class UserService {
     return this.instance;
   }
 
-  async login(userLogin: UserLogin): Promise<UserState> {
+  async login(userLogin: UserLogin) {
     try {
       const { data } = await this.API.post<UserState>("auth/login", userLogin);
 
-      return {
-        ...data,
-        error: null,
-      };
+      return data;
     } catch (error: any) {
-      const response = {
-        token: null,
-        user: null,
-        careers: [],
-        error: USER_EXCEPTIONS.INTERNAL_ERROR,
-      };
-
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-            return {
-              ...response,
-              error: USER_EXCEPTIONS.INVALID_CREDENTIALS,
-            };
-          case 400:
-            return {
-              ...response,
-              error: USER_EXCEPTIONS.INVALID_CREDENTIALS,
-            };
-        }
+      if (!error.response) {
+        return RESPONSES.INTERNAL_SERVER_ERROR;
       }
-      return response;
+      switch (error.response.status) {
+        case 401:
+          return RESPONSES.UNAUTHORIZE;
+        case 400:
+          return RESPONSES.INTERNAL_SERVER_ERROR;
+        default:
+          return RESPONSES.INTERNAL_SERVER_ERROR;
+      }
     }
   }
 
-  async register(userRegister: UserRegister): Promise<UserState> {
+  async register(userRegister: UserRegister) {
     try {
       const { data } = await this.API.post<UserState>(
         "auth/register",
         userRegister
       );
-      return {
-        ...data,
-        error: null,
-      };
+      return data;
     } catch (error: any) {
-      const response = {
-        token: null,
-        user: null,
-        careers: [],
-        error: USER_EXCEPTIONS.INTERNAL_ERROR,
-      };
-
       if (!error.response) {
-        return response;
+        return RESPONSES.INTERNAL_SERVER_ERROR;
       }
-
       switch (error.response.status) {
+        case 401:
+          return RESPONSES.UNAUTHORIZE;
         case 400:
-          return {
-            ...response,
-            error: USER_EXCEPTIONS.ALREADY_REGISTERED,
-          };
+          return RESPONSES.INTERNAL_SERVER_ERROR;
         default:
-          return response;
+          return RESPONSES.INTERNAL_SERVER_ERROR;
       }
     }
   }
@@ -117,15 +92,15 @@ export class UserService {
       return data;
     } catch (error: any) {
       if (!error.response) {
-        return USER_EXCEPTIONS.INTERNAL_ERROR;
+        return RESPONSES.INTERNAL_SERVER_ERROR;
       }
       switch (error.response.status) {
-        case 400:
-          return USER_EXCEPTIONS.ALREADY_EXIST;
         case 401:
-          return USER_EXCEPTIONS.INVALID_SESSION;
+          return RESPONSES.UNAUTHORIZE;
+        case 400:
+          return RESPONSES.INTERNAL_SERVER_ERROR;
         default:
-          return USER_EXCEPTIONS.INTERNAL_ERROR;
+          return RESPONSES.INTERNAL_SERVER_ERROR;
       }
     }
   }

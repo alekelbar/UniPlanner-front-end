@@ -14,31 +14,37 @@ interface TaskCardProps {
   task: Task;
   reload: (page: number) => void;
   onOpenEdit: () => void;
+  actualPage: number;
 }
 
-export default function TaskCard ({ task, reload, onOpenEdit }: TaskCardProps): JSX.Element {
+export default function TaskCard ({ task, reload, onOpenEdit, actualPage }: TaskCardProps): JSX.Element {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleRemove = async () => {
-    const deleted = await dispatch(startRemoveTask(task));
-    if (deleted !== RESPONSES.SUCCESS) {
-      switch (deleted) {
+    const response = await dispatch(startRemoveTask(task));
+    if (response !== RESPONSES.SUCCESS) {
+      let responseText = "";
+
+      switch (response) {
         case RESPONSES.UNAUTHORIZE:
-          await Swal.fire('Parece que no estas autorizado para ver esto 🔒');
+          responseText = "Parece que no tiene autorización para estar aquí 🔒";
+          router.push("/auth");
           dispatch(onLogOut());
           logOut();
-          router.push('/auth');
           break;
         case RESPONSES.BAD_REQUEST:
-          await Swal.fire('Lo lamentamos, ocurrio un error 😱', deleted);
+          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
           break;
       }
-      return;
+      await Swal.fire({
+        title: "Una disculpa",
+        text: responseText,
+        icon: 'info'
+      });
     }
-    await Swal.fire('Listo, esa tarea se marcho de nuestra vidas 🐶');
-    reload(1);
+    reload(actualPage);
   };
 
   return (

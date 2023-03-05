@@ -28,14 +28,15 @@ export const startLoadDeliveries = (page: number) => {
     const service = DeliverableService.createService("v1");
     const response = await service.getDeliverables(selectedCourse, page);
 
-    if (typeof response !== "string") {
-      const data = response.data;
-      dispatch(loadDeliveries(data));
+    if (typeof response === "string") {
       dispatch(stopLoadingDeliveries());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    const data = response.data;
+    dispatch(loadDeliveries(data));
+    dispatch(stopLoadingDeliveries());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -58,14 +59,14 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
     const service = DeliverableService.createService("v1");
     const response = await service.createDeliverables(deliverable);
 
-    if (typeof response !== "string") {
-      const deliverie = response.data;
-      dispatch(addDelivery(deliverie));
+    if (typeof response === "string") {
       dispatch(stopLoadingDeliveries());
-      return RESPONSES.SUCCESS;
+      return response;
     }
-
-    return response;
+    const deliverie = response.data;
+    dispatch(addDelivery(deliverie));
+    dispatch(stopLoadingDeliveries());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -85,14 +86,15 @@ export const startRemoveDelivery = (deliverable: Deliverable) => {
     const service = DeliverableService.createService("v1");
     const response = await service.removeDeliverables(deliverable);
 
-    if (typeof response !== "string") {
-      const deliverie = response.data;
-      dispatch(removeDelivery(deliverie));
+    if (typeof response === "string") {
       dispatch(stopLoadingDeliveries());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    const deliverie = response.data;
+    dispatch(removeDelivery(deliverie));
+    dispatch(stopLoadingDeliveries());
+    return RESPONSES.SUCCESS;
   };
 };
 
@@ -116,13 +118,14 @@ export const startUpdateDelivery = (deliverable: Deliverable) => {
     const service = DeliverableService.createService("v1");
     const response = await service.updateDeliverable(deliverable);
 
-    if (typeof response !== "string") {
-      const deliverie = response.data;
-      dispatch(updateDeliverable(deliverie));
+    if (typeof response === "string") {
       dispatch(stopLoadingDeliveries());
-      return RESPONSES.SUCCESS;
+      return response;
     }
 
-    return response;
+    const deliverie = response.data;
+    dispatch(updateDeliverable(deliverie));
+    dispatch(stopLoadingDeliveries());
+    return RESPONSES.SUCCESS;
   };
 };

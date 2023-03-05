@@ -82,6 +82,15 @@ export default function Courses ({ }: CoursesProps) {
   }, [actualPage]);
 
   useEffect(() => {
+
+    if (coursesState.courses.length === 0 && actualPage > 1) {
+      reload(actualPage - 1);
+    }
+
+    if (coursesState.courses.length > 5) {
+      reload(actualPage);
+    }
+
     setCourses(coursesState.courses);
 
     // Cálculo para la paginación
@@ -121,25 +130,22 @@ export default function Courses ({ }: CoursesProps) {
           </Grid>
         </Grid>
       </Box>
-      <Paper variant='elevation'>
-        <Grid container spacing={2} direction={'row'} justifyContent="start" alignItems={'center'}>
-          {
-            courses.length
-              ? courses.map((course, index) => {
-                if (index >= 5) return null;
-                return (
-                  <Grid item xs={12} sm={4} key={course._id + course.name} mb={5}>
-                    <CourseCard onOpenEdit={onOpenEdit} course={course} reload={reload} />
-                    <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
-                  </Grid>
-                );
-              })
-              : <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
-              </Grid>
-          }
-        </Grid>
-      </Paper>
+      <Grid container p={1} gap={1} direction={'row'} justifyContent="center" alignItems={'center'}>
+        {
+          courses.length
+            ? courses.map((course) => {
+              return (
+                <Grid item xs={12} sm={5} md={4} lg={3} key={course._id + course.name}>
+                  <CourseCard actualPage={actualPage} onOpenEdit={onOpenEdit} course={course} reload={reload} />
+                  <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
+                </Grid>
+              );
+            })
+            : <Grid item xs={12} sm={12}>
+              <Typography align='center' variant='subtitle1' p={5}>No hay cursos disponibles</Typography>
+            </Grid>
+        }
+      </Grid>
       <FloatButton
         onAction={onOpenCreate}
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}

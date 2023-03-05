@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 
@@ -27,6 +27,9 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
   const { user } = useAppSelector(st => st.auth);
 
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const formik = useFormik({
     initialValues: {
@@ -64,7 +67,11 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
 
   return (
     <>
-      <Dialog onClose={onClose} open={open}>
+      <Dialog onClose={onClose} open={open} sx={{
+        '& .MuiDialog-paper': {
+          width: width
+        }
+      }}>
         <DialogTitle>
           <Typography component={'span'} variant='button'>Carreras disponibles</Typography>
         </DialogTitle>

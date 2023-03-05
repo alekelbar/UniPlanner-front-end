@@ -83,6 +83,15 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
 
 
   useEffect(() => {
+
+    if (taskState.tasks.length > 5) {
+      reload(actualPage);
+    }
+
+    if (taskState.tasks.length === 0 && actualPage > 1) {
+      reload(actualPage - 1);
+    }
+
     setTasks(taskState.tasks);
     // Cálculo para la paginación
     const pages: number =
@@ -124,31 +133,30 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
           </Grid>
         </Grid>
       </Box>
-      <Paper variant='elevation'>
-        <Grid
-          container
-          spacing={2}
-          direction={'row'}
-          justifyContent="start"
-          alignItems={'center'}>
-          {
-            tasks.length
-              ? tasks.map((task, index) => {
-                if (index >= 5) return null;
-                return (
-                  <Grid item xs={12} sm={4} key={task._id + task.name} mb={5}>
-                    <TaskCard onOpenEdit={onOpenEdit} reload={reload} task={task} key={task._id + task.name} />
-                    <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
-                  </Grid>
-                );
-              })
-              :
-              <Grid item xs={12} sm={12}>
-                <Typography align='center' variant='subtitle1' p={5}>No hay tareas disponibles</Typography>
-              </Grid>
-          }
-        </Grid>
-      </Paper>
+      <Grid
+        container
+        gap={1}
+        p={2}
+        direction={'row'}
+        justifyContent="center"
+        alignItems={'center'}>
+        {
+          tasks.length
+            ? tasks.map((task, index) => {
+              if (index >= 5) return null;
+              return (
+                <Grid item xs={12} sm={4} md={3} lg={3} key={task._id + task.name} mb={5}>
+                  <TaskCard actualPage={actualPage} onOpenEdit={onOpenEdit} reload={reload} task={task} key={task._id + task.name} />
+                  <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
+                </Grid>
+              );
+            })
+            :
+            <Grid item xs={12} sm={12}>
+              <Typography align='center' variant='subtitle1' p={5}>No hay tareas disponibles</Typography>
+            </Grid>
+        }
+      </Grid>
       <FloatButton
         onAction={onOpenCreate}
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}

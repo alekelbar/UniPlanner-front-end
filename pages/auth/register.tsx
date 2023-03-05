@@ -61,7 +61,20 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
       }));
 
       if (response !== RESPONSES.SUCCESS) {
-        await Swal.fire('Algo salio mal 😥', response);
+        let responsesMessage = "";
+        switch (response) {
+          case RESPONSES.UNAUTHORIZE:
+            responsesMessage = "Parece que su credenciales son invalidas 🔒";
+            break;
+          default:
+            responsesMessage = "Ocurrio un error con el servidor";
+            break;
+        }
+        await Swal.fire({
+          title: "Hubo un inconveniente 😊",
+          icon: 'info',
+          text: responsesMessage,
+        });
         return;
       }
 
@@ -276,13 +289,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     };
   }
-  
+
   const service = CareerService.createService("v1");
-  const { data } = await service.listAll();
+  const response = await service.listAll();
 
   return {
     props: {
-      careers: data
+      careers: typeof response !== "string" ? response.data : null
     }
   };
 };

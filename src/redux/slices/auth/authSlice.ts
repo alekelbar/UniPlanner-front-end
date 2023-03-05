@@ -7,7 +7,7 @@ import { UserState, UserToken } from "../../../interfaces/users.interface";
 const initialState: UserState = getLocalToken() || {
   token: null,
   user: null,
-  error: null,
+  loading: false,
 };
 
 export const authSlice = createSlice({
@@ -18,6 +18,12 @@ export const authSlice = createSlice({
     setAuth: (_, { payload }: PayloadAction<UserState>) => {
       return { ...payload };
     },
+    initLoadingApp: (state) => {
+      state.loading = true;
+    },
+    stopLoadingApp: (state) => {
+      state.loading = false;
+    },
     onLogOut: (_) => {
       return initialState;
     },
@@ -27,6 +33,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth, onLogOut, onUpdateUser } = authSlice.actions;
+export const { setAuth, onLogOut, onUpdateUser, initLoadingApp, stopLoadingApp } =
+  authSlice.actions;
 
 export default authSlice;

@@ -1,13 +1,14 @@
-import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { useTheme, Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Theme, Typography, useMediaQuery } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { logOut } from '../../helpers/local-storage';
 import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateDelivery } from '../../redux/thunks/deliverables-thunks';
 
 interface AddDeliveryDialogProps {
@@ -28,6 +29,10 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const theme: Theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
+
   const formik = useFormik({
     initialValues,
     onSubmit: async (values) => {
@@ -41,16 +46,25 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         status,
       }));
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
             router.push("/auth");
+            dispatch(onLogOut());
+            logOut();
             onClose();
             return;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que este entregable ya existe 🔒');
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
+            break;
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
       formik.resetForm(initialValues);
       onClose();
@@ -87,6 +101,12 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -177,6 +197,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
             )}
 
             <Select
+              fullWidth
               value={formik.values.status}
               onChange={formik.handleChange}
               name={'status'}

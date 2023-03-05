@@ -29,7 +29,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 
   const careerState = useAppSelector(st => st.career);
   const { careers, loading } = careerState;
-  
+
   const [careersState, setCareersState] = useState<Career[]>(careers);
 
   const [open, setOpen] = useState(false);
@@ -68,10 +68,10 @@ const Career: React.FC<Props> = ({ allCareers }) => {
 
   return (
     <Container maxWidth="lg">
-      <Grid container my={2} spacing={5}>
+      <Grid container my={2} spacing={5} justifyContent='space-evenly'>
         {
           careersState.map(career => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={career._id}>
+            <Grid item xs={12} md={6} key={career._id}>
               <CareerCard career={career} />
             </Grid>
           ))
@@ -102,11 +102,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const parseToken: UserState = JSON.parse(token);
     const tokenString = parseToken.token;
 
-    
+
     if ((await validateToken(tokenString))) {
       const service = CareerService.createService("v1");
       const response = await service.listAll();
-      
+
       if (typeof response === "string") {
         return {
           redirect: {
@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           },
         };
       }
-      
+
       return {
         props: {
           allCareers: response.data

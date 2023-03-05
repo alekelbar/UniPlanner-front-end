@@ -1,12 +1,14 @@
-import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startAddCourse } from '../../redux/thunks/courses.thunks';
 
 interface AddCourseDialogProps {
@@ -18,6 +20,9 @@ interface AddCourseDialogProps {
 export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
 
   const formik = useFormik({
@@ -30,16 +35,24 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
       const { courseDescription, credits, name } = values;
       const response = await dispatch(startAddCourse(name, courseDescription, credits));
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
             router.push("/auth");
+            dispatch(onLogOut);
+            logOut();
             onClose();
             return;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que este cursos ya existe 🔒');
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
       formik.resetForm();
       onClose();
@@ -62,6 +75,12 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -86,8 +105,8 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Ingrese el nombre del curso"
-              placeholder='Nombre' 
-              autoComplete='off'/>
+              placeholder='Nombre'
+              autoComplete='off' />
             {formik.touched.name && formik.errors.name && (
               <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
             )}
@@ -97,8 +116,8 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Ingrese la descripción del curso"
-              placeholder='Descripción' 
-              autoComplete='off'/>
+              placeholder='Descripción'
+              autoComplete='off' />
             {formik.touched.courseDescription && formik.errors.courseDescription && (
               <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
             )}
@@ -108,8 +127,8 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               helperText="Agregue el valor en creditos del curso"
-              placeholder='Credito' 
-              autoComplete='off'/>
+              placeholder='Credito'
+              autoComplete='off' />
             {formik.touched.credits && formik.errors.credits && (
               <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
             )}

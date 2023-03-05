@@ -4,12 +4,14 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import * as Yup from 'yup';
-import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { format, parseISO } from 'date-fns';
 import { startUpdateDelivery } from '../../redux/thunks/deliverables-thunks';
 import { RESPONSES } from '../../interfaces/response-messages';
 import Swal from 'sweetalert2';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { logOut } from '../../helpers/local-storage';
 
 interface EditDeliverableDialogProps {
   open: boolean,
@@ -20,6 +22,10 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { selected } = useAppSelector(st => st.deliveries);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const selectedDeadline = parseISO(selected ? selected.deadline.toString() : new Date().toString());
   const [selectedDeliverable, setSelectedDeliverable] = useState(selected);
@@ -44,16 +50,24 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         status,
       }));
       if (response !== RESPONSES.SUCCESS) {
+        let responseText = "";
+
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
-            await Swal.fire('Parece que no tiene autorización para estar aquí 🔒');
+            responseText = "Parece que no tiene autorización para estar aquí 🔒";
             router.push("/auth");
-            onClose();
-            return;
+            dispatch(onLogOut());
+            logOut();
+            break;
           case RESPONSES.BAD_REQUEST:
-            await Swal.fire('Parece que este entregable ya existe 🔒');
-            return;
+            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
+            break;
         }
+        await Swal.fire({
+          title: "Una disculpa",
+          text: responseText,
+          icon: 'info'
+        });
       }
       onClose();
     },
@@ -101,6 +115,12 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
   return (
     <>
       <Dialog
+        sx={{
+          '& .MuiDialog-paper': {
+            width: width,
+            height: 'auto'
+          }
+        }}
         onClose={onClose}
         open={open}>
         <DialogTitle>
@@ -195,6 +215,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                   )}
 
                   <Select
+                    fullWidth
                     value={formik.values.status}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

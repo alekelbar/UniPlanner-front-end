@@ -1,64 +1,81 @@
 import { setLocalToken } from "../../helpers/local-storage";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
-import { UserService } from "../../services/User/user.service";
+import { UserService } from "../../services/User/user-service";
 import { UpdateUser } from "../../types/users/update-user";
-import { User } from "../../types/users/user";
-import { onUpdateUser, setAuth } from "../slices/auth/authSlice";
+import {
+  initLoadingApp,
+  onUpdateUser,
+  setAuth,
+  stopLoadingApp,
+} from "../slices/auth/authSlice";
 import { AppDispatch, RootState } from "../store";
+
+// TODO Acabar de estandarizar este servicio, y este thunk
 
 const service = UserService.createService("v1");
 
 export const startUserLogin = (login: UserLogin) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    
-    const registered = await service.login(login);
+    dispatch(initLoadingApp());
 
-    if (registered.error) {
-      return registered.error;
+    const logIn = await service.login(login);
+
+    if (typeof logIn === "string") {
+      dispatch(stopLoadingApp());
+      return logIn;
     }
 
-    dispatch(setAuth({ ...registered, error: null }));
-    setLocalToken({ ...registered, error: null }, "token");
-
+    dispatch(setAuth(logIn));
+    setLocalToken(logIn, "token");
+    dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
   };
 };
 
 export const startUserRegister = (register: UserRegister) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(initLoadingApp());
     const registered = await service.register(register);
 
-    if (registered.error) {
-      return registered.error;
+    if (typeof registered === "string") {
+      dispatch(stopLoadingApp());
+      return registered;
     }
 
-    dispatch(setAuth({ ...registered, error: null }));
-    setLocalToken({ ...registered, error: null }, "token");
-
+    dispatch(setAuth(registered));
+    setLocalToken(registered, "token");
+    dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
   };
 };
 
 export const startUpdateUser = (updateUser: UpdateUser) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(initLoadingApp());
     const {
       auth: { user },
     } = getState();
 
     if (!user) {
+      dispatch(stopLoadingApp());
       return RESPONSES.UNAUTHORIZE;
     }
 
     const service = UserService.createService("v1");
     const response = await service.updateUser(updateUser, user.id);
 
-    if (typeof response !== "string") {
-      const { email, fullname, identification, _id } = response as User;
-      dispatch(onUpdateUser({ email, fullname, identification, id: _id }));
-      setLocalToken(getState().auth, "token");
-      return RESPONSES.SUCCESS;
+    if (typeof response === "string") {
+      dispatch(stopLoadingApp());
+      return response;
     }
-    return response;
+
+    const { email, fullname, identification, _id } = response;
+
+    dispatch(onUpdateUser({ email, fullname, identification, id: _id }));
+    setLocalToken(getState().auth, "token");
+    dispatch(stopLoadingApp());
+
+    return RESPONSES.SUCCESS;
   };
 };
