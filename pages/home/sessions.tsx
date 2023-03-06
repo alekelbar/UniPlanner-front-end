@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { FloatButton, Loading } from '../../src/components';
 import AddSessionDialog from '../../src/components/Sessions/AddSessionDialog';
 import SessionCard from '../../src/components/Sessions/SessionCard';
+import SessionClock from '../../src/components/Sessions/SessionClock';
 import isInteger from '../../src/helpers/isInteger';
 import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
@@ -128,6 +129,7 @@ export default function Sessions (): JSX.Element {
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddSessionDialog onClose={onCloseCreate} open={openCreate} />
+      <SessionClock />
     </Stack>
   );
 }
