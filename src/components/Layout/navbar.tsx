@@ -1,6 +1,6 @@
 import { School } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
-import Link from '../Link';
+import Link from '../common/Link';
 
 interface NabvarProps {
   onOpen: () => void;

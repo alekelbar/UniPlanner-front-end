@@ -1,12 +1,12 @@
-import { Logout, Person, School } from '@mui/icons-material';
-import { Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
+import { Logout, Person, School, Timelapse } from '@mui/icons-material';
+import { Box, Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
-import { logOut } from '../../../helpers/local-storage';
-import { useAppDispatch } from '../../../redux/hooks';
-import { onLogOut } from '../../../redux/slices/auth/authSlice';
-import Link from '../Link';
+import { logOut } from '../../helpers/local-storage';
+import { useAppDispatch } from '../../redux/hooks';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import Link from '../common/Link';
 
 interface SideBarProps {
   open: boolean,
@@ -14,13 +14,14 @@ interface SideBarProps {
 }
 
 interface Page {
-  title: string,
-  url: string,
+  title: string;
+  url: string;
   color: string;
   icon: React.ReactNode;
 }
 const pages: Page[] = [
   { title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
+  { title: 'Sesiones', color: 'text.primary', url: "sessions", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
   { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
 ];
 
@@ -105,18 +106,21 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
                   py: '10px',
                 }}
                 onClick={() => handleLogOut()}
-                color={'secondary'}
+                color={'warning'}
+                size="small"
               >
-                <Typography
-                  variant='subtitle1'
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'white'
-                  }}
-                >
-                  {'Salir'}
-                </Typography>
-                <Logout />
+                <Stack m={'0 auto'} justifyContent={'center'} alignItems="center">
+                  <Typography
+                    variant='subtitle1'
+                    sx={{
+                      fontWeight: 'bold',
+                      color: 'white'
+                    }}
+                  >
+                    {'Salir'}
+                  </Typography>
+                  <Logout />
+                </Stack>
               </Button>
               <Divider />
             </Grid>

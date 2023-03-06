@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Copyright from '../src/components/common/Copyright';
-import { LayoutComponent } from '../src/components/common/Layout/Layout';
+import { LayoutComponent } from '../src/components/Layout/Layout';
 import { createEmotionCache, theme } from '../src/config';
 import { store } from '../src/redux';
 // Client-side cache, shared for the whole session of the user in the browser.

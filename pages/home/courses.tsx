@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Loading } from '../../src/components';
 import { FloatButton } from '../../src/components/common/FloatButton';
-import GoHome from '../../src/components/common/Layout/GoHome';
+import GoHome from '../../src/components/Layout/GoHome';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
 import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';

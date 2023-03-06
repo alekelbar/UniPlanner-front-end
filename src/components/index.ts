@@ -9,8 +9,8 @@ export { default as EditDeliverableDialog } from './Deliverables/EditDeliverable
 export { default as AddTaskDialog } from './Tasks/AddTaskDialog';
 export { default as EditTaskDialog } from './Tasks/EditTaskDialog';
 export { default as TaskCard } from './Tasks/TaskCard';
-export { default as GoHome } from './common/Layout/GoHome';
-export * from './common/Layout/Layout';
-export * from './common/Layout/SideBar';
-export * from './common/Layout/navbar';
+export { default as GoHome } from './Layout/GoHome';
+export * from './Layout/Layout';
+export * from './Layout/SideBar';
+export * from './Layout/navbar';
 export * from './common';

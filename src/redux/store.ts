@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { SessionSlice } from "./slices";
 import authSlice from "./slices/auth/authSlice";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
@@ -12,7 +13,8 @@ export const store = configureStore({
     career: careerSlice.reducer,
     courses: coursesSlice.reducer,
     deliveries: deliveriesSlice.reducer,
-    tasks: TaskSlice.reducer
+    tasks: TaskSlice.reducer,
+    sessions: SessionSlice.reducer
   },
 });
 

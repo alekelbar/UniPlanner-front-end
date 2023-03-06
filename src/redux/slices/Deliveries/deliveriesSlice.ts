@@ -44,6 +44,7 @@ export const deliveriesSlice = createSlice({
       state.deliverables = state.deliverables.filter(
         (deliverable) => deliverable._id !== payload._id
       );
+      state.count -= 1;
     },
     setSelectedDelivery: (state, { payload }: PayloadAction<Deliverable>) => {
       state.selected = payload;

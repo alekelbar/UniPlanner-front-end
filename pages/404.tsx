@@ -1,4 +1,4 @@
-import GoHome from '../src/components/common/Layout/GoHome';
+import GoHome from '../src/components/Layout/GoHome';
 
 export default function NotFound () {
   return (

@@ -1,9 +1,9 @@
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../redux';
-import { FloatButton } from '../FloatButton';
-import { Loading } from '../Loading';
+import { useAppSelector } from '../../redux';
+import { FloatButton } from '../common/FloatButton';
+import { Loading } from '../common/Loading';
 import { Navbar } from './navbar';
 import { SideBar } from './SideBar';
 

@@ -1,30 +1,30 @@
-import { Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from '@mui/material';
-import Button from '@mui/material/Button';
+import { Button, Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import React from 'react';
 import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
-import { Course } from '../../interfaces/course.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { useAppDispatch } from '../../redux/hooks';
+import { Session } from '../../interfaces/session-interface';
+import { setSelectedSession, useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
-import { setSelectedCourse } from '../../redux/slices/Courses/coursesSlice';
-import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
+import { startRemoveSession } from '../../redux/thunks/session-thunks';
 
-interface CourseCardProps {
-  course: Course;
-  onOpenEdit: () => void;
+
+interface SessionCardProps {
+  session: Session;
   reload: (page: number) => void;
   actualPage: number;
 }
 
-export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: CourseCardProps): JSX.Element {
-  const { courseDescription, name, credits } = course;
+export default function SessionCard ({ actualPage, reload, session }:
+  SessionCardProps): JSX.Element {
+  const { duration, name, type } = session;
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleDelete = async () => {
-    const response = await dispatch(startRemoveCourse(course));
+    const response = await dispatch(startRemoveSession(session));
     if (response !== RESPONSES.SUCCESS) {
       let responseText = "";
       switch (response) {
@@ -35,7 +35,9 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
           logOut();
           return;
         case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que todavía tienes algunas entregas 🔒';
+          responseText = 'Parece que hubo un error 🔒';
+        case RESPONSES.INTERNAL_SERVER_ERROR:
+          responseText = 'Parece que hubo un error de servidor 🔒';
       }
       await Swal.fire({
         title: "Una disculpa",
@@ -58,23 +60,19 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
             <Typography variant="subtitle1" sx={{
               color: (theme) => theme.palette.info.main,
             }} gutterBottom>
-              Credits: {credits}
+              Tipo de sesión: {type} : {duration} minutos
             </Typography>
           </Tooltip>
         }
       />
       <CardContent>
-        <Typography variant="body1" color="text.secondary" gutterBottom>
-          {courseDescription}
-        </Typography>
         <Button
           fullWidth variant='contained'
           color='secondary'
           onClick={() => {
-            dispatch(setSelectedCourse(course));
-            router.push('/home/deliveries');
+            dispatch(setSelectedSession(session));
           }}
-        >Entregables
+        >Iniciar la sesión
         </Button>
         <CardActions>
           <Button
@@ -82,12 +80,6 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
             color='warning'
             onClick={handleDelete}>
             Eliminar
-          </Button>
-          <Button
-            variant='outlined'
-            color='success'
-            onClick={() => { onOpenEdit(); dispatch(setSelectedCourse(course)); }}>
-            Actualizar
           </Button>
         </CardActions>
       </CardContent>
