@@ -107,7 +107,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
             component={'p'}
             variant='subtitle1'
             align='center'>
-            ¿Vas a agregar una nueva tarea? 😊
+            ¿Vas a actualizar esta tarea? 😊
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -125,6 +125,8 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               onChange={formik.handleChange}
               value={formik.values.name}
               type={'text'}
+              rows={2}
+              multiline
               onBlur={formik.handleBlur}
               autoComplete="off"
               placeholder="Nombre"
@@ -140,6 +142,8 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               onChange={formik.handleChange}
               value={formik.values.descripcion}
               type={'text'}
+              rows={2}
+              multiline
               onBlur={formik.handleBlur}
               autoComplete="off"
               placeholder="Descripción"

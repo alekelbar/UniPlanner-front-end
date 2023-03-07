@@ -1,5 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Pagination, Stack, Typography, useTheme } from '@mui/material';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -11,8 +12,10 @@ import isInteger from '../../src/helpers/isInteger';
 import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { Session } from '../../src/interfaces/session-interface';
-import { useAppDispatch, useAppSelector } from '../../src/redux';
+import { UserState } from '../../src/interfaces/users.interface';
+import { setSelectedSession, useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSession } from '../../src/redux/thunks/session-thunks';
+import { validateToken } from '../../src/services/auth/validate-token';
 
 export default function Sessions (): JSX.Element {
   const theme = useTheme();
@@ -20,6 +23,7 @@ export default function Sessions (): JSX.Element {
   const dispatch = useAppDispatch();
 
   const sessionsState = useAppSelector(st => st.sessions);
+  const [openClock, setOpenClock] = useState(false);
 
   const {
     actualPage,
@@ -114,7 +118,10 @@ export default function Sessions (): JSX.Element {
             ? sessions.map((session) => {
               return (
                 <Grid item xs={12} sm={5} md={4} lg={3} key={session._id + session.name}>
-                  <SessionCard actualPage={actualPage} session={session} reload={reload} />
+                  <SessionCard onStartSession={() => {
+                    dispatch(setSelectedSession(session));
+                    setOpenClock(true);
+                  }} actualPage={actualPage} session={session} reload={reload} />
                   <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
                 </Grid>
               );
@@ -129,8 +136,30 @@ export default function Sessions (): JSX.Element {
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddSessionDialog onClose={onCloseCreate} open={openCreate} />
-      <SessionClock />
+      <SessionClock onClose={() => { setOpenClock(false); }} open={openClock} />
     </Stack>
   );
 }
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { token } = ctx.req.cookies;
+
+  if (token) {
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      return {
+        props: {
+        }
+      };
+    }
+  }
+
+  return {
+    redirect: {
+      destination: '/auth',
+      permanent: false,
+    },
+  };
+};

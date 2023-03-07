@@ -68,11 +68,11 @@ export default function AddSessionDialog ({ onClose, open }: AddSessionDialogPro
     validationSchema: Yup.object({
       duration: Yup
         .string()
-        .test('is-number', 'La duración debe ser un número, y al menos 5 minutos', (value) => {
+        .test('is-number', 'La duración debe ser un número, y al menos 1 minuto', (value) => {
           if (isNaN(Number(value))) {
             return false;
           }
-          return Number(value) >= 5;
+          return Number(value) >= 1;
         })
         .required("La duración de la sesión es requerida"),
       name: Yup

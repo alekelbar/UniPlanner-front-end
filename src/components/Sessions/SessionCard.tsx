@@ -14,9 +14,10 @@ interface SessionCardProps {
   session: Session;
   reload: (page: number) => void;
   actualPage: number;
+  onStartSession: () => void;
 }
 
-export default function SessionCard ({ actualPage, reload, session }:
+export default function SessionCard ({ actualPage, reload, session, onStartSession }:
   SessionCardProps): JSX.Element {
   const { duration, name, type } = session;
 
@@ -70,7 +71,7 @@ export default function SessionCard ({ actualPage, reload, session }:
           fullWidth variant='contained'
           color='secondary'
           onClick={() => {
-            dispatch(setSelectedSession(session));
+            onStartSession();
           }}
         >Iniciar la sesión
         </Button>
