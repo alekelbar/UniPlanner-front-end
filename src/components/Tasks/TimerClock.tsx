@@ -1,35 +1,33 @@
-import { Backdrop, Button, Grid, Typography, useTheme } from '@mui/material';
-import { Stack } from '@mui/system';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../../redux";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { setInterval, clearInterval } from 'timers';
-import { SESSION_TYPES } from '../../interfaces/session-interface';
-import { useAppSelector } from '../../redux';
+import { Backdrop, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
+import { formatSeconds } from "../../helpers/formatSeconds";
 
-interface SessionClockProps {
+interface TimerClockProps {
   open: boolean;
   onClose: () => void;
   title?: string;
 }
 
-export default function SessionClock ({ open, onClose }: SessionClockProps): JSX.Element {
+export default function TimerClock ({ open, onClose }: TimerClockProps): JSX.Element {
 
-  const { selected } = useAppSelector(st => st.sessions);
-
+  const { selected } = useAppSelector(st => st.tasks);
   const theme = useTheme();
 
-  const secondsLeftRef = useRef(0);
+  const secondsRef = useRef(0);
   const pauseRef = useRef(false);
   const intervalRef = useRef<NodeJS.Timer | null>(null);
 
-  const [secondsLeft, setSecondsLeft] = useState(secondsLeftRef.current);
+  const [seconds, setSeconds] = useState(secondsRef.current);
   const [pause, setPause] = useState(pauseRef.current);
   const [totalSeconds, setTotalSeconds] = useState(0);
 
   const handleReset = () => {
     if (selected && intervalRef.current) {
-      secondsLeftRef.current = selected.duration * 60;
+      secondsRef.current = 0;
+      setSeconds(secondsRef.current);
       pauseRef.current = false; setPause(pauseRef.current);
       clearInterval(intervalRef.current);
       onClose();
@@ -37,18 +35,14 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
   };
 
   const handleTimer = () => {
-    console.log('iniciando contador');
     if (selected) {
-      secondsLeftRef.current = selected.duration * 60;
-      setTotalSeconds(selected.duration * 60);
+      secondsRef.current = 0;
+      setTotalSeconds(secondsRef.current);
 
       const interval = setInterval(() => {
-
-        if (secondsLeftRef.current <= 0) handleReset();
-
         if (!pauseRef.current) {
-          secondsLeftRef.current -= 1;
-          setSecondsLeft(secondsLeftRef.current);
+          secondsRef.current += 1;
+          setSeconds(secondsRef.current);
         }
       }, 1000);
       intervalRef.current = interval;
@@ -66,21 +60,33 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
       sx={{ color: '#fff', backdropFilter: 'blur(3px)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
       open={open}
     >
-      <Stack width={"300px"} height={"300px"}>
+      <Stack sx={{
+        width: {
+          xs: '80%',
+          sm: '50%',
+          md: '40%',
+          lg: '30%',
+          xl: '20%'
+        }
+      }}>
         {selected ? <>
-          <CircularProgressbarWithChildren
-            value={Math.trunc((secondsLeft / totalSeconds) * 100)}
-            styles={buildStyles({
-              pathColor: (selected.type === SESSION_TYPES.RESTING)
-                ? theme.palette.success.main
-                : theme.palette.info.main,
-            })}
+          <CircularProgressbarWithChildren value={100} styles={buildStyles({
+            pathColor: (pause)
+              ? theme.palette.success.main
+              : theme.palette.info.main,
+          })}
           >
-            <Typography variant='h2'> {Math.trunc((secondsLeft / totalSeconds) * 100)}% </Typography>
-            <Typography variant='caption'> Temporizador </Typography>
+            <Typography variant='h4'>{formatSeconds(seconds)}</Typography>
+            <Typography variant='subtitle2'> {selected.name}</Typography>
 
           </CircularProgressbarWithChildren>
-          <Grid container width={"90%"} sx={{ placeItems: "center" }} gap={2} m={'0 auto'} p={2} direction="column">
+          <Grid container
+            width={"90%"}
+            sx={{ placeItems: "center" }}
+            gap={2}
+            m={'0 auto'}
+            p={2}
+            direction="column">
             <Button fullWidth onClick={handleReset} variant="contained">
               Terminar
             </Button>

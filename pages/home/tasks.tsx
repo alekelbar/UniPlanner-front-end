@@ -9,6 +9,7 @@ import { FloatButton } from '../../src/components/common/FloatButton';
 import AddTaskDialog from '../../src/components/Tasks/AddTaskDialog';
 import EditTaskDialog from '../../src/components/Tasks/EditTaskDialog';
 import TaskCard from '../../src/components/Tasks/TaskCard';
+import TimerClock from '../../src/components/Tasks/TimerClock';
 import isInteger from '../../src/helpers/isInteger';
 import { logOut } from '../../src/helpers/local-storage';
 import usePagination from '../../src/hooks/pagination';
@@ -42,6 +43,13 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
 
   // Manejo de estado de los modales...
   const [openCreate, setOpenCreate] = useState(false);
+
+  // timer
+  const [openClock, setOpenClock] = useState(false);
+
+  const handleCloseClock = () => {
+    setOpenClock(false);
+  };
 
   const onOpenCreate = () => {
     setOpenCreate(true);
@@ -146,7 +154,13 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
               if (index >= 5) return null;
               return (
                 <Grid item xs={12} sm={4} md={3} lg={3} key={task._id + task.name} mb={5}>
-                  <TaskCard actualPage={actualPage} onOpenEdit={onOpenEdit} reload={reload} task={task} key={task._id + task.name} />
+                  <TaskCard
+                    openClock={() => { setOpenClock(true); }}
+                    actualPage={actualPage}
+                    onOpenEdit={onOpenEdit}
+                    reload={reload}
+                    task={task}
+                    key={task._id + task.name} />
                   <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
                 </Grid>
               );
@@ -163,6 +177,9 @@ export default function Tasks ({ }: TaskProps): JSX.Element {
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddTaskDialog onClose={onCloseCreate} open={openCreate} />
       <EditTaskDialog onClose={onCloseEdit} open={openEdit} />
+      <TimerClock
+        open={openClock}
+        onClose={() => { setOpenClock(false); }} />
     </Stack>
   );
 }

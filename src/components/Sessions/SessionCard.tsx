@@ -4,7 +4,7 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { Session } from '../../interfaces/session-interface';
+import { Session, SESSION_TYPES } from '../../interfaces/session-interface';
 import { setSelectedSession, useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveSession } from '../../redux/thunks/session-thunks';
@@ -59,9 +59,12 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
         subheader={
           <Tooltip title='Cantidad de creditos correspondientes a esta materia' placement='top-start'>
             <Typography variant="subtitle1" sx={{
-              color: (theme) => theme.palette.info.main,
+              color: (theme) =>
+                (session.type === SESSION_TYPES.RESTING)
+                  ? theme.palette.success.main
+                  : theme.palette.info.main,
             }} gutterBottom>
-              Tipo de sesión: {type} : {duration} minutos
+              {type} : {duration} minutos
             </Typography>
           </Tooltip>
         }

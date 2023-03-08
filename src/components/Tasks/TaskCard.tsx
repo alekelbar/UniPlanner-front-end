@@ -15,9 +15,10 @@ interface TaskCardProps {
   reload: (page: number) => void;
   onOpenEdit: () => void;
   actualPage: number;
+  openClock: () => void;
 }
 
-export default function TaskCard ({ task, reload, onOpenEdit, actualPage }: TaskCardProps): JSX.Element {
+export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openClock }: TaskCardProps): JSX.Element {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -68,6 +69,13 @@ export default function TaskCard ({ task, reload, onOpenEdit, actualPage }: Task
         }}>
           Estado: {task.status}
         </Typography>
+        <Button
+          fullWidth
+          variant='contained'
+          onClick={() => { dispatch(setSelectedTask(task)); openClock(); }}
+          color='secondary'>
+          Temporizar
+        </Button>
         <CardActions>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} lg={4}>
