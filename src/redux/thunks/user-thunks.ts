@@ -2,7 +2,6 @@ import { setLocalToken } from "../../helpers/local-storage";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
 import { UserService } from "../../services/User/user-service";
-import { API_VERSION } from "../../types";
 import { UpdateUser } from "../../types/users/update-user";
 import {
   initLoadingApp,
@@ -14,7 +13,7 @@ import { AppDispatch, RootState } from "../store";
 
 // TODO Acabar de estandarizar este servicio, y este thunk
 
-const service = UserService.createService(API_VERSION);
+const service = UserService.createService();
 
 export const startUserLogin = (login: UserLogin) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -63,7 +62,7 @@ export const startUpdateUser = (updateUser: UpdateUser) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = UserService.createService(API_VERSION);
+    const service = UserService.createService();
     const response = await service.updateUser(updateUser, user.id);
 
     if (typeof response === "string") {

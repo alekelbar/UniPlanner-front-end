@@ -1,7 +1,6 @@
 import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { DeliverableService } from "../../services/Deliveries/Deliverable-service";
-import { API_VERSION } from "../../types";
 import {
   loadDeliveries,
   startLoadingDeliveries,
@@ -26,7 +25,7 @@ export const startLoadDeliveries = (page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = DeliverableService.createService(API_VERSION);
+    const service = DeliverableService.createService();
     const response = await service.getDeliverables(selectedCourse, page);
 
     if (typeof response === "string") {
@@ -57,7 +56,7 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
 
     deliverable.course = selectedCourse._id;
 
-    const service = DeliverableService.createService(API_VERSION);
+    const service = DeliverableService.createService();
     const response = await service.createDeliverables(deliverable);
 
     if (typeof response === "string") {
@@ -84,7 +83,7 @@ export const startRemoveDelivery = (deliverable: Deliverable) => {
     if (!user || !selectedCourse) {
       return RESPONSES.UNAUTHORIZE;
     }
-    const service = DeliverableService.createService(API_VERSION);
+    const service = DeliverableService.createService();
     const response = await service.removeDeliverables(deliverable);
 
     if (typeof response === "string") {
@@ -116,7 +115,7 @@ export const startUpdateDelivery = (deliverable: Deliverable) => {
 
     deliverable._id = selectedDeliveries._id;
 
-    const service = DeliverableService.createService(API_VERSION);
+    const service = DeliverableService.createService();
     const response = await service.updateDeliverable(deliverable);
 
     if (typeof response === "string") {

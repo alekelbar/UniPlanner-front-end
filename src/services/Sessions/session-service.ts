@@ -4,22 +4,22 @@ import { RESPONSES } from "../../interfaces/response-messages";
 import { Session } from "../../interfaces/session-interface";
 import { UserToken } from "../../interfaces/users.interface";
 import { CreateSession } from "../../interfaces/session-interface";
+import { API_URL } from "../api-version";
 
 export class SessionService {
-  private baseUrl: string = `http://localhost:3000/api/`;
   private API: AxiosInstance;
   private static instance: SessionService | null = null;
 
-  private constructor(serviceVersion: string) {
+  private constructor() {
     this.API = axios.create({
-      baseURL: this.baseUrl + `${serviceVersion}/`,
+      baseURL: API_URL,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: string): SessionService {
+  public static createService(): SessionService {
     if (!this.instance) {
-      this.instance = new SessionService(version);
+      this.instance = new SessionService();
       return this.instance;
     }
     return this.instance;

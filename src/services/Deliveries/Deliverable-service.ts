@@ -3,22 +3,22 @@ import { authInterceptor } from "../../interceptors";
 import { Course } from "../../interfaces/course.interface";
 import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
+import { API_URL } from "../api-version";
 
 export class DeliverableService {
-  private baseUrl: string = `http://localhost:3000/api/`;
   private API: AxiosInstance;
   private static instance: DeliverableService | null = null;
 
-  private constructor(serviceVersion: string) {
+  private constructor() {
     this.API = axios.create({
-      baseURL: this.baseUrl + `${serviceVersion}/`,
+      baseURL: API_URL,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: string): DeliverableService {
+  public static createService(): DeliverableService {
     if (!this.instance) {
-      this.instance = new DeliverableService(version);
+      this.instance = new DeliverableService();
       return this.instance;
     }
     return this.instance;

@@ -25,7 +25,6 @@ import { CareerService } from '../../src/services/Career/career-service';
 import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 import { UserState } from '../../src/interfaces/users.interface';
 import { validateToken } from '../../src/services/auth/validate-token';
-import { API_VERSION } from '../../src/types';
 
 interface Props {
   careers: Career[];
@@ -291,7 +290,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const service = CareerService.createService(API_VERSION);
+  const service = CareerService.createService();
   const response = await service.listAll();
 
   return {

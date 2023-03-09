@@ -4,22 +4,22 @@ import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { Career } from "../../interfaces/career.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
+import { API_URL } from "../api-version";
 
 export class CareerService {
-  private baseUrl: string = `http://localhost:3000/api/`;
   private API: AxiosInstance;
   private static instance: CareerService | null = null;
 
-  private constructor(serviceVersion: string) {
+  private constructor() {
     this.API = axios.create({
-      baseURL: this.baseUrl + `${serviceVersion}/`,
+      baseURL: API_URL,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: string): CareerService {
+  public static createService(): CareerService {
     if (!this.instance) {
-      this.instance = new CareerService(version);
+      this.instance = new CareerService();
       return this.instance;
     }
     return this.instance;
@@ -34,7 +34,6 @@ export class CareerService {
   }
 
   async getCareers(identification: string) {
-    // careers/:id
     try {
       const { data } = await this.API.get<Career[]>(
         `careers/${identification}`

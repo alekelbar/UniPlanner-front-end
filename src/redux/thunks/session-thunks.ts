@@ -1,7 +1,6 @@
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateSession, Session } from "../../interfaces/session-interface";
 import { SessionService } from "../../services/Sessions/session-service";
-import { API_VERSION } from "../../types";
 import {
   addSession,
   loadSessions,
@@ -23,7 +22,7 @@ export const startLoadSession = (page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = SessionService.createService(API_VERSION);
+    const service = SessionService.createService();
     const response = await service.getSessions(user, page);
 
     if (typeof response === "string") {
@@ -51,7 +50,7 @@ export const startcreateSession = (createSession: CreateSession) => {
 
     createSession.user = user.id;
 
-    const service = SessionService.createService(API_VERSION);
+    const service = SessionService.createService();
     const response = await service.createSessions(createSession);
 
     if (typeof response === "string") {
@@ -77,7 +76,7 @@ export const startRemoveSession = (delSession: Session) => {
     if (!user) {
       return RESPONSES.UNAUTHORIZE;
     }
-    const service = SessionService.createService(API_VERSION);
+    const service = SessionService.createService();
     const response = await service.removeSessions(delSession);
 
     if (typeof response === "string") {

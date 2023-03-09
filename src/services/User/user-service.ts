@@ -7,7 +7,7 @@ import {
   UserRegister,
   UserState,
 } from "../../interfaces/users.interface";
-import type { User, UpdateUser } from "../../types";
+import { User, UpdateUser, API_URL } from "../../types";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -20,20 +20,19 @@ export enum USER_EXCEPTIONS {
 }
 
 export class UserService {
-  private baseUrl: string = `http://localhost:3000/api`;
   private API: AxiosInstance;
   private static instance: UserService | null = null;
 
-  private constructor(serviceVersion: string) {
+  private constructor() {
     this.API = axios.create({
-      baseURL: this.baseUrl + `/${serviceVersion}/`,
+      baseURL: API_URL,
     });
     authInterceptor(this.API);
   }
 
-  public static createService(version: string): UserService {
+  public static createService(): UserService {
     if (!this.instance) {
-      this.instance = new UserService(version);
+      this.instance = new UserService();
       return this.instance;
     }
     return this.instance;

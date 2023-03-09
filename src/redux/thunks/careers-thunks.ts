@@ -1,7 +1,6 @@
 import Career from "../../../pages/home/careers";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CareerService } from "../../services";
-import { API_VERSION } from "../../types";
 import {
   addCareer,
   removeCareer,
@@ -24,7 +23,7 @@ export const startLoadCareers = () => {
       return RESPONSES.UNAUTHORIZE;
     }
     
-    const service = CareerService.createService(API_VERSION);
+    const service = CareerService.createService();
     const careers = await service.getCareers(user.identification);
     
     if (typeof careers === "string") {
@@ -50,7 +49,7 @@ export const startAddCareer = (idCareer: string) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CareerService.createService(API_VERSION);
+    const service = CareerService.createService();
     const response = await service.addCareer(user.id, idCareer);
 
     if (typeof response === "string") {
@@ -76,7 +75,7 @@ export const startRemoveCareer = (idCareer: string) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CareerService.createService(API_VERSION);
+    const service = CareerService.createService();
     const response = await service.removeCareer(user.id, idCareer);
 
     if (typeof response === "string") {

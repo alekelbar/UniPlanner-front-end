@@ -1,7 +1,6 @@
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateTask, Task, UpdateTask } from "../../interfaces/task-interface";
 import { TaskService } from "../../services/Task/task-service";
-import { API_VERSION } from "../../types";
 import {
   addTask,
   loadTask,
@@ -26,7 +25,7 @@ export const startLoadTasks = (page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = TaskService.createService(API_VERSION);
+    const service = TaskService.createService();
     const response = await service.getTasks(selectedDelivery, page);
 
     if (typeof response === "string") {
@@ -55,7 +54,7 @@ export const startCreateTask = (createTask: CreateTask) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = TaskService.createService(API_VERSION);
+    const service = TaskService.createService();
     createTask.delivery = selectedDelivery._id;
 
     const response = await service.createTask(createTask);
@@ -85,7 +84,7 @@ export const startRemoveTask = (remove: Task) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = TaskService.createService(API_VERSION);
+    const service = TaskService.createService();
     const response = await service.removeTask(remove);
 
     if (typeof response === "string") {
@@ -114,7 +113,7 @@ export const startUpdateTask = (update: Task) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = TaskService.createService(API_VERSION);
+    const service = TaskService.createService();
     const response = await service.updateTask(update);
 
     if (typeof response === "string") {
