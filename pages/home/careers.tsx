@@ -17,6 +17,7 @@ import { CareerService } from '../../src/services/Career/career-service';
 import { FloatButton } from '../../src/components/common/FloatButton';
 import { Add } from '@mui/icons-material';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { API_URL } from '../../src/types';
 
 interface Props {
   parseToken: UserState;
@@ -24,6 +25,8 @@ interface Props {
 }
 
 const Career: React.FC<Props> = ({ allCareers }) => {
+
+  console.log(API_URL);
 
   const dispatch = useAppDispatch();
 
@@ -99,6 +102,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
 
   console.log('¿El token existe', token);
+  console.log(API_URL);
+
   if (token) {
     const parseToken: UserState = JSON.parse(token);
     const tokenString = parseToken.token;
