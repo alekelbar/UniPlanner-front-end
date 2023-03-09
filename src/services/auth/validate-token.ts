@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../api-version";
+import { API_URL } from "../api-service";
 
 export const validateToken = async (token: string | null) => {
   if (token) {

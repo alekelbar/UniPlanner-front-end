@@ -50,7 +50,7 @@ const Career: React.FC<Props> = ({ allCareers }) => {
       if (response == RESPONSES.UNAUTHORIZE) {
         dispatch(onLogOut());
         logOut();
-        router.push('/auth');
+        router.push('/');
       }
     })();
   }, []);
@@ -103,12 +103,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const parseToken: UserState = JSON.parse(token);
     const tokenString = parseToken.token;
 
-    console.log('¿El token es valido', await validateToken(token));
     if ((await validateToken(tokenString))) {
       const service = CareerService.createService();
       const response = await service.listAll();
 
-      console.log('¿La respuesta es valida', response);
 
       if (typeof response === "string") {
         return {
@@ -129,7 +127,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     redirect: {
-      destination: '/auth',
+      destination: '/',
       permanent: false,
     },
   };

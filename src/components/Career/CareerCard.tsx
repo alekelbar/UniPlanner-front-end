@@ -25,7 +25,7 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
       switch (response) {
         case RESPONSES.UNAUTHORIZE:
           responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/auth");
+          router.push("/");
           dispatch(onLogOut);
           logOut();
           return;

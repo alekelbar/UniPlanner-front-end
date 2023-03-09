@@ -16,15 +16,15 @@ import * as Yup from 'yup';
 
 
 import Swal from 'sweetalert2';
-import { Link } from '../../src/components';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import { Career } from '../../src/interfaces/career.interface';
-import { useAppDispatch } from '../../src/redux/hooks';
-import { startUserRegister } from '../../src/redux/thunks/user-thunks';
-import { CareerService } from '../../src/services/Career/career-service';
-import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
-import { UserState } from '../../src/interfaces/users.interface';
-import { validateToken } from '../../src/services/auth/validate-token';
+import { Link } from '../src/components';
+import { RESPONSES } from '../src/interfaces/response-messages';
+import { Career } from '../src/interfaces/career.interface';
+import { useAppDispatch } from '../src/redux/hooks';
+import { startUserRegister } from '../src/redux/thunks/user-thunks';
+import { CareerService } from '../src/services/Career/career-service';
+import { getNameByID } from '../src/services/identificationAPI/cedula-service';
+import { UserState } from '../src/interfaces/users.interface';
+import { validateToken } from '../src/services/auth/validate-token';
 
 interface Props {
   careers: Career[];
@@ -257,7 +257,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           </Button>
           <Box mt={1}>
             <Link
-              href='/auth'
+              href='/'
               sx={{ listStyle: 'none', mt: .5, color: 'text.secondary' }}
             >
               <Typography variant='body1' align='center'>

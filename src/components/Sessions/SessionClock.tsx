@@ -37,7 +37,6 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
   };
 
   const handleTimer = () => {
-    console.log('iniciando contador');
     if (selected) {
       secondsLeftRef.current = selected.duration * 60;
       setTotalSeconds(selected.duration * 60);

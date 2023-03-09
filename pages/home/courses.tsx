@@ -66,7 +66,7 @@ export default function Courses ({ }: CoursesProps) {
       if (response !== RESPONSES.SUCCESS) {
 
         if (response === RESPONSES.UNAUTHORIZE) {
-          router.push('/auth');
+          router.push('/');
           await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
           return;
         }
@@ -173,7 +173,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     redirect: {
-      destination: '/auth',
+      destination: '/',
       permanent: false,
     },
   };

@@ -55,7 +55,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         switch (response) {
           case RESPONSES.UNAUTHORIZE:
             responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/auth");
+            router.push("/");
             dispatch(onLogOut());
             logOut();
             break;

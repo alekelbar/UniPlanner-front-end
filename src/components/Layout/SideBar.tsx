@@ -40,7 +40,7 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
   const handleLogOut = () => {
     dispatch(onLogOut());
     logOut();
-    router.push('/auth');
+    router.push('/');
   };
 
   return (

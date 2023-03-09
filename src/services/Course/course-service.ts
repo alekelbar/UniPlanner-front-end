@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { PaginatedCourses, Course } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { API_URL } from "../api-version";
+import { API_URL } from "../api-service";
 
 export class CourseService {
   private API: AxiosInstance;

@@ -48,7 +48,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
           });
           logOut();
           dispatch(onLogOut());
-          router.replace('/auth');
+          router.replace('/');
         }
 
         if (response !== RESPONSES.SUCCESS) {

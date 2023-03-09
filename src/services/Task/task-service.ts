@@ -3,7 +3,7 @@ import { authInterceptor } from "../../interceptors";
 import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateTask, Task } from "../../interfaces/task-interface";
-import { API_URL } from "../api-version";
+import { API_URL } from "../api-service";
 
 export class TaskService {
   private API: AxiosInstance;

@@ -3,7 +3,7 @@ import { authInterceptor } from "../../interceptors";
 import { Course } from "../../interfaces/course.interface";
 import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { API_URL } from "../api-version";
+import { API_URL } from "../api-service";
 
 export class DeliverableService {
   private API: AxiosInstance;
@@ -108,7 +108,6 @@ export class DeliverableService {
 
       return updated;
     } catch (error: any) {
-      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }

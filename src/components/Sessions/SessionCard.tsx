@@ -31,7 +31,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
       switch (response) {
         case RESPONSES.UNAUTHORIZE:
           responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/auth");
+          router.push("/");
           dispatch(onLogOut());
           logOut();
           return;
