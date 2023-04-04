@@ -20,7 +20,7 @@ interface Props {
   parseToken: UserState;
 }
 
-const Profile: React.FC<Props> = () => {
+const ProfilePage: React.FC<Props> = () => {
 
   const dispatch = useAppDispatch();
 
@@ -127,7 +127,7 @@ const Profile: React.FC<Props> = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;

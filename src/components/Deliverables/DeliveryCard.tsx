@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Grid, Stack, Typography } from '@mui/material';
 import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
@@ -6,10 +6,13 @@ import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
 import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { useAppDispatch } from '../../redux';
+import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
+import { Loading } from '../common';
+import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
@@ -22,6 +25,8 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
   const deadline = parseISO(deliverable.deadline.toString());
 
   let create_at: Date | null = null;
+
+  const { selected } = useAppSelector(s => s.setting);
 
   if (deliverable.createdAt) {
     create_at = parseISO(deliverable.createdAt.toString());
@@ -84,9 +89,23 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     reload(actualPage);
   };
 
+  if (!selected) return <Loading />;
+  const { importance, urgency } = deliverable;
+  const { do: doing, delegate, ignore, prepare } = selected;
+
+  const userMatrizColor: ColorMatrixPreferences = {
+    delegate,
+    do: doing,
+    ignore,
+    prepare
+  };
+
+  const colorSeleted = getPriorityColor(importance, urgency, userMatrizColor);
 
   return (
-    <Card>
+    <Card variant='elevation' sx={{
+      minHeight: MIN_CARD_HEIGHT,
+    }}>
       <CardHeader
         title={deliverable.name}
         subheader={
@@ -111,25 +130,37 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
         <Typography sx={{
           color: (theme) => theme.palette.text.secondary
         }}>
+          <Stack direction={'row'} justifyContent={'start'} alignItems={'baseline'}>
+            <Box sx={{
+              px: 2,
+              width: '64px',
+              height: '5px',
+              borderRadius: '8px'
+            }} component={'div'} bgcolor={colorSeleted} />
+          </Stack>
+        </Typography>
+        <Typography sx={{
+          color: (theme) => theme.palette.text.secondary
+        }}>
           Calificación: {deliverable.note}
         </Typography>
         <Typography sx={{
           color: (theme) => theme.palette.text.secondary
         }}>
-          Porcentaje: {deliverable.percent}%
+          Valor: {deliverable.percent}%
         </Typography>
         <CardActions>
           <Grid container spacing={1}>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={12} lg={12}>
               <Button
                 onClick={() => {
                   dispatch(setSelectedDelivery(deliverable));
                   router.push('/home/tasks');
                 }}
                 fullWidth
-                variant='contained'
+                variant='outlined'
                 color='secondary'>
-                Tareas
+                ver tareas
               </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -145,7 +176,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
               <Button
                 fullWidth
                 variant='outlined'
-                color='warning'
+                color='error'
                 onClick={handleRemove}>
                 Eliminar
               </Button>

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import Career from "../../../pages/home/careers";
+import CareerPage from "../../../pages/home/careers";
 import { authInterceptor } from "../../interceptors/auth.interceptor";
 import { RESPONSES } from "../../interfaces/response-messages";
 import {

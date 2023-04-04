@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCourse } from '../../redux/slices/Courses/coursesSlice';
 import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface CourseCardProps {
   course: Course;
@@ -47,7 +48,11 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
   };
 
   return (
-    <Card variant='elevation'>
+    <Card variant='elevation'
+      sx={{
+        minHeight: MIN_CARD_HEIGHT,
+      }}
+    >
       <CardHeader
         title={name}
         sx={{
@@ -68,18 +73,18 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
           {courseDescription}
         </Typography>
         <Button
-          fullWidth variant='contained'
+          fullWidth variant='outlined'
           color='secondary'
           onClick={() => {
             dispatch(setSelectedCourse(course));
             router.push('/home/deliveries');
           }}
-        >Entregables
+        >Ver entregables
         </Button>
         <CardActions>
           <Button
             variant='outlined'
-            color='warning'
+            color='error'
             onClick={handleDelete}>
             Eliminar
           </Button>

@@ -5,16 +5,35 @@ import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
-import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
+import { DELIVERABLE_STATUS, DELIVERABLE_TAGS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { useAppDispatch } from '../../redux';
+import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateDelivery } from '../../redux/thunks/deliverables-thunks';
+import { isSameWeek } from 'date-fns';
+import { Loading } from '../common';
+import { ImportantThings, UrgentThings } from '../../helpers/priorityCalc';
 
 interface AddDeliveryDialogProps {
   open: boolean,
   onClose: () => void,
 }
+
+const makePriority = (deadline: Date, important: boolean) => {
+
+  const urgency: UrgentThings = isSameWeek(deadline, new Date())
+    ? DELIVERABLE_TAGS.URGENT
+    : DELIVERABLE_TAGS.NOT_URGENT;
+
+  const importance: ImportantThings = important
+    ? DELIVERABLE_TAGS.IMPORTANT
+    : DELIVERABLE_TAGS.NOT_IMPORTANT;
+
+  return {
+    urgency,
+    importance
+  };
+};
 
 const initialValues = {
   name: '',
@@ -28,6 +47,7 @@ const initialValues = {
 export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { selected } = useAppSelector(s => s.setting);
 
   const theme: Theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -37,6 +57,13 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
     initialValues,
     onSubmit: async (values) => {
       const { deadline, description, name, note, percent, status } = values;
+
+      const { importance, urgency } = makePriority(new Date(deadline),
+        percent > selected!.importance
+          ? true
+          : false
+      );
+
       const response = await dispatch(startcreateDelivery({
         deadline: new Date(deadline),
         description,
@@ -44,6 +71,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         note,
         percent,
         status,
+        importance,
+        urgency,
       }));
       if (response !== RESPONSES.SUCCESS) {
         let responseText = "";
@@ -97,6 +126,8 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         .required('El porcentaje del entregable es obligatorio'),
     }),
   });
+
+  if (!selected) return <Loading />;
 
   return (
     <>
@@ -210,7 +241,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
             {formik.touched.status && formik.errors.status && (
               <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
             )}
-
             <Button
               fullWidth
               type='submit'

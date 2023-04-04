@@ -7,7 +7,7 @@ import { AddCareerDialog } from '../../src/components/Career/AddCareerDialog';
 import { CareerCard } from '../../src/components/Career/CareerCard';
 import { Loading } from '../../src/components/common/Loading';
 import { logOut } from '../../src/helpers/local-storage';
-import { Career } from '../../src/interfaces/career.interface';
+import { Career as CareerPage } from '../../src/interfaces/career.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
@@ -21,19 +21,18 @@ import { API_URL } from '../../src/types';
 
 interface Props {
   parseToken: UserState;
-  allCareers: Career[];
+  allCareers: CareerPage[];
 }
 
-const Career: React.FC<Props> = ({ allCareers }) => {
-
-  console.log(API_URL);
+const CareerPage: React.FC<Props> = ({ allCareers }) => {
 
   const dispatch = useAppDispatch();
 
   const careerState = useAppSelector(st => st.career);
+
   const { careers, loading } = careerState;
 
-  const [careersState, setCareersState] = useState<Career[]>(careers);
+  const [careersState, setCareersState] = useState<CareerPage[]>(careers);
 
   const [open, setOpen] = useState(false);
 
@@ -95,14 +94,11 @@ const Career: React.FC<Props> = ({ allCareers }) => {
   );
 };
 
-export default Career;
+export default CareerPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { token } = ctx.req.cookies;
-
-  console.log('¿El token existe', token);
-  console.log(API_URL);
 
   if (token) {
     const parseToken: UserState = JSON.parse(token);

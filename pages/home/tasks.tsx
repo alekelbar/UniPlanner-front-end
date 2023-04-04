@@ -25,7 +25,7 @@ interface TaskProps {
 
 }
 
-export default function Tasks ({ }: TaskProps): JSX.Element {
+export default function TasksPage ({ }: TaskProps): JSX.Element {
   const router = useRouter();
   const dispatch = useAppDispatch();
 

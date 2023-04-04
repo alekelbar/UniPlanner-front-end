@@ -1,21 +1,52 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { SessionSlice } from "./slices";
-import authSlice from "./slices/auth/authSlice";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
 import deliveriesSlice from "./slices/Deliveries/deliveriesSlice";
+import { settingSlice } from "./slices/Settings/setting-slice";
 import { TaskSlice } from "./slices/Tasks/task-slice";
+import authSlice from "./slices/auth/authSlice";
+
 // ...
 
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+  whitelist: ["setting"],
+};
+
+const reducer = combineReducers({
+  setting: settingSlice.reducer,
+  auth: authSlice.reducer,
+  career: careerSlice.reducer,
+  courses: coursesSlice.reducer,
+  deliveries: deliveriesSlice.reducer,
+  tasks: TaskSlice.reducer,
+  sessions: SessionSlice.reducer,
+});
+
+const persistReducers = persistReducer(persistConfig, reducer);
+
 export const store = configureStore({
-  reducer: {
-    auth: authSlice.reducer,
-    career: careerSlice.reducer,
-    courses: coursesSlice.reducer,
-    deliveries: deliveriesSlice.reducer,
-    tasks: TaskSlice.reducer,
-    sessions: SessionSlice.reducer
-  },
+  reducer: persistReducers,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

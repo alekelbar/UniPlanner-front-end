@@ -1,8 +1,15 @@
+import { Setting } from "../../components/Settings/Settings";
 import { setLocalToken } from "../../helpers/local-storage";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
+import { SettingService } from "../../services/Settings/settings-services";
 import { UserService } from "../../services/User/user-service";
 import { UpdateUser } from "../../types/users/update-user";
+import {
+  setLoadingSettings,
+  stopLoadingSettings,
+  updateSetting,
+} from "../slices/Settings/setting-slice";
 import {
   initLoadingApp,
   onUpdateUser,
@@ -10,8 +17,6 @@ import {
   stopLoadingApp,
 } from "../slices/auth/authSlice";
 import { AppDispatch, RootState } from "../store";
-
-// TODO Acabar de estandarizar este servicio, y este thunk
 
 const service = UserService.createService();
 
@@ -26,8 +31,23 @@ export const startUserLogin = (login: UserLogin) => {
       return logIn;
     }
 
-    dispatch(setAuth(logIn));
+    const { loading, token, user } = logIn;
+
+    dispatch(setAuth({ loading, token, user }));
     setLocalToken(logIn, "token");
+
+    // Cargar las preferencias de usuario...
+    const userId = getState().auth.user?.id;
+
+    const settingsService = SettingService.createService();
+    const settings = await settingsService.getSetting(userId as string);
+
+    if (typeof settings === "string") {
+      dispatch(stopLoadingApp());
+      return logIn;
+    }
+
+    dispatch(updateSetting(settings));
     dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
   };

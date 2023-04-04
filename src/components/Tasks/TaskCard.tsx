@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedTask } from '../../redux/slices/Tasks/task-slice';
 import { startRemoveTask } from '../../redux/thunks/tasks-thunks';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface TaskCardProps {
   task: Task;
@@ -49,7 +50,9 @@ export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openCl
   };
 
   return (
-    <Card>
+    <Card variant='elevation' sx={{
+      minHeight: MIN_CARD_HEIGHT,
+    }}>
       <CardHeader
         title={task.name}
         subheader={

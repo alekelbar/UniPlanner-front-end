@@ -8,6 +8,7 @@ import { Session, SESSION_TYPES } from '../../interfaces/session-interface';
 import { setSelectedSession, useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveSession } from '../../redux/thunks/session-thunks';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 
 interface SessionCardProps {
@@ -50,7 +51,9 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
   };
 
   return (
-    <Card variant='elevation'>
+    <Card variant='elevation' sx={{
+      minHeight: MIN_CARD_HEIGHT,
+    }}>
       <CardHeader
         title={name}
         sx={{
@@ -71,7 +74,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
       />
       <CardContent>
         <Button
-          fullWidth variant='contained'
+          fullWidth variant='outlined'
           color='secondary'
           onClick={() => {
             onStartSession();
@@ -81,7 +84,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
         <CardActions>
           <Button
             variant='outlined'
-            color='warning'
+            color='error'
             onClick={handleDelete}>
             Eliminar
           </Button>

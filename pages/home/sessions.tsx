@@ -17,7 +17,7 @@ import { setSelectedSession, useAppDispatch, useAppSelector } from '../../src/re
 import { startLoadSession } from '../../src/redux/thunks/session-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
 
-export default function Sessions (): JSX.Element {
+export default function SessionsPage (): JSX.Element {
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useAppDispatch();

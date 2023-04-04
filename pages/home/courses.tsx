@@ -23,7 +23,7 @@ interface CoursesProps {
 
 }
 
-export default function Courses ({ }: CoursesProps) {
+export default function CoursesPage ({ }: CoursesProps) {
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useAppDispatch();

@@ -25,7 +25,7 @@ interface DeliveriesProps {
 
 }
 
-export default function Deliveries ({ }: DeliveriesProps): JSX.Element {
+export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   const router = useRouter();
   const dispatch = useAppDispatch();
 

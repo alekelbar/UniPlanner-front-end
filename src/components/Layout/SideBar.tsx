@@ -1,4 +1,4 @@
-import { Logout, Person, School, Timelapse } from '@mui/icons-material';
+import { Logout, Person, School, Settings, Timelapse } from '@mui/icons-material';
 import { Box, Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
@@ -23,6 +23,7 @@ const pages: Page[] = [
   { title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
   { title: 'Sesiones', color: 'text.primary', url: "sessions", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
   { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
+  { title: 'Configuración', color: 'text.primary', url: "settings", icon: <Settings sx={{ color: 'text.primary' }} /> },
 ];
 
 export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
@@ -105,7 +106,7 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
                   px: '5px',
                   py: '10px',
                 }}
-                onClick={() => handleLogOut()}
+                onClick={() => { onClose(); handleLogOut(); }}
                 color={'warning'}
                 size="small"
               >
