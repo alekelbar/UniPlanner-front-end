@@ -1,12 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { Session } from "../../interfaces/session-interface";
-import { UserToken } from "../../interfaces/users.interface";
-import { CreateSession } from "../../interfaces/session-interface";
-import { API_URL } from "../api-service";
 import { CreateSetting, Setting } from "../../interfaces/settings-interfaces";
-import { Settings } from "@mui/icons-material";
+import { API_URL } from "../api-service";
 
 export class SettingService {
   private API: AxiosInstance;
@@ -78,8 +74,6 @@ export class SettingService {
         `user-settings/${updateSetting._id}`,
         updateSetting
       );
-
-      console.log(setting);
 
       return setting.data;
       

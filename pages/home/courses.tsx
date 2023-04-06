@@ -112,7 +112,12 @@ export default function CoursesPage ({ }: CoursesProps) {
         backgroundColor: ({ palette }) => palette.primary.dark,
         zIndex: '10'
       }}>
-        <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{`Cursos de la carrera | ${selected.name}`}</Typography>
+        <Typography
+          align='center'
+          bgcolor={'secondary'}
+          variant='subtitle1'>
+          {`Cursos de la carrera | ${selected.name}`}
+        </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
             <Pagination
@@ -122,6 +127,7 @@ export default function CoursesPage ({ }: CoursesProps) {
                 [theme.breakpoints.up("md")]: {
                   fontSize: "large"
                 },
+                py: 1
               }}
               size="small"
               count={totalPages}

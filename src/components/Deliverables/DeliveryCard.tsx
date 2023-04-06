@@ -39,7 +39,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     if (deliverable.status === DELIVERABLE_STATUS.PENDING) {
       if (isAfter(new Date(), deadline)) {
         return (
-          <Typography variant="body2" sx={{
+          <Typography component={'div'} variant="body2" sx={{
             color: (theme) => theme.palette.error.main
           }}>
             No entregado | {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
@@ -47,7 +47,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
         );
       }
       return (
-        <Typography variant="body2" sx={{
+        <Typography component={'div'} variant="body2" sx={{
           color: (theme) => theme.palette.warning.main
         }}>
           Se entrega: {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
@@ -56,7 +56,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     }
 
     return (
-      <Typography variant="body2" sx={{
+      <Typography component={'div'} variant="body2" sx={{
         color: (theme) => theme.palette.success.main
       }}>
         Entregado
@@ -157,10 +157,17 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
                   dispatch(setSelectedDelivery(deliverable));
                   router.push('/home/tasks');
                 }}
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    transform: 'scale(.9)',
+                  },
+                }}
                 fullWidth
                 variant='outlined'
                 color='secondary'>
-                ver tareas
+                VER TAREAS
               </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>

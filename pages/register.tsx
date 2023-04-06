@@ -258,7 +258,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
           <Box mt={1}>
             <Link
               href='/'
-              sx={{ listStyle: 'none', mt: .5, color: 'text.secondary' }}
+              sx={{ textDecoration: 'none', listStyle: 'none', mt: .5, color: 'text.secondary' }}
             >
               <Typography variant='body1' align='center'>
                 ¿Ya te encuentras registrado?

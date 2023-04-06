@@ -1,3 +1,4 @@
+import { isSameWeek } from "date-fns";
 import { DELIVERABLE_TAGS } from "../interfaces/deliveries.interface";
 
 export type ImportantThings =
@@ -12,6 +13,21 @@ const priorityCalc = {
   [DELIVERABLE_TAGS.NOT_IMPORTANT]: 0,
   [DELIVERABLE_TAGS.URGENT]: 2,
   [DELIVERABLE_TAGS.NOT_URGENT]: 1,
+};
+
+export const makePriority = (deadline: Date, important: boolean) => {
+  const urgency: UrgentThings = isSameWeek(deadline, new Date())
+    ? DELIVERABLE_TAGS.URGENT
+    : DELIVERABLE_TAGS.NOT_URGENT;
+
+  const importance: ImportantThings = important
+    ? DELIVERABLE_TAGS.IMPORTANT
+    : DELIVERABLE_TAGS.NOT_IMPORTANT;
+
+  return {
+    urgency,
+    importance,
+  };
 };
 
 export type ColorMatrixPreferences = {

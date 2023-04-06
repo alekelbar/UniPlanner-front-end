@@ -1,4 +1,4 @@
-import { Logout, Person, School, Settings, Timelapse } from '@mui/icons-material';
+import { Logout, Person, Schedule, School, Settings, Task, Timelapse } from '@mui/icons-material';
 import { Box, Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
@@ -17,13 +17,15 @@ interface Page {
   title: string;
   url: string;
   color: string;
+  inactiveColor: string;
   icon: React.ReactNode;
 }
 const pages: Page[] = [
-  { title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
-  { title: 'Sesiones', color: 'text.primary', url: "sessions", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
-  { title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
-  { title: 'Configuración', color: 'text.primary', url: "settings", icon: <Settings sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Tareas', color: 'text.primary', url: "tasks", icon: <Task sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Sesiones', color: 'text.primary', url: "sessions", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Configuración', color: 'text.primary', url: "settings", icon: <Settings sx={{ color: 'text.primary' }} /> },
 ];
 
 export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
@@ -59,13 +61,19 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
         }}
         ref={drawerRef}
       >
-        <Grid container maxWidth="lg" sx={{ width: '175px' }}>
+        <Grid container maxWidth="lg" sx={{ width: '240px' }}>
 
           <Grid xs={12} item display={'flex'} flexDirection="column" sx={{ placeItems: 'center' }}>
             <Typography
-              variant='h1'
+              variant='h4'
             >
-              GE
+              <Stack
+                direction={'column'}
+                justifyContent={'center'}
+                alignItems={'center'}>
+                UniPlanner
+                <Schedule sx={{ fontSize: '2em', py: 2 }} />
+              </Stack>
             </Typography>
           </Grid>
           <Grid container spacing={1} >
@@ -75,11 +83,18 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
                   <Link
                     href={`/home/${page.url}`}
                     sx={{
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                      },
                       width: '100%',
                       display: 'block',
                       color: page.color,
                       textDecoration: 'none',
-                      backgroundColor: (router.pathname.includes(page.url)) ? ({ palette: { primary } }) => primary.main : "",
+                      backgroundColor: (router.pathname.includes(page.url))
+                        ? ({ palette: { primary } }) => primary.dark
+                        : ({ palette: { secondary } }) => secondary.dark,
                     }}
                   >
                     <Stack sx={{ placeItems: 'center', p: 2 }}>

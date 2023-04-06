@@ -12,6 +12,7 @@ import { RESPONSES } from '../../interfaces/response-messages';
 import Swal from 'sweetalert2';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { logOut } from '../../helpers/local-storage';
+import { makePriority } from '../../helpers/priorityCalc';
 
 interface EditDeliverableDialogProps {
   open: boolean,
@@ -22,6 +23,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { selected } = useAppSelector(st => st.deliveries);
+  const { selected: selectedSetting } = useAppSelector(st => st.setting);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -41,6 +43,12 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
     },
     onSubmit: async (values) => {
       const { deadline, description, name, note, percent, status } = values;
+
+      const { importance, urgency } = makePriority(new Date(deadline), percent >= selectedSetting!.importance
+        ? true
+        : false
+      );
+
       const response = await dispatch(startUpdateDelivery({
         deadline: new Date(deadline),
         description,
@@ -48,6 +56,8 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         note,
         percent,
         status,
+        importance,
+        urgency
       }));
       if (response !== RESPONSES.SUCCESS) {
         let responseText = "";

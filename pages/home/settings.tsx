@@ -12,6 +12,9 @@ import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSetting, startUpdateSetting } from '../../src/redux/thunks/settings-thunks';
 import { ThemeContext } from '../../src/context/theme-provider';
 import { blueTheme, GreenTheme, redTheme, UNATheme } from '../../src/config/MUI/theme';
+import { GetServerSideProps } from 'next';
+import { UserState } from '../../src/interfaces/users.interface';
+import { validateToken } from '../../src/services/auth/validate-token';
 
 const SettingsPage = () => {
 
@@ -81,10 +84,6 @@ const SettingsPage = () => {
         .min(0, "El valor minimo es cero")
         .max(100, 'El valor máximo es 100')
         .required('Su preferencia de valor es obligatoria'),
-      urgency: Yup
-        .number()
-        .min(0, "Almenos tendrá que trabajar con una semana")
-        .required('La cantidad de semanas es obligatoria'),
       do: Yup.string().required(),
       prepare: Yup.string().required(),
       delegate: Yup.string().required(),
@@ -96,9 +95,9 @@ const SettingsPage = () => {
 
   return (
     <Container>
-      <Paper sx={{ my: 5, width: '100%', py: 2 }}>
+      <Paper sx={{ my: 2, width: '100%', py: 2 }} component={'form'} onSubmit={formik.handleSubmit}>
         <Stack justifyContent={'center'} alignItems={'center'} direction={'row'}>
-          <Typography variant='h4'>Configuraciones de usuario</Typography>
+          <Typography variant='h5'>Configuraciones de usuario</Typography>
         </Stack>
         <Container>
           {/* Dividir el area en dos partes */}
@@ -204,18 +203,6 @@ const SettingsPage = () => {
                 {formik.touched.importance && formik.errors.importance && (
                   <Typography variant='caption' color={'error'}>{formik.errors.importance}</Typography>
                 )}
-                <TextField
-                  sx={{
-                    maxWidth: '80%',
-                  }}
-                  name={'urgency'}
-                  value={formik.values.urgency}
-                  onChange={formik.handleChange}
-                  helperText={'¿Apartir de cuantas semanas una tarea es considerada urgente?'}
-                  type='number' />
-                {formik.touched.urgency && formik.errors.urgency && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.urgency}</Typography>
-                )}
                 <Button type='submit' variant='contained'>Aplicar cambios</Button>
               </Stack>
             </Grid>
@@ -227,3 +214,26 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { token } = ctx.req.cookies;
+
+  if (token) {
+    const parseToken: UserState = JSON.parse(token);
+    const tokenString = parseToken.token;
+
+    if ((await validateToken(tokenString))) {
+      return {
+        props: {
+        }
+      };
+    }
+  }
+
+  return {
+    redirect: {
+      destination: '/',
+      permanent: false,
+    },
+  };
+};

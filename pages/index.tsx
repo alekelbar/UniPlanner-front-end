@@ -134,7 +134,7 @@ const LoginPage: React.FC = () => {
           <Box mt={1}>
             <Link
               href='/register'
-              sx={{ listStyle: 'none', mt: .5, width: '100', color: 'text.secondary' }}
+              sx={{ textDecoration: 'none', listStyle: 'none', mt: .5, width: '100', color: 'text.secondary' }}
             >
               <Typography variant='body1' align='center'>
                 ¿Todavía no tienes una cuenta?

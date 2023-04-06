@@ -132,7 +132,8 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
             <Pagination
               page={actualPage}
               sx={{
-                width: "100%"
+                width: "100%",
+                py: 1
               }}
               size="small"
               count={totalPages}

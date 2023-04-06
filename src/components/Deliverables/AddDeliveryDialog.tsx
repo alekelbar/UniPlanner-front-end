@@ -12,28 +12,12 @@ import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateDelivery } from '../../redux/thunks/deliverables-thunks';
 import { isSameWeek } from 'date-fns';
 import { Loading } from '../common';
-import { ImportantThings, UrgentThings } from '../../helpers/priorityCalc';
+import { ImportantThings, UrgentThings, makePriority } from '../../helpers/priorityCalc';
 
 interface AddDeliveryDialogProps {
   open: boolean,
   onClose: () => void,
 }
-
-const makePriority = (deadline: Date, important: boolean) => {
-
-  const urgency: UrgentThings = isSameWeek(deadline, new Date())
-    ? DELIVERABLE_TAGS.URGENT
-    : DELIVERABLE_TAGS.NOT_URGENT;
-
-  const importance: ImportantThings = important
-    ? DELIVERABLE_TAGS.IMPORTANT
-    : DELIVERABLE_TAGS.NOT_IMPORTANT;
-
-  return {
-    urgency,
-    importance
-  };
-};
 
 const initialValues = {
   name: '',
@@ -59,7 +43,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
       const { deadline, description, name, note, percent, status } = values;
 
       const { importance, urgency } = makePriority(new Date(deadline),
-        percent > selected!.importance
+        percent >= selected!.importance
           ? true
           : false
       );

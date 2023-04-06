@@ -57,7 +57,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
       <CardHeader
         title={name}
         sx={{
-          color: (theme) => theme.palette.primary.contrastText,
+          color: (theme) => theme.palette.text.primary,
         }}
         subheader={
           <Tooltip title='Cantidad de creditos correspondientes a esta materia' placement='top-start'>

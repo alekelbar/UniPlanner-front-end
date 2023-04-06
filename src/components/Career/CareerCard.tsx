@@ -59,6 +59,13 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
             variant='contained'
             color='secondary'
             onClick={handleSelectedCareer}
+            sx={{
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              '&:hover': {
+                transform: 'scale(.9)',
+              },
+            }}
           > Cursos
           </Button>
           <Button

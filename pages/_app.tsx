@@ -32,9 +32,9 @@ export default function MyApp (props: MyAppProps) {
   const persistor = persistStore(store);
 
   return (
-    <ThemeContext.Provider value={{ onChangeTheme }}>
-      <Provider store={store}>
-        <PersistGate loading={<Loading />} persistor={persistor}>
+    <Provider store={store}>
+      <PersistGate loading={<Loading />} persistor={persistor}>
+        <ThemeContext.Provider value={{ onChangeTheme }}>
           <CacheProvider value={emotionCache}>
             <Head>
               <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -48,8 +48,8 @@ export default function MyApp (props: MyAppProps) {
               </LayoutComponent>
             </ThemeProvider>
           </CacheProvider>
-        </PersistGate>
-      </Provider>
-    </ThemeContext.Provider>
+        </ThemeContext.Provider>
+      </PersistGate>
+    </Provider>
   );
 }

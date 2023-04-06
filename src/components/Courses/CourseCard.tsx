@@ -56,7 +56,7 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
       <CardHeader
         title={name}
         sx={{
-          color: (theme) => theme.palette.primary.contrastText,
+          color: (theme) => theme.palette.text.primary,
         }}
         subheader={
           <Tooltip title='Cantidad de creditos correspondientes a esta materia' placement='top-start'>
@@ -73,13 +73,20 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
           {courseDescription}
         </Typography>
         <Button
+          sx={{
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'scale(.9)',
+            },
+          }}
           fullWidth variant='outlined'
           color='secondary'
           onClick={() => {
             dispatch(setSelectedCourse(course));
             router.push('/home/deliveries');
           }}
-        >Ver entregables
+        >VER ENTREGABLES
         </Button>
         <CardActions>
           <Button

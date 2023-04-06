@@ -112,7 +112,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
-      <Box position='sticky' top={0} sx={{
+      <Box component={'div'} position='sticky' top={0} sx={{
         backgroundColor: ({ palette }) => palette.primary.dark,
         zIndex: '10'
       }}>
@@ -127,7 +127,8 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
             <Pagination
               page={actualPage}
               sx={{
-                width: "100%"
+                width: "100%",
+                py: 1
               }}
               size="small"
               count={totalPages}

@@ -75,6 +75,13 @@ export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openCl
         <Button
           fullWidth
           variant='contained'
+          sx={{
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'scale(.9)',
+            },
+          }}
           onClick={() => { dispatch(setSelectedTask(task)); openClock(); }}
           color='secondary'>
           Temporizar
