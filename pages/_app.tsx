@@ -14,6 +14,7 @@ import { Loading } from '../src/components';
 import { useState } from 'react';
 import { ThemeContext } from '../src/context/theme-provider';
 
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
