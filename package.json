@@ -37,8 +37,10 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "@types/uuid": "^9.0.1",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "uuid": "^9.0.0"
   }
 }
