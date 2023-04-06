@@ -125,12 +125,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Tienes una nueva entrega? 😊
-          </Typography>
+          Nueva Entrega
         </DialogTitle>
         <DialogContent>
           <Stack

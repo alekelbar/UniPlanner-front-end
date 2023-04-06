@@ -104,6 +104,7 @@ export default function SessionsPage (): JSX.Element {
                 [theme.breakpoints.up("md")]: {
                   fontSize: "large"
                 },
+                pb: 2
               }}
               size="small"
               count={totalPages}

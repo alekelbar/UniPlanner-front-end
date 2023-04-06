@@ -8,7 +8,6 @@ import { useAppDispatch } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
 import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface CareerCardProps {
   career: Career;

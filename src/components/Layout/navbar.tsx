@@ -8,7 +8,7 @@ interface NabvarProps {
 export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' sx={{ p: 2 }}>
       <Typography
         variant="h4"
         sx={{

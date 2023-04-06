@@ -83,14 +83,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
         }}
         onClose={onClose}
         open={open}>
-        <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Llevas un nuevo curso? 😊
-          </Typography>
-        </DialogTitle>
+        <DialogTitle>Nuevo curso</DialogTitle>
         <DialogContent>
           <Stack
             component={'form'}
@@ -100,6 +93,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
             alignItems={'center'}
             spacing={2}>
             <TextField
+              fullWidth
               value={formik.values.name}
               name={'name'}
               onChange={formik.handleChange}
@@ -114,6 +108,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
             )}
             <TextField
+              fullWidth
               value={formik.values.courseDescription}
               name={'courseDescription'}
               onChange={formik.handleChange}
@@ -128,6 +123,7 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
             )}
             <TextField
+              fullWidth
               value={formik.values.credits}
               name={'credits'}
               onChange={formik.handleChange}
@@ -142,9 +138,10 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
               <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
             )}
             <Button
+              fullWidth
               type="submit"
               variant="contained"
-              color="secondary">
+              color="primary">
               Agregar
             </Button>
           </Stack>

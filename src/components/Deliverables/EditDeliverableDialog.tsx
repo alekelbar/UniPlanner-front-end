@@ -134,12 +134,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar ese entregable? 😊
-          </Typography>
+          Actualización de Entrega
         </DialogTitle>
         <DialogContent>
           {

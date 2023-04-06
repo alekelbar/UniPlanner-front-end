@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Loading } from '../../src/components';
 import { FloatButton } from '../../src/components/common/FloatButton';
-import GoHome from '../../src/components/Layout/GoHome';
+import NotFoundPage from '../../src/components/Layout/GoHome';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
 import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';
@@ -103,7 +103,7 @@ export default function CoursesPage ({ }: CoursesProps) {
 
   }, [coursesState]);
 
-  if (!selected) return <GoHome />;
+  if (!selected) return <NotFoundPage />;
   if (coursesState.loading) return <Loading />;
 
   return (

@@ -92,12 +92,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a agregar una nueva tarea? 😊
-          </Typography>
+          Nueva Tarea de entrega
         </DialogTitle>
         <DialogContent>
           <Stack

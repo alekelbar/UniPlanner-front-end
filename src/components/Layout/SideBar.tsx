@@ -94,7 +94,7 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
                       textDecoration: 'none',
                       backgroundColor: (router.pathname.includes(page.url))
                         ? ({ palette: { primary } }) => primary.dark
-                        : ({ palette: { secondary } }) => secondary.dark,
+                        : '',
                     }}
                   >
                     <Stack sx={{ placeItems: 'center', p: 2 }}>

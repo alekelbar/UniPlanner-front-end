@@ -1,1 +1,1 @@
-export const MIN_CARD_HEIGHT = 350;
+export const MIN_CARD_HEIGHT = 250;

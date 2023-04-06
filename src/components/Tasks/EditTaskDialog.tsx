@@ -103,12 +103,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar esta tarea? 😊
-          </Typography>
+          Actualización de Tarea
         </DialogTitle>
         <DialogContent>
           <Stack

@@ -94,12 +94,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar ese curso? 😊
-          </Typography>
+          Actualizar curso
         </DialogTitle>
         <DialogContent>
           {
@@ -114,6 +109,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                   alignItems={'center'}
                   spacing={2}>
                   <TextField
+                    fullWidth
                     value={formik.values.name}
                     name={'name'}
                     onChange={formik.handleChange}
@@ -128,6 +124,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
                   )}
                   <TextField
+                    fullWidth
                     value={formik.values.courseDescription}
                     name={'courseDescription'}
                     onChange={formik.handleChange}
@@ -142,6 +139,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
                   )}
                   <TextField
+                    fullWidth
                     value={formik.values.credits}
                     name={'credits'}
                     onChange={formik.handleChange}
@@ -156,9 +154,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
                   )}
                   <Button
+                    fullWidth
                     type="submit"
                     variant="contained"
-                    color="secondary">
+                    color="primary">
                     Actualizar
                   </Button>
                 </Stack>

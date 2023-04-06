@@ -1,28 +1,25 @@
-import { Button, Divider, Stack, Typography } from '@mui/material';
-import { Container } from '@mui/system';
+import { Button, Container, Divider, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
-
-export default function GoHome (): JSX.Element {
+export default function NotFoundPage (): JSX.Element {
   const router = useRouter();
+
+  const handleGoHome = () => {
+    router.push('/home/careers');
+  };
+
   return (
-    <Container sx={{ py: 4 }}>
-      <Stack
-        spacing={2}
-        direction={'column'}
-        sx={{ placeItems: 'center' }}>
-        <Typography
-          variant='h6'
-          align='center'>
-          No se como llegaste hasta aquí pequeño saltamontes 😥,
-          pero dejame llevarte a casa.
-        </Typography >
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      <Stack spacing={2} alignItems="center">
+        <Typography variant="h6" align="center">
+          Oops! Parece que estás perdido 😞
+        </Typography>
         <Divider />
-        <Button
-          onClick={() => router.push('/home/careers')}
-          className='animate__infinite animate__animated animate__pulse'
-          variant='contained'>
-          Volver a casa con mamá: 🤒
+        <Typography align="center">
+          La página que estás buscando no existe o ha sido movida.
+        </Typography>
+        <Button onClick={handleGoHome} variant="contained">
+          Volver a la página de inicio
         </Button>
       </Stack>
     </Container>
