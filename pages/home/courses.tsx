@@ -116,7 +116,7 @@ export default function CoursesPage ({ }: CoursesProps) {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {`Cursos de la carrera | ${selected.name}`}
+          {`${selected.name}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>

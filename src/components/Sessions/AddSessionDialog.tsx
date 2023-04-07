@@ -97,12 +97,7 @@ export default function AddSessionDialog ({ onClose, open }: AddSessionDialogPro
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a agregar una nueva sesión? 😊
-          </Typography>
+          Nueva sesión
         </DialogTitle>
         <DialogContent>
           <Stack

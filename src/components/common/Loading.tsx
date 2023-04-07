@@ -2,11 +2,15 @@ import { Backdrop, CircularProgress } from '@mui/material';
 
 export function Loading (): JSX.Element {
   return (
-    <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open
+    <Backdrop open={true}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+      }}
     >
-      <CircularProgress color="primary" />
+      <CircularProgress />
     </Backdrop>
   );
 }

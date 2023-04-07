@@ -125,7 +125,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {`Tareas del entregable | ${selectedDelivery?.name}`}
+          {`${selectedDelivery?.name}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>

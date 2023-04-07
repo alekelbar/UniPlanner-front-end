@@ -120,7 +120,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {`Entregables del curso | ${selectedCourse.name}`}
+          {`${selectedCourse.name}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>

@@ -16,6 +16,7 @@ import coursesSlice from "./slices/Courses/coursesSlice";
 import deliveriesSlice from "./slices/Deliveries/deliveriesSlice";
 import { settingSlice } from "./slices/Settings/setting-slice";
 import { TaskSlice } from "./slices/Tasks/task-slice";
+import { KanbanSlice } from "./slices/kanban/kanban-slice";
 import authSlice from "./slices/auth/authSlice";
 
 // ...
@@ -35,6 +36,7 @@ const reducer = combineReducers({
   deliveries: deliveriesSlice.reducer,
   tasks: TaskSlice.reducer,
   sessions: SessionSlice.reducer,
+  kanban: KanbanSlice.reducer,
 });
 
 const persistReducers = persistReducer(persistConfig, reducer);
