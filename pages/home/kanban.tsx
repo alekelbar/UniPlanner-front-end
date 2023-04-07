@@ -1,8 +1,8 @@
-import { Button, Container, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, Paper, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Container, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, Paper, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { FloatButton } from '../../src/components';
-import { Add } from '@mui/icons-material';
+import { Add, Delete, Remove } from '@mui/icons-material';
 import { useAppDispatch } from '../../src/redux';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
@@ -28,17 +28,23 @@ const BoardItem = ({ task: { content, id, title }, idx }: BoardItemProps): JSX.E
   return (
     <Draggable key={id} draggableId={id} index={idx}>
       {(draggableProvided) => (
-        <ListItem
+        <Card
           sx={{
-            bgcolor: 'secondary.dark'
+            bgcolor: 'secondary.dark',
           }}
           {...draggableProvided.draggableProps}
           {...draggableProvided.dragHandleProps}
           ref={draggableProvided.innerRef}
         >
-          <ListItemText primaryTypographyProps={{
-          }} primary={title} secondary={content} />
-        </ListItem>
+          <CardHeader titleTypographyProps={{
+            textOverflow: 'wrap',
+          }} title={title} subheader={content} />
+          <CardContent sx={{ display: 'flex', justifyContent: 'end' }}>
+            <Button>
+              <Delete color='error' />
+            </Button>
+          </CardContent>
+        </Card>
       )}
     </Draggable>
   );
@@ -54,15 +60,14 @@ interface BoardListProps {
 const BoardList = ({ droppableId, listOfItems, header }: BoardListProps): JSX.Element => {
   return (
     <Paper sx={{
-      minWidth: '30%',
-      minHeight: '70vh',
+      minWidth: '250px',
+      maxWidth: '30%',
+      border: '2px solid',
       p: 2,
     }}>
       <Typography
-        bgcolor={'primary.light'}
-        borderRadius={'8px'}
-        variant='h5'
-        lineHeight={'2em'}
+        variant='caption'
+        fontSize={'1em'}
         textAlign={'center'}>
         {header}
       </Typography>
@@ -150,7 +155,9 @@ const KanbanAddTodo = ({ onClose, open }: KanbanAddProps): JSX.Element => {
       }}
       onClose={onClose}
       open={open}>
-      <DialogTitle title='Nueva Tarea' />
+      <DialogTitle >
+        Nueva Tarea
+      </DialogTitle>
 
       <DialogContent>
         <Stack
@@ -222,7 +229,7 @@ const Kanban = () => {
     TODO: [{
       content: 'hello world',
       id: 'hello world-1',
-      title: 'Testing my kanban'
+      title: 'Testing my kanban board with a lot of content'
     }],
     DOING: [],
     DONE: []
@@ -266,22 +273,26 @@ const Kanban = () => {
   const [todo, doing, done] = Object.keys(lists);
 
   return (
-    <Container sx={{
-      mt: 2
-    }}>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Stack overflow={'auto'} direction={'row'} justifyContent={'space-evenly'}>
-          <BoardList header={todo} droppableId={todo} listOfItems={lists.TODO} />
-          <BoardList header={doing} droppableId={doing} listOfItems={lists.DOING} />
-          <BoardList header={done} droppableId={done} listOfItems={lists.DONE} />
-        </Stack>
-      </DragDropContext>
-      <FloatButton
-        onAction={onOpen}
-        icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
-        sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
-      <KanbanAddTodo onClose={onClose} open={OpenAdd} />
-    </Container>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <Container component={'div'} sx={{
+        mt: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'start',
+        width: '90%',
+        overflowX: 'auto',
+
+      }}>
+        <BoardList header={todo} droppableId={todo} listOfItems={lists.TODO} />
+        <BoardList header={doing} droppableId={doing} listOfItems={lists.DOING} />
+        <BoardList header={done} droppableId={done} listOfItems={lists.DONE} />
+        <FloatButton
+          onAction={onOpen}
+          icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
+          sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
+        <KanbanAddTodo onClose={onClose} open={OpenAdd} />
+      </Container>
+    </DragDropContext>
   );
 };
 
