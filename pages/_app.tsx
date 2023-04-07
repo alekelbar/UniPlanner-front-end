@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { ThemeContext } from '../src/context/theme-provider';
 import { GreenTheme } from '../src/config/MUI/theme';
 
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
