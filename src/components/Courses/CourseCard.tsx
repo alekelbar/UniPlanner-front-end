@@ -80,7 +80,7 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
               transform: 'scale(.9)',
             },
           }}
-          fullWidth variant='outlined'
+          fullWidth variant='contained'
           color='secondary'
           onClick={() => {
             dispatch(setSelectedCourse(course));

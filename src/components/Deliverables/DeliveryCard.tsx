@@ -165,7 +165,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
                   },
                 }}
                 fullWidth
-                variant='outlined'
+                variant='contained'
                 color='secondary'>
                 VER TAREAS
               </Button>

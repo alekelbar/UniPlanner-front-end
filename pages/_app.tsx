@@ -6,13 +6,14 @@ import Head from 'next/head';
 import { Provider } from 'react-redux';
 import Copyright from '../src/components/common/Copyright';
 import { LayoutComponent } from '../src/components/Layout/Layout';
-import { createEmotionCache, theme } from '../src/config';
+import { createEmotionCache } from '../src/config';
 import { store } from '../src/redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { Loading } from '../src/components';
 import { useState } from 'react';
 import { ThemeContext } from '../src/context/theme-provider';
+import { GreenTheme } from '../src/config/MUI/theme';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -23,7 +24,7 @@ interface MyAppProps extends AppProps {
 export default function MyApp (props: MyAppProps) {
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const [appTheme, setAppTheme] = useState(theme);
+  const [appTheme, setAppTheme] = useState(GreenTheme);
 
   const onChangeTheme = (theme: Theme) => {
     setAppTheme(theme);

@@ -74,7 +74,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
       />
       <CardContent>
         <Button
-          fullWidth variant='outlined'
+          fullWidth variant='contained'
           color='secondary'
           onClick={() => {
             onStartSession();
