@@ -18,6 +18,7 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface CoursesProps {
 
@@ -164,23 +165,14 @@ export default function CoursesPage ({ }: CoursesProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      return {
-        props: {
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

@@ -20,6 +20,7 @@ import { validateToken } from '../../src/services/auth/validate-token';
 import usePagination from '../../src/hooks/pagination';
 import isInteger from '../../src/helpers/isInteger';
 import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface DeliveriesProps {
 
@@ -170,26 +171,16 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   );
 }
 
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      return {
-        props: {
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

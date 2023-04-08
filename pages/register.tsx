@@ -11,32 +11,30 @@ import { Box } from '@mui/system';
 import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 
 import Swal from 'sweetalert2';
-import { Link } from '../src/components';
+import { Link, Loading } from '../src/components';
 import { RESPONSES } from '../src/interfaces/response-messages';
 import { Career } from '../src/interfaces/career.interface';
 import { useAppDispatch } from '../src/redux/hooks';
 import { startUserRegister } from '../src/redux/thunks/user-thunks';
-import { CareerService } from '../src/services/Career/career-service';
 import { getNameByID } from '../src/services/identificationAPI/cedula-service';
 import { UserState } from '../src/interfaces/users.interface';
 import { validateToken } from '../src/services/auth/validate-token';
+import { useAllCareers } from '../src/hooks/Carrers/useAllCarrers';
 
 interface Props {
   careers: Career[];
 }
 
-const RegisterPage: React.FC<Props> = ({ careers }) => {
+const RegisterPage: React.FC<Props> = () => {
 
+  const { allCareers, loading } = useAllCareers();
   const dispatch = useAppDispatch();
-
   const [Message, setMessage] = useState("");
-
-  const careerSelected = (careers.length > 0 ? careers[0]._id : "");
 
   const router = useRouter();
 
@@ -45,7 +43,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
       id: '',
       name: Message,
       email: '',
-      career: careerSelected,
+      career: '',
       password: '',
       repassword: '',
     },
@@ -101,6 +99,12 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
     }),
   });
 
+  useEffect(() => {
+    if (allCareers.length)
+      formik.setFieldValue('career', allCareers[0]);
+  }, [allCareers]);
+
+
   const handleIdentification = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     formik.setFieldValue('id', value);
@@ -118,8 +122,12 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
     }
   };
 
+  if (loading) return <Loading />;
+
+  console.log(allCareers);
+
   return (
-    <Grid container sx={{ display: 'grid', placeContent: 'center' }}>
+    <Grid container sx={{ display: 'grid', placeConteqnt: 'center' }}>
       <Box component={'form'} onSubmit={formik.handleSubmit} sx={{ p: 4, overflow: 'auto' }}>
         <Typography variant='h5' my={2} align='center' width={'100%'}>
           Registro
@@ -235,8 +243,7 @@ const RegisterPage: React.FC<Props> = ({ careers }) => {
               name={'career'}
               onChange={formik.handleChange}
             >
-              {careers.map(career => {
-
+              {allCareers.map(career => {
                 return (
                   <MenuItem key={career._id} value={career._id}>
                     {career.name}
@@ -289,13 +296,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     };
   }
-
-  const service = CareerService.createService();
-  const response = await service.listAll();
-
   return {
     props: {
-      careers: typeof response !== "string" ? response.data : null
     }
   };
 };

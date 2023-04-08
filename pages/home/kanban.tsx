@@ -1,19 +1,12 @@
-import { Box, Button, Card, CardContent, CardHeader, Container, Dialog, DialogContent, DialogTitle, Grid, List, ListItem, ListItemText, Paper, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { Container } from '@mui/material';
+import { DragDropContext } from 'react-beautiful-dnd';
 import { FloatButton } from '../../src/components';
-import { Add, Delete, Remove } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from '../../src/redux';
-import { useRouter } from 'next/router';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { v1 as uuidV1 } from 'uuid';
-import { KanbanTaskModel } from '../../src/redux/slices/kanban/models/taskModel';
-import { addTask, setStatus } from '../../src/redux/slices/kanban/kanban-slice';
-import { BoardItem } from '../../src/components/Kanban/BoardItem';
+import { Add } from '@mui/icons-material';
 import { BoardList } from '../../src/components/Kanban/BoardList';
 import { KanbanAddTodo } from '../../src/components/Kanban/KanbanAddTodo';
 import { useKanbanBoard } from '../../src/components/Kanban/hooks/useKanbanBoard';
+import { isValidToken } from '../../src/helpers/isValidToken';
+import { GetServerSidePropsContext } from 'next';
 
 // model ...
 
@@ -67,3 +60,17 @@ const Kanban = () => {
 };
 
 export default Kanban;
+
+export const GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { token } = ctx.req.cookies;
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    }
+    : {
+      props: {},
+    };
+};

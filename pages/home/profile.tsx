@@ -15,6 +15,7 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface Props {
   parseToken: UserState;
@@ -131,23 +132,14 @@ export default ProfilePage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      return {
-        props: {
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

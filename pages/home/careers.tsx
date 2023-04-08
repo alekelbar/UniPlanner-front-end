@@ -13,38 +13,29 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/careers-thunks';
-import { CareerService } from '../../src/services/Career/career-service';
 import { FloatButton } from '../../src/components/common/FloatButton';
 import { Add } from '@mui/icons-material';
-import { validateToken } from '../../src/services/auth/validate-token';
-import { API_URL } from '../../src/types';
+import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface Props {
   parseToken: UserState;
   allCareers: CareerPage[];
 }
 
-const CareerPage: React.FC<Props> = ({ allCareers }) => {
+const CareerPage: React.FC<Props> = () => {
 
+  const { allCareers, loading: allCarrersLoading } = useAllCareers();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const careerState = useAppSelector(st => st.career);
-
-  const { careers, loading } = careerState;
-
-  const [careersState, setCareersState] = useState<CareerPage[]>(careers);
+  const { careers, loading } = useAppSelector(st => st.career);
 
   const [open, setOpen] = useState(false);
 
-  const onOpen = () => {
-    setOpen(true);
-  };
+  const onOpen = () => setOpen(true);
 
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  const router = useRouter();
+  const onClose = () => setOpen(false);
 
   useEffect(() => {
     (async () => {
@@ -57,9 +48,6 @@ const CareerPage: React.FC<Props> = ({ allCareers }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    setCareersState(careers);
-  }, [careers]);
 
   if (loading) {
     return (
@@ -67,12 +55,13 @@ const CareerPage: React.FC<Props> = ({ allCareers }) => {
     );
   }
 
+  if (allCarrersLoading) return <Loading />;
 
   return (
     <Container maxWidth="lg">
       <Grid container my={2} spacing={5} justifyContent='space-evenly'>
         {
-          careersState.map(career => (
+          careers.map(career => (
             <Grid item xs={12} md={6} key={career._id}>
               <CareerCard career={career} />
             </Grid>
@@ -97,39 +86,15 @@ const CareerPage: React.FC<Props> = ({ allCareers }) => {
 export default CareerPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      const service = CareerService.createService();
-      const response = await service.listAll();
-
-
-      if (typeof response === "string") {
-        return {
-          redirect: {
-            destination: '/auth',
-            permanent: false,
-          },
-        };
-      }
-
-      return {
-        props: {
-          allCareers: response.data
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

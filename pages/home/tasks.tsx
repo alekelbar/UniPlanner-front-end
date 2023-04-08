@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadTasks } from '../../src/redux/thunks/tasks-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 
 interface TaskProps {
@@ -189,23 +190,14 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      return {
-        props: {
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

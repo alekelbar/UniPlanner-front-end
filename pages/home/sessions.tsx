@@ -16,6 +16,7 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { setSelectedSession, useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSession } from '../../src/redux/thunks/session-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
+import { isValidToken } from '../../src/helpers/isValidToken';
 
 export default function SessionsPage (): JSX.Element {
   const theme = useTheme();
@@ -144,23 +145,14 @@ export default function SessionsPage (): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-
-  if (token) {
-    const parseToken: UserState = JSON.parse(token);
-    const tokenString = parseToken.token;
-
-    if ((await validateToken(tokenString))) {
-      return {
-        props: {
-        }
-      };
+  return !token || !(await isValidToken(JSON.parse(token).token))
+    ? {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  }
-
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+    : {
+      props: {},
+    };
 };

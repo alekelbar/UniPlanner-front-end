@@ -29,7 +29,8 @@ export class CareerService {
     try {
       return await this.API.get<Career[]>("careers/find/all");
     } catch (error) {
-      return RESPONSES.UNAUTHORIZE;
+      console.log(error);
+      return RESPONSES.INTERNAL_SERVER_ERROR;
     }
   }
 
