@@ -1,7 +1,7 @@
 //localhost:3000/api/v1/careers/all
 
 import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth.interceptor";
+import { authInterceptor } from "../../interceptors/auth-interceptor";
 import { Career } from "../../interfaces/career.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { API_URL } from "../api-service";

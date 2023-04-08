@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth.interceptor";
+import { authInterceptor } from "../../interceptors/auth-interceptor";
 import { RESPONSES } from "../../interfaces/response-messages";
 import {
   UserLogin,
