@@ -11,7 +11,6 @@ import { Setting } from '../../src/interfaces/settings-interfaces';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSetting, startUpdateSetting } from '../../src/redux/thunks/settings-thunks';
 import { ThemeContext } from '../../src/context/theme-provider';
-import { blueTheme, GreenTheme, redTheme, UNATheme } from '../../src/config/MUI/theme';
 import { GetServerSideProps } from 'next';
 import { isValidToken } from '../../src/helpers/isValidToken';
 
@@ -107,16 +106,6 @@ const SettingsPage = () => {
                 <Typography variant='subtitle1'>
                   <ColorLens sx={{ fontSize: '4em' }} />
                 </Typography>
-              </Stack>
-              <Stack
-                direction={'row'}
-                spacing={2}
-                justifyContent={'space-around'}
-                width={'100%'}>
-                <Button variant='contained' onClick={() => onChangeTheme(UNATheme)}>UNA</Button>
-                <Button variant='contained' onClick={() => onChangeTheme(redTheme)}>Rojo Pastel</Button>
-                <Button variant='contained' onClick={() => onChangeTheme(blueTheme)}>Azul Pastel</Button>
-                <Button variant='contained' onClick={() => onChangeTheme(GreenTheme)}>Verder Pastel</Button>
               </Stack>
               <Stack mt={3}
                 direction={'column'}
