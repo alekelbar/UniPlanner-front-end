@@ -31,16 +31,14 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const { selected: selectedCourse } = useAppSelector(st => st.courses);
-  const deliverablesState = useAppSelector(st => st.deliveries);
+  const { deliverables, count, loading } = useAppSelector(st => st.deliveries);
 
   const {
     actualPage,
     handleChangePage,
     totalPages,
     setTotalPages,
-  } = usePagination(deliverablesState.count);
-
-  const [deliveries, setDeliveries] = useState(deliverablesState.deliverables);
+  } = usePagination(count);
 
   // Manejo de estado de los modales...
   const [openCreate, setOpenCreate] = useState(false);
@@ -84,32 +82,28 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
     reload(actualPage);
   }, [actualPage]);
 
-
   useEffect(() => {
-
-    if (deliverablesState.deliverables.length === 0 && actualPage > 1) {
+    if (deliverables.length === 0 && actualPage > 1) {
       reload(actualPage - 1);
     }
 
-    if (deliverablesState.deliverables.length > 5) {
+    if (deliverables.length > 5) {
       reload(actualPage);
     }
 
-    setDeliveries(deliverablesState.deliverables);
-
     // Cálculo para la paginación
     const pages: number =
-      isInteger(deliverablesState.count / 5)
-        ? deliverablesState.count / 5
-        : Math.floor(deliverablesState.count / 5) + 1;
+      isInteger(count / 5)
+        ? count / 5
+        : Math.floor(count / 5) + 1;
 
     setTotalPages(pages);
 
-  }, [deliverablesState]);
+  }, [deliverables]);
 
 
   if (!selectedCourse) return <GoHome />;
-  if (deliverablesState.loading) return <Loading />;
+  if (loading) return <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
@@ -146,8 +140,8 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
         justifyContent="center"
         alignItems={'center'}>
         {
-          deliveries.length
-            ? deliveries.map((delivery) => {
+          deliverables.length
+            ? deliverables.map((delivery) => {
               return (
                 <Grid item xs={12} sm={5} md={6} lg={3} key={delivery._id + delivery.name}>
                   <DeliveryCard actualPage={actualPage} onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} />

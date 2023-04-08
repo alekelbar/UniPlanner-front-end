@@ -31,16 +31,14 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const { selected: selectedDelivery } = useAppSelector(st => st.deliveries);
-  const taskState = useAppSelector(st => st.tasks);
+  const { tasks, count, loading } = useAppSelector(st => st.tasks);
 
   const {
     actualPage,
     handleChangePage,
     totalPages,
     setTotalPages,
-  } = usePagination(taskState.count);
-
-  const [tasks, setTasks] = useState(taskState.tasks);
+  } = usePagination(count);
 
   // Manejo de estado de los modales...
   const [openCreate, setOpenCreate] = useState(false);
@@ -93,28 +91,26 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
 
   useEffect(() => {
 
-    if (taskState.tasks.length > 5) {
+    if (tasks.length > 5) {
       reload(actualPage);
     }
 
-    if (taskState.tasks.length === 0 && actualPage > 1) {
+    if (tasks.length === 0 && actualPage > 1) {
       reload(actualPage - 1);
     }
-
-    setTasks(taskState.tasks);
     // Cálculo para la paginación
     const pages: number =
-      isInteger(taskState.count / 5)
-        ? taskState.count / 5
-        : Math.floor(taskState.count / 5) + 1;
+      isInteger(count / 5)
+        ? count / 5
+        : Math.floor(count / 5) + 1;
 
     setTotalPages(pages);
 
-  }, [taskState]);
+  }, [tasks]);
 
   if (!selectedDelivery) return <GoHome />;
 
-  if (taskState.loading) return <Loading />;
+  if (loading) return <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
-import { useFormik } from 'formik';
+import { Formik, FormikValues, useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -101,7 +101,7 @@ const RegisterPage: React.FC<Props> = () => {
 
   useEffect(() => {
     if (allCareers.length)
-      formik.setFieldValue('career', allCareers[0]);
+      formik.setFieldValue('career', allCareers[0]._id);
   }, [allCareers]);
 
 
@@ -123,8 +123,6 @@ const RegisterPage: React.FC<Props> = () => {
   };
 
   if (loading) return <Loading />;
-
-  console.log(allCareers);
 
   return (
     <Grid container sx={{ display: 'grid', placeConteqnt: 'center' }}>

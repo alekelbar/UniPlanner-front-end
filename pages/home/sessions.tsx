@@ -23,7 +23,7 @@ export default function SessionsPage (): JSX.Element {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const sessionsState = useAppSelector(st => st.sessions);
+  const { sessions, count, loading } = useAppSelector(st => st.sessions);
   const [openClock, setOpenClock] = useState(false);
 
   const {
@@ -31,9 +31,8 @@ export default function SessionsPage (): JSX.Element {
     handleChangePage,
     totalPages,
     setTotalPages,
-  } = usePagination(sessionsState.count);
+  } = usePagination(count);
 
-  const [sessions, setCourses] = useState<Session[]>(sessionsState.sessions);
 
   const [openCreate, setOpenCreate] = useState(false);
 
@@ -67,27 +66,25 @@ export default function SessionsPage (): JSX.Element {
 
   useEffect(() => {
 
-    if (sessionsState.sessions.length === 0 && actualPage > 1) {
+    if (sessions.length === 0 && actualPage > 1) {
       reload(actualPage - 1);
     }
 
-    if (sessionsState.sessions.length > 5) {
+    if (sessions.length > 5) {
       reload(actualPage);
     }
 
-    setCourses(sessionsState.sessions);
-
     // Cálculo para la paginación
     const pages: number =
-      isInteger(sessionsState.count / 5)
-        ? sessionsState.count / 5
-        : Math.floor(sessionsState.count / 5) + 1;
+      isInteger(count / 5)
+        ? count / 5
+        : Math.floor(count / 5) + 1;
 
     setTotalPages(pages);
 
-  }, [sessionsState]);
+  }, [sessions]);
 
-  if (sessionsState.loading) return <Loading />;
+  if (loading) return <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

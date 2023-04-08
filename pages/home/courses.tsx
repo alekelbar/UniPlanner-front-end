@@ -30,16 +30,15 @@ export default function CoursesPage ({ }: CoursesProps) {
   const dispatch = useAppDispatch();
 
   const { selected } = useAppSelector(st => st.career);
-  const coursesState = useAppSelector(st => st.courses);
+  const { courses, count, loading } = useAppSelector(st => st.courses);
 
   const {
     actualPage,
     handleChangePage,
     totalPages,
     setTotalPages,
-  } = usePagination(coursesState.count);
+  } = usePagination(count);
 
-  const [courses, setCourses] = useState<Course[]>(coursesState.courses);
   const [openCreate, setOpenCreate] = useState(false);
 
   const onOpenCreate = () => {
@@ -84,28 +83,26 @@ export default function CoursesPage ({ }: CoursesProps) {
 
   useEffect(() => {
 
-    if (coursesState.courses.length === 0 && actualPage > 1) {
+    if (courses.length === 0 && actualPage > 1) {
       reload(actualPage - 1);
     }
 
-    if (coursesState.courses.length > 5) {
+    if (courses.length > 5) {
       reload(actualPage);
     }
 
-    setCourses(coursesState.courses);
-
     // Cálculo para la paginación
     const pages: number =
-      isInteger(coursesState.count / 5)
-        ? coursesState.count / 5
-        : Math.floor(coursesState.count / 5) + 1;
+      isInteger(count / 5)
+        ? count / 5
+        : Math.floor(count / 5) + 1;
 
     setTotalPages(pages);
 
-  }, [coursesState]);
+  }, [courses]);
 
   if (!selected) return <NotFoundPage />;
-  if (coursesState.loading) return <Loading />;
+  if (loading) return <Loading />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

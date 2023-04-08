@@ -1,5 +1,5 @@
 import { ColorLens, Settings } from '@mui/icons-material';
-import { Button, Container, Divider, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
@@ -13,8 +13,6 @@ import { startLoadSetting, startUpdateSetting } from '../../src/redux/thunks/set
 import { ThemeContext } from '../../src/context/theme-provider';
 import { blueTheme, GreenTheme, redTheme, UNATheme } from '../../src/config/MUI/theme';
 import { GetServerSideProps } from 'next';
-import { UserState } from '../../src/interfaces/users.interface';
-import { validateToken } from '../../src/services/auth/validate-token';
 import { isValidToken } from '../../src/helpers/isValidToken';
 
 const SettingsPage = () => {
