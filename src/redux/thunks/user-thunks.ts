@@ -1,4 +1,3 @@
-import { Setting } from "../../components/Settings/Settings";
 import { setLocalToken } from "../../helpers/local-storage";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
@@ -6,9 +5,7 @@ import { SettingService } from "../../services/Settings/settings-services";
 import { UserService } from "../../services/User/user-service";
 import { UpdateUser } from "../../types/users/update-user";
 import {
-  setLoadingSettings,
-  stopLoadingSettings,
-  updateSetting,
+  updateSetting
 } from "../slices/Settings/setting-slice";
 import {
   initLoadingApp,

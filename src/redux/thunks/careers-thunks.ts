@@ -1,4 +1,3 @@
-import CareerPage from "../../../pages/home/careers";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CareerService } from "../../services";
 import {

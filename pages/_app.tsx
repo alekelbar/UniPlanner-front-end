@@ -1,20 +1,13 @@
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Theme, ThemeProvider } from '@mui/material/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist';
+import { LayoutComponent } from '../src/components/Layout'; // No importar esto NUNCA desde components, es una dependecia circular
 import { createEmotionCache } from '../src/config';
-import { LayoutComponent } from '../src/components/Layout/Layout';
-import { Copyright, Loading } from '../src/components';
-import { GreenTheme } from '../src/config/MUI/theme';
-import { store } from '../src/redux';
-import { ThemeContext } from '../src/context/theme-provider';
-import { ReduxPersistWrapper } from '../src/redux/reduxPersist/wrapper';
 import { ThemeProviderWrapper } from '../src/context/wrapperProvider';
+import { store } from '../src/redux';
+import { ReduxPersistWrapper } from '../src/redux/reduxPersist/wrapper';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -37,7 +30,6 @@ export default function MyApp (props: MyAppProps) {
             <LayoutComponent>
               <CssBaseline />
               <Component {...pageProps} />
-              <Copyright />
             </LayoutComponent>
           </ReduxPersistWrapper>
         </ThemeProviderWrapper>

@@ -9,14 +9,11 @@ import AddSessionDialog from '../../src/components/Sessions/AddSessionDialog';
 import SessionCard from '../../src/components/Sessions/SessionCard';
 import SessionClock from '../../src/components/Sessions/SessionClock';
 import isInteger from '../../src/helpers/isInteger';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { Session } from '../../src/interfaces/session-interface';
-import { UserState } from '../../src/interfaces/users.interface';
 import { setSelectedSession, useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSession } from '../../src/redux/thunks/session-thunks';
-import { validateToken } from '../../src/services/auth/validate-token';
-import { isValidToken } from '../../src/helpers/isValidToken';
 
 export default function SessionsPage (): JSX.Element {
   const theme = useTheme();

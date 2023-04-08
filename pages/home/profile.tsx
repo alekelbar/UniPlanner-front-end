@@ -10,12 +10,11 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { Loading } from '../../src/components';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
-import { validateToken } from '../../src/services/auth/validate-token';
-import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface Props {
   parseToken: UserState;

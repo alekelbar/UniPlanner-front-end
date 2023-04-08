@@ -1,3 +1,4 @@
+import { Course } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CourseService } from "../../services/Course/course-service";
 import {
@@ -9,7 +10,6 @@ import {
   updateCourse,
 } from "../slices/Courses/coursesSlice";
 import { AppDispatch, RootState } from "../store";
-import { Course } from "../../interfaces/course.interface";
 
 export const startLoadCourses = (careerId: string, page: number) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {

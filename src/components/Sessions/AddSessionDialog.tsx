@@ -2,15 +2,14 @@ import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, Te
 import { useTheme } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
+import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { CreateSession, SESSION_TYPES } from '../../interfaces/session-interface';
 import { useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateSession } from '../../redux/thunks/session-thunks';
-import * as Yup from 'yup';
 
 
 interface AddSessionDialogProps {

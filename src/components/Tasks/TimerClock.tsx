@@ -1,9 +1,9 @@
+import { Backdrop, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../redux";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Backdrop, Button, Grid, Stack, Typography, useTheme } from "@mui/material";
 import { formatSeconds } from "../../helpers/formatSeconds";
+import { useAppSelector } from "../../redux";
 
 interface TimerClockProps {
   open: boolean;

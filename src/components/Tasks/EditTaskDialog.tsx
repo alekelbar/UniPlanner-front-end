@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';

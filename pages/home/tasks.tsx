@@ -1,25 +1,23 @@
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Stack, Typography } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { GoHome, Loading } from '../../src/components';
-import { FloatButton } from '../../src/components/common/FloatButton';
+import { Loading, NotFoundPage } from '../../src/components';
 import AddTaskDialog from '../../src/components/Tasks/AddTaskDialog';
 import EditTaskDialog from '../../src/components/Tasks/EditTaskDialog';
 import TaskCard from '../../src/components/Tasks/TaskCard';
 import TimerClock from '../../src/components/Tasks/TimerClock';
+import { FloatButton } from '../../src/components/common/FloatButton';
 import isInteger from '../../src/helpers/isInteger';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import { logOut } from '../../src/helpers/local-storage';
 import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadTasks } from '../../src/redux/thunks/tasks-thunks';
-import { validateToken } from '../../src/services/auth/validate-token';
-import { isValidToken } from '../../src/helpers/isValidToken';
 
 
 interface TaskProps {
@@ -108,7 +106,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
 
   }, [tasks]);
 
-  if (!selectedDelivery) return <GoHome />;
+  if (!selectedDelivery) return <NotFoundPage />;
 
   if (loading) return <Loading />;
 

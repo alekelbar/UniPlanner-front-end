@@ -1,7 +1,7 @@
+import { Delete } from "@mui/icons-material";
+import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import { Draggable } from "react-beautiful-dnd";
 import { KanbanTaskModel } from "../../redux/slices/kanban/models/taskModel";
-import { Button, Card, CardContent, CardHeader } from "@mui/material";
-import { Delete } from "@mui/icons-material";
 
 interface BoardItemProps {
   draggableId: string;

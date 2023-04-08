@@ -1,6 +1,5 @@
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
 
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { CareerService } from '../../services';
+import { useEffect, useState } from 'react';
 import { Career } from '../../interfaces/career.interface';
+import { CareerService } from '../../services';
 
 
 

@@ -2,11 +2,11 @@ import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { DeliverableService } from "../../services/Deliveries/Deliverable-service";
 import {
+  addDelivery,
   loadDeliveries,
+  removeDelivery,
   startLoadingDeliveries,
   stopLoadingDeliveries,
-  addDelivery,
-  removeDelivery,
   updateDeliverable,
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";

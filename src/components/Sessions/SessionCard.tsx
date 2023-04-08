@@ -1,14 +1,13 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { Session, SESSION_TYPES } from '../../interfaces/session-interface';
-import { setSelectedSession, useAppDispatch } from '../../redux';
+import { SESSION_TYPES, Session } from '../../interfaces/session-interface';
+import { useAppDispatch } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveSession } from '../../redux/thunks/session-thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 
 interface SessionCardProps {

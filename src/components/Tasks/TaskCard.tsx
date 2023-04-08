@@ -1,15 +1,14 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { Task, TASK_STATUS } from '../../interfaces/task-interface';
+import { TASK_STATUS, Task } from '../../interfaces/task-interface';
 import { useAppDispatch } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedTask } from '../../redux/slices/Tasks/task-slice';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveTask } from '../../redux/thunks/tasks-thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface TaskCardProps {
   task: Task;

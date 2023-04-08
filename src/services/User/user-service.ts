@@ -6,7 +6,7 @@ import {
   UserRegister,
   UserState,
 } from "../../interfaces/users.interface";
-import { User, UpdateUser, API_URL } from "../../types";
+import { API_URL, UpdateUser, User } from "../../types";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",

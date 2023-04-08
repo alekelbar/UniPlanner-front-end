@@ -3,16 +3,16 @@ import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
-import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
+import { DELIVERABLE_STATUS, Deliverable } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
 import { Loading } from '../common';
 import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;

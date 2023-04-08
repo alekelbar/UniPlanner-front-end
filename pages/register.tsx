@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
-import { Formik, FormikValues, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -17,14 +17,14 @@ import * as Yup from 'yup';
 
 import Swal from 'sweetalert2';
 import { Link, Loading } from '../src/components';
-import { RESPONSES } from '../src/interfaces/response-messages';
+import { useAllCareers } from '../src/hooks/Carrers/useAllCarrers';
 import { Career } from '../src/interfaces/career.interface';
+import { RESPONSES } from '../src/interfaces/response-messages';
+import { UserState } from '../src/interfaces/users.interface';
 import { useAppDispatch } from '../src/redux/hooks';
 import { startUserRegister } from '../src/redux/thunks/user-thunks';
-import { getNameByID } from '../src/services/identificationAPI/cedula-service';
-import { UserState } from '../src/interfaces/users.interface';
 import { validateToken } from '../src/services/auth/validate-token';
-import { useAllCareers } from '../src/hooks/Carrers/useAllCarrers';
+import { getNameByID } from '../src/services/identificationAPI/cedula-service';
 
 interface Props {
   careers: Career[];

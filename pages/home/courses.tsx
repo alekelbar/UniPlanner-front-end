@@ -1,24 +1,21 @@
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Pagination, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Stack, Typography, useTheme } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { Loading } from '../../src/components';
-import { FloatButton } from '../../src/components/common/FloatButton';
-import NotFoundPage from '../../src/components/Layout/GoHome';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
 import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';
+import NotFoundPage from '../../src/components/Layout/NotFoundPage';
+import { FloatButton } from '../../src/components/common/FloatButton';
 import isInteger from '../../src/helpers/isInteger';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import usePagination from '../../src/hooks/pagination';
-import { Course } from '../../src/interfaces/course.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
-import { validateToken } from '../../src/services/auth/validate-token';
-import { isValidToken } from '../../src/helpers/isValidToken';
+import { Loading } from '../../src/components';
 
 interface CoursesProps {
 

@@ -1,6 +1,6 @@
 import { List, Paper, Typography } from "@mui/material";
-import { KanbanTaskModel } from "../../redux/slices/kanban/models/taskModel";
 import { Droppable } from "react-beautiful-dnd";
+import { KanbanTaskModel } from "../../redux/slices/kanban/models/taskModel";
 import { BoardItem } from "./BoardItem";
 
 

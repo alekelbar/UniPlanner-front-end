@@ -1,22 +1,19 @@
 import { ColorLens, Settings } from '@mui/icons-material';
 import { Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { Loading } from '../../src/components';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { Setting } from '../../src/interfaces/settings-interfaces';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { startLoadSetting, startUpdateSetting } from '../../src/redux/thunks/settings-thunks';
-import { ThemeContext } from '../../src/context/theme-provider';
-import { GetServerSideProps } from 'next';
-import { isValidToken } from '../../src/helpers/isValidToken';
 
 const SettingsPage = () => {
-
-  const { onChangeTheme } = useContext(ThemeContext);
 
   const { selected } = useAppSelector(state => state.setting);
 

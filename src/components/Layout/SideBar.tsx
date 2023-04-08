@@ -1,5 +1,5 @@
 import { Logout, Person, Schedule, School, Settings, Task, Timelapse } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
+import { Button, Divider, Drawer, Grid, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';

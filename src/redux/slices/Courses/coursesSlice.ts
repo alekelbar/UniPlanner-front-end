@@ -1,6 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs/promises";
 import { Course, CoursesState } from "../../../interfaces/course.interface";
 
 // Define the initial state using that type

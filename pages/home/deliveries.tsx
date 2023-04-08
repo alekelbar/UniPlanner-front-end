@@ -1,26 +1,24 @@
-import { useTheme } from '@emotion/react';
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Pagination, Paper, Typography } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { GoHome, Loading } from '../../src/components';
-import { FloatButton } from '../../src/components/common/FloatButton';
-import { DeliveryCard } from '../../src/components/Deliverables/DeliveryCard';
+import { Loading } from '../../src/components';
 import AddDeliveryDialog from '../../src/components/Deliverables/AddDeliveryDialog';
+import { DeliveryCard } from '../../src/components/Deliverables/DeliveryCard';
+import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
+import { FloatButton } from '../../src/components/common/FloatButton';
+import isInteger from '../../src/helpers/isInteger';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import { logOut } from '../../src/helpers/local-storage';
+import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks';
-import { validateToken } from '../../src/services/auth/validate-token';
-import usePagination from '../../src/hooks/pagination';
-import isInteger from '../../src/helpers/isInteger';
-import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
-import { isValidToken } from '../../src/helpers/isValidToken';
+import NotFound from '../404';
 
 interface DeliveriesProps {
 
@@ -102,7 +100,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   }, [deliverables]);
 
 
-  if (!selectedCourse) return <GoHome />;
+  if (!selectedCourse) return <NotFound />;
   if (loading) return <Loading />;
 
   return (

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors/auth-interceptor";
-import { PaginatedCourses, Course } from "../../interfaces/course.interface";
+import { Course, PaginatedCourses } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { API_URL } from "../api-service";
 

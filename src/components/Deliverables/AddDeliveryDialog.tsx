@@ -1,18 +1,17 @@
-import { useTheme, Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Theme, Typography, useMediaQuery } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
-import { DELIVERABLE_STATUS, DELIVERABLE_TAGS } from '../../interfaces/deliveries.interface';
+import { makePriority } from '../../helpers/priorityCalc';
+import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateDelivery } from '../../redux/thunks/deliverables-thunks';
-import { isSameWeek } from 'date-fns';
 import { Loading } from '../common';
-import { ImportantThings, UrgentThings, makePriority } from '../../helpers/priorityCalc';
 
 interface AddDeliveryDialogProps {
   open: boolean,

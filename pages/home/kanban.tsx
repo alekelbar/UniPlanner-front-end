@@ -1,12 +1,12 @@
+import { Add } from '@mui/icons-material';
 import { Container } from '@mui/material';
+import { GetServerSidePropsContext } from 'next';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { FloatButton } from '../../src/components';
-import { Add } from '@mui/icons-material';
 import { BoardList } from '../../src/components/Kanban/BoardList';
 import { KanbanAddTodo } from '../../src/components/Kanban/KanbanAddTodo';
 import { useKanbanBoard } from '../../src/components/Kanban/hooks/useKanbanBoard';
 import { isValidToken } from '../../src/helpers/isValidToken';
-import { GetServerSidePropsContext } from 'next';
 
 // model ...
 

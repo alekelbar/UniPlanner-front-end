@@ -1,5 +1,5 @@
 import { RESPONSES } from "../../interfaces/response-messages";
-import { CreateTask, Task, UpdateTask } from "../../interfaces/task-interface";
+import { CreateTask, Task } from "../../interfaces/task-interface";
 import { TaskService } from "../../services/Task/task-service";
 import {
   addTask,

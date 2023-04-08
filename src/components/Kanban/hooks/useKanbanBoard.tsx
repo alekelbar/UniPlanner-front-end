@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../redux';
-import { KanbanTaskModel } from '../../../redux/slices/kanban/models/taskModel';
+import { useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
+import { useAppDispatch, useAppSelector } from '../../../redux';
 import { setStatus } from '../../../redux/slices/kanban/kanban-slice';
+import { KanbanTaskModel } from '../../../redux/slices/kanban/models/taskModel';
 
 type ListsState = {
   TODO: KanbanTaskModel[],

@@ -1,16 +1,15 @@
-import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useAppDispatch } from '../../redux';
-import * as Yup from 'yup';
-import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
 import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
-import { startCreateTask } from '../../redux/thunks/tasks-thunks';
-import { RESPONSES } from '../../interfaces/response-messages';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
+import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
+import { useAppDispatch } from '../../redux';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { startCreateTask } from '../../redux/thunks/tasks-thunks';
 
 interface AddTaskDialogProps {
   open: boolean,

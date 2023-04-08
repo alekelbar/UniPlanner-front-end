@@ -1,7 +1,7 @@
+import { ThemeContext } from "@emotion/react";
 import { Theme, ThemeProvider } from "@mui/material";
 import { useState } from "react";
 import { GreenTheme } from "../config/MUI/theme";
-import { ThemeContext } from "@emotion/react";
 
 export function ThemeProviderWrapper (props: { children: React.ReactNode; }) {
   const { children } = props;

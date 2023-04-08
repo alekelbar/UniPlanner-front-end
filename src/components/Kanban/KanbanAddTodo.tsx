@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { v1 as uuidV1 } from 'uuid';
-import { useAppDispatch, useAppSelector } from '../../redux';
 import { Button, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { KanbanTaskModel } from '../../redux/slices/kanban/models/taskModel';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import { v1 as uuidV1 } from 'uuid';
+import * as Yup from 'yup';
+import { useAppDispatch, useAppSelector } from '../../redux';
 import { addTask } from '../../redux/slices/kanban/kanban-slice';
+import { KanbanTaskModel } from '../../redux/slices/kanban/models/taskModel';
 
 interface KanbanAddProps {
   open: boolean;

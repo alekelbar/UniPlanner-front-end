@@ -1,9 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { authInterceptor } from "../../interceptors";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { Session } from "../../interfaces/session-interface";
+import { CreateSession, Session } from "../../interfaces/session-interface";
 import { UserToken } from "../../interfaces/users.interface";
-import { CreateSession } from "../../interfaces/session-interface";
 import { API_URL } from "../api-service";
 
 export class SessionService {

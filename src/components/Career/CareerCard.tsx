@@ -1,12 +1,12 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
 import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
 
 interface CareerCardProps {

@@ -1,3 +1,4 @@
+import { Add } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 import Container from '@mui/material/Container';
 import { GetServerSideProps } from 'next';
@@ -5,18 +6,17 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AddCareerDialog } from '../../src/components/Career/AddCareerDialog';
 import { CareerCard } from '../../src/components/Career/CareerCard';
+import { FloatButton } from '../../src/components/common/FloatButton';
 import { Loading } from '../../src/components/common/Loading';
+import { isValidToken } from '../../src/helpers/isValidToken';
 import { logOut } from '../../src/helpers/local-storage';
+import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
 import { Career as CareerPage } from '../../src/interfaces/career.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/careers-thunks';
-import { FloatButton } from '../../src/components/common/FloatButton';
-import { Add } from '@mui/icons-material';
-import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
-import { isValidToken } from '../../src/helpers/isValidToken';
 
 interface Props {
   parseToken: UserState;

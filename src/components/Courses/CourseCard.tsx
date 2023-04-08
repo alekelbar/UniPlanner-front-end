@@ -2,14 +2,14 @@ import { Card, CardActions, CardContent, CardHeader, Tooltip, Typography } from 
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
 import { Course } from '../../interfaces/course.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCourse } from '../../redux/slices/Courses/coursesSlice';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveCourse } from '../../redux/thunks/courses.thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface CourseCardProps {
   course: Course;

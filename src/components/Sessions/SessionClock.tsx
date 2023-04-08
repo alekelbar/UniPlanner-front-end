@@ -3,7 +3,7 @@ import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { setInterval, clearInterval } from 'timers';
+import { clearInterval, setInterval } from 'timers';
 import { SESSION_TYPES } from '../../interfaces/session-interface';
 import { useAppSelector } from '../../redux';
 
