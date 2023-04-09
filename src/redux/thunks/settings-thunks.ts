@@ -8,8 +8,6 @@ import {
 } from "../slices/Settings/setting-slice";
 import { AppDispatch, RootState } from "../store";
 
-const service = SettingService.createService();
-
 export const startLoadSetting = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando las carreras...
@@ -23,6 +21,7 @@ export const startLoadSetting = () => {
       return RESPONSES.UNAUTHORIZE;
     }
 
+    const service = new SettingService();
     const settings = await service.getSetting(user.id);
 
     if (typeof settings === "string") {
@@ -49,6 +48,7 @@ export const startUpdateSetting = (settingUpdate: Setting) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
+    const service = new SettingService();
     const settings = await service.updateSetting(settingUpdate);
 
     if (typeof settings === "string") {

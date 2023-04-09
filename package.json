@@ -6,6 +6,8 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
+    "test": "jest --watch",
+    "test:ci": "jest --ci",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
@@ -35,11 +37,15 @@
     "yup": "^1.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/uuid": "^9.0.1",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "typescript": "latest",
     "uuid": "^9.0.0"
   }

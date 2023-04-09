@@ -23,7 +23,7 @@ export const startLoadCourses = (careerId: string, page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService();
+    const service = new CourseService();
     const response = await service.getUserCourse(user.id, careerId, page);
 
     if (typeof response === "string") {
@@ -50,7 +50,7 @@ export const startRemoveCourse = (course: Course) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService();
+    const service = new CourseService();
     const response = await service.removeCourse(course);
 
     if (typeof response === "string") {
@@ -81,7 +81,7 @@ export const startAddCourse = (
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService();
+    const service = new CourseService();
     const course: Course = {
       name,
       courseDescription,
@@ -120,7 +120,7 @@ export const startUpdateCourse = (
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CourseService.createService();
+    const service = new CourseService();
     const course: Course = {
       name,
       courseDescription,

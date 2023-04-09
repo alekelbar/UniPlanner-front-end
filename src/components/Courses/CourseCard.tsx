@@ -48,7 +48,7 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
   };
 
   return (
-    <Card variant='elevation'
+    <Card variant='elevation' data-testid="course-card"
       sx={{
         minHeight: MIN_CARD_HEIGHT,
       }}

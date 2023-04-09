@@ -17,10 +17,9 @@ import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
 
 interface Props {
-  parseToken: UserState;
 }
 
-const ProfilePage: React.FC<Props> = () => {
+const ProfilePage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
@@ -75,7 +74,7 @@ const ProfilePage: React.FC<Props> = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 2, display: 'block' }}>
-      <Paper component={'form'} onSubmit={formik.handleSubmit} sx={{ py: 4, px: 2 }}>
+      <Paper data-testid='profile-form' component={'form'} onSubmit={formik.handleSubmit} sx={{ py: 4, px: 2 }}>
         <Stack spacing={1} direction="column" sx={{ placeItems: 'center' }}>
           <IconButton>
             <Avatar />

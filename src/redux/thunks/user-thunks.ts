@@ -4,9 +4,7 @@ import { UserLogin, UserRegister } from "../../interfaces/users.interface";
 import { SettingService } from "../../services/Settings/settings-services";
 import { UserService } from "../../services/User/user-service";
 import { UpdateUser } from "../../types/users/update-user";
-import {
-  updateSetting
-} from "../slices/Settings/setting-slice";
+import { updateSetting } from "../slices/Settings/setting-slice";
 import {
   initLoadingApp,
   onUpdateUser,
@@ -15,12 +13,11 @@ import {
 } from "../slices/auth/authSlice";
 import { AppDispatch, RootState } from "../store";
 
-const service = UserService.createService();
-
 export const startUserLogin = (login: UserLogin) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(initLoadingApp());
 
+    const service = new UserService();
     const logIn = await service.login(login);
 
     if (typeof logIn === "string") {
@@ -36,7 +33,7 @@ export const startUserLogin = (login: UserLogin) => {
     // Cargar las preferencias de usuario...
     const userId = getState().auth.user?.id;
 
-    const settingsService = SettingService.createService();
+    const settingsService = new SettingService();
     const settings = await settingsService.getSetting(userId as string);
 
     if (typeof settings === "string") {
@@ -53,6 +50,8 @@ export const startUserLogin = (login: UserLogin) => {
 export const startUserRegister = (register: UserRegister) => {
   return async (dispatch: AppDispatch) => {
     dispatch(initLoadingApp());
+    const service = new UserService();
+
     const registered = await service.register(register);
 
     if (typeof registered === "string") {
@@ -79,7 +78,7 @@ export const startUpdateUser = (updateUser: UpdateUser) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = UserService.createService();
+    const service = new UserService();
     const response = await service.updateUser(updateUser, user.id);
 
     if (typeof response === "string") {

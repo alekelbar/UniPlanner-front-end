@@ -70,7 +70,7 @@ export default function TimerClock ({ open, onClose }: TimerClockProps): JSX.Ele
         }
       }}>
         {selected ? <>
-          <CircularProgressbarWithChildren value={100} styles={buildStyles({
+          <CircularProgressbarWithChildren data-testid="session-clock" value={100} styles={buildStyles({
             pathColor: (pause)
               ? theme.palette.success.main
               : theme.palette.info.main,

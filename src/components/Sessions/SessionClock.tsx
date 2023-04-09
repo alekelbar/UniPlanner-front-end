@@ -6,6 +6,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { clearInterval, setInterval } from 'timers';
 import { SESSION_TYPES } from '../../interfaces/session-interface';
 import { useAppSelector } from '../../redux';
+import { Loading } from '../common';
 
 interface SessionClockProps {
   open: boolean;
@@ -59,6 +60,8 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
       handleTimer();
   }, [open]);
 
+  if (!selected) return <Loading />;
+
 
   return (
     <Backdrop
@@ -76,7 +79,7 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
             })}
           >
             <Typography variant='h2'> {Math.trunc((secondsLeft / totalSeconds) * 100)}% </Typography>
-            <Typography variant='caption'> Temporizador </Typography>
+            <Typography data-testid='session-clock' variant='caption'> Temporizador </Typography>
 
           </CircularProgressbarWithChildren>
           <Grid container width={"90%"} sx={{ placeItems: "center" }} gap={2} m={'0 auto'} p={2} direction="column">

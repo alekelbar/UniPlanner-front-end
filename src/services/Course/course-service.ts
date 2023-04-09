@@ -1,26 +1,14 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth-interceptor";
+import { AxiosInstance } from "axios";
 import { Course, PaginatedCourses } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class CourseService {
   private API: AxiosInstance;
   private static instance: CourseService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): CourseService {
-    if (!this.instance) {
-      this.instance = new CourseService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   public async getUserCourse(userId: string, careerId: string, page: number) {

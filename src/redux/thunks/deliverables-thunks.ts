@@ -25,7 +25,7 @@ export const startLoadDeliveries = (page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.getDeliverables(selectedCourse, page);
 
     if (typeof response === "string") {
@@ -56,7 +56,7 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
 
     deliverable.course = selectedCourse._id;
 
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.createDeliverables(deliverable);
 
     if (typeof response === "string") {
@@ -83,7 +83,7 @@ export const startRemoveDelivery = (deliverable: Deliverable) => {
     if (!user || !selectedCourse) {
       return RESPONSES.UNAUTHORIZE;
     }
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.removeDeliverables(deliverable);
 
     if (typeof response === "string") {
@@ -115,7 +115,7 @@ export const startUpdateDelivery = (deliverable: Deliverable) => {
 
     deliverable._id = selectedDeliveries._id;
 
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.updateDeliverable(deliverable);
 
     if (typeof response === "string") {

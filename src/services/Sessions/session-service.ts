@@ -1,27 +1,15 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors";
+import { AxiosInstance } from "axios";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateSession, Session } from "../../interfaces/session-interface";
 import { UserToken } from "../../interfaces/users.interface";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class SessionService {
   private API: AxiosInstance;
   private static instance: SessionService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): SessionService {
-    if (!this.instance) {
-      this.instance = new SessionService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async getSessions(user: UserToken, page: number) {

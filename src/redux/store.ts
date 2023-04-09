@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { PreloadedState, combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
   PAUSE,
@@ -28,7 +28,7 @@ const persistConfig = {
   whitelist: ["setting", "courses", "deliveries", "tasks", "sessions"],
 };
 
-const reducer = combineReducers({
+export const reducer = combineReducers({
   setting: settingSlice.reducer,
   auth: authSlice.reducer,
   career: careerSlice.reducer,
@@ -44,12 +44,16 @@ const persistReducers = persistReducer(persistConfig, reducer);
 export const store = configureStore({
   reducer: persistReducers,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 });
+
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return store;
+}
 
 export const persistor = persistStore(store);
 
@@ -57,3 +61,5 @@ export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+export type AppStore = ReturnType<typeof setupStore>;

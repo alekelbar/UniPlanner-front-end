@@ -50,7 +50,7 @@ export default function SessionCard ({ actualPage, reload, session, onStartSessi
   };
 
   return (
-    <Card variant='elevation' sx={{
+    <Card variant='elevation' data-testid="session-card" sx={{
       minHeight: MIN_CARD_HEIGHT,
     }}>
       <CardHeader

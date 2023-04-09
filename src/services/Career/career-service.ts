@@ -1,28 +1,16 @@
 //localhost:3000/api/v1/careers/all
 
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth-interceptor";
+import { AxiosInstance } from "axios";
 import { Career } from "../../interfaces/career.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class CareerService {
   private API: AxiosInstance;
   private static instance: CareerService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): CareerService {
-    if (!this.instance) {
-      this.instance = new CareerService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   public async listAll() {

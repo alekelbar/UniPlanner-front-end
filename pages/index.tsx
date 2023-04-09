@@ -9,13 +9,14 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
+
+import { validateToken } from '../src/services/auth/validate-token';
+import { getNameByID } from '../src/services/identificationAPI/cedula-service';
+import { startUserLogin } from '../src/redux/thunks/user-thunks';
 import { Link } from '../src/components';
 import { RESPONSES } from '../src/interfaces/response-messages';
 import { UserState } from '../src/interfaces/users.interface';
 import { useAppDispatch } from '../src/redux/hooks';
-import { startUserLogin } from '../src/redux/thunks/user-thunks';
-import { validateToken } from '../src/services/auth/validate-token';
-import { getNameByID } from '../src/services/identificationAPI/cedula-service';
 
 
 const LoginPage: React.FC = () => {

@@ -1,12 +1,11 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth-interceptor";
+import { AxiosInstance } from "axios";
 import { RESPONSES } from "../../interfaces/response-messages";
 import {
   UserLogin,
   UserRegister,
   UserState,
 } from "../../interfaces/users.interface";
-import { API_URL, UpdateUser, User } from "../../types";
+import { API_INSTANCE, UpdateUser, User } from "../../types";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -22,25 +21,14 @@ export class UserService {
   private API: AxiosInstance;
   private static instance: UserService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): UserService {
-    if (!this.instance) {
-      this.instance = new UserService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async login(userLogin: UserLogin) {
     try {
       const { data } = await this.API.post<UserState>("auth/login", userLogin);
-
+      
       return data;
     } catch (error: any) {
       if (!error.response) {

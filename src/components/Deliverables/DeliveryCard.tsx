@@ -103,7 +103,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
   const colorSeleted = getPriorityColor(importance, urgency, userMatrizColor);
 
   return (
-    <Card variant='elevation' sx={{
+    <Card variant='elevation' data-testid="career-card" sx={{
       minHeight: MIN_CARD_HEIGHT,
     }}>
       <CardHeader

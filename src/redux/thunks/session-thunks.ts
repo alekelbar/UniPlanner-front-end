@@ -22,7 +22,7 @@ export const startLoadSession = (page: number) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = SessionService.createService();
+    const service = new SessionService();
     const response = await service.getSessions(user, page);
 
     if (typeof response === "string") {
@@ -50,7 +50,7 @@ export const startcreateSession = (createSession: CreateSession) => {
 
     createSession.user = user.id;
 
-    const service = SessionService.createService();
+    const service = new SessionService();
     const response = await service.createSessions(createSession);
 
     if (typeof response === "string") {
@@ -76,7 +76,7 @@ export const startRemoveSession = (delSession: Session) => {
     if (!user) {
       return RESPONSES.UNAUTHORIZE;
     }
-    const service = SessionService.createService();
+    const service = new SessionService();
     const response = await service.removeSessions(delSession);
 
     if (typeof response === "string") {

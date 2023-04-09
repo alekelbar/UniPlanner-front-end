@@ -48,7 +48,7 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
   };
 
   return (
-    <Card variant='elevation'>
+    <Card variant='elevation' data-testid="career-card">
       <CardHeader
         title={name}
       />

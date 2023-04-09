@@ -1,27 +1,15 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors";
+import { AxiosInstance } from "axios";
 import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateTask, Task } from "../../interfaces/task-interface";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class TaskService {
   private API: AxiosInstance;
   private static instance: TaskService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): TaskService {
-    if (!this.instance) {
-      this.instance = new TaskService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async getTasks(delivery: Deliverable, page: number) {

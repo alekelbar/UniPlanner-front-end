@@ -1,26 +1,14 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors";
+import { AxiosInstance } from "axios";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CreateSetting, Setting } from "../../interfaces/settings-interfaces";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class SettingService {
   private API: AxiosInstance;
   private static instance: SettingService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): SettingService {
-    if (!this.instance) {
-      this.instance = new SettingService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async getSetting(user: string) {

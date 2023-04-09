@@ -12,7 +12,7 @@ export const useAllCareers = () => {
 
 
   const getAllCareers = async () => {
-    const service = CareerService.createService();
+    const service = new CareerService();
     const response = await service.listAll();
 
     if (typeof response !== "string") {

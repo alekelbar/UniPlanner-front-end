@@ -22,7 +22,7 @@ export const startLoadCareers = () => {
       return RESPONSES.UNAUTHORIZE;
     }
     
-    const service = CareerService.createService();
+    const service = new CareerService();
     const careers = await service.getCareers(user.identification);
     
     if (typeof careers === "string") {
@@ -48,7 +48,7 @@ export const startAddCareer = (idCareer: string) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CareerService.createService();
+    const service = new CareerService();
     const response = await service.addCareer(user.id, idCareer);
 
     if (typeof response === "string") {
@@ -74,7 +74,7 @@ export const startRemoveCareer = (idCareer: string) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = CareerService.createService();
+    const service = new CareerService();
     const response = await service.removeCareer(user.id, idCareer);
 
     if (typeof response === "string") {
