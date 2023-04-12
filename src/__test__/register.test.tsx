@@ -5,30 +5,35 @@ import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { createMockRouter } from './testUtils/MockRouter';
 import RegisterPage from '../../pages/register';
 import { act } from 'react-dom/test-utils';
+import { renderWithProviders } from './testUtils/test-utils';
 
 
 describe('Register', () => {
+
+  const router = createMockRouter({});
+
   it('should render register page', async () => {
-    render(
-      <RouterContext.Provider value={createMockRouter({})}>
-        <Provider store={store}>
-          <RegisterPage />
-        </Provider>
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <RegisterPage />
       </RouterContext.Provider>
     );
 
     await waitFor(() => {
-      const title = screen.getByText(/Registro.*/);
-      expect(title).toBeInTheDocument();
+      expect(screen.getByText(/Registro.*/)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/identificación/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Nombre completo/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/correo electronico/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/contraseña/i)[0]).toBeVisible();
+      expect(screen.getAllByText(/contraseña/i)[1]).toBeVisible();
     });
+
   });
 
-  it('should show error messages when submitting empty form', async () => {
-    render(
+  it('should be show error messages when submitting empty form', async () => {
+    renderWithProviders(
       <RouterContext.Provider value={createMockRouter({})}>
-        <Provider store={store}>
-          <RegisterPage />
-        </Provider>
+        <RegisterPage />
       </RouterContext.Provider>
     );
 

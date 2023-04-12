@@ -5,7 +5,8 @@ import {
   UserRegister,
   UserState,
 } from "../../interfaces/users.interface";
-import { API_INSTANCE, UpdateUser, User } from "../../types";
+import { UpdateUser, User } from "../../types";
+import { API_INSTANCE } from "../api-service";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -28,7 +29,7 @@ export class UserService {
   async login(userLogin: UserLogin) {
     try {
       const { data } = await this.API.post<UserState>("auth/login", userLogin);
-      
+
       return data;
     } catch (error: any) {
       if (!error.response) {

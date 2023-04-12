@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { Container } from '@mui/material';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { FloatButton } from '../../src/components';
 import { BoardList } from '../../src/components/Kanban/BoardList';
@@ -61,7 +61,7 @@ const Kanban = () => {
 
 export default Kanban;
 
-export const GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {

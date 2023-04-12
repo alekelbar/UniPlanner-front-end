@@ -39,7 +39,7 @@ export const reducer = combineReducers({
   kanban: KanbanSlice.reducer,
 });
 
-const persistReducers = persistReducer(persistConfig, reducer);
+export const persistReducers = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistReducers,

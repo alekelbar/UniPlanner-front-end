@@ -33,7 +33,12 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth, onLogOut, onUpdateUser, initLoadingApp, stopLoadingApp } =
-  authSlice.actions;
+export const {
+  setAuth,
+  onLogOut,
+  onUpdateUser,
+  initLoadingApp,
+  stopLoadingApp,
+} = authSlice.actions;
 
 export default authSlice;

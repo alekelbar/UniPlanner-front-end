@@ -42,10 +42,7 @@ export class SessionService {
 
   async createSessions(createSession: CreateSession) {
     try {
-      const session = await this.API.post<Session>(
-        `sessions`,
-        createSession
-      );
+      const session = await this.API.post<Session>(`sessions`, createSession);
 
       return session;
     } catch (error: any) {

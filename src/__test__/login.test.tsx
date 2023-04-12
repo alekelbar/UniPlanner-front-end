@@ -1,33 +1,21 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import LoginPage from '../../pages/index';
 import { store } from '../redux/store';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { createMockRouter } from './testUtils/MockRouter';
 import { act } from 'react-dom/test-utils';
-
-
-
-const submitLoginForm = async (username: string, password: string) => {
-  const usernameInput = screen.getByPlaceholderText(/identificación/i);
-  const passwordInput = screen.getByPlaceholderText(/contraseña/i);
-  const submitButton = screen.getByRole('button', { name: /ingresar/i });
-
-  await act(async () => {
-    fireEvent.change(usernameInput, { target: { value: username } });
-    fireEvent.change(passwordInput, { target: { value: password } });
-    fireEvent.click(submitButton);
-  });
-};
-
+import { renderWithProviders } from './testUtils/test-utils';
 
 describe('Login', () => {
+
+  let router = createMockRouter({});
+
+
   it('should render login page', () => {
-    render(
-      <RouterContext.Provider value={createMockRouter({})}>
-        <Provider store={store}>
-          <LoginPage />
-        </Provider>
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <LoginPage />
       </RouterContext.Provider>
     );
 
@@ -43,8 +31,8 @@ describe('Login', () => {
   });
 
   it('should show error messages when submitting empty form', async () => {
-    render(
-      <RouterContext.Provider value={createMockRouter({})}>
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
         <Provider store={store}>
           <LoginPage />
         </Provider>
@@ -65,9 +53,12 @@ describe('Login', () => {
   });
 
 
-  it('should not redirect when submitting incorrect credentials', async () => {
-    render(
-      <RouterContext.Provider value={createMockRouter({})}>
+  it('should not redirect when submitting incorrect/empty credentials', async () => {
+
+    const spyPush = jest.spyOn(router, 'push');
+
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
         <Provider store={store}>
           <LoginPage />
         </Provider>
@@ -80,27 +71,35 @@ describe('Login', () => {
       fireEvent.click(submitButton);
     });
 
-    const errorMessage = screen.queryByText(/carreras disponibles/i);
-    expect(errorMessage).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(spyPush).not.toHaveBeenCalledWith('/home/careers');
+    });
 
   });
 
-  // TODO: buscar la manera de probar esta funcionalidad
-  // it('should redirect to home page when submitting correct credentials', async () => {
-  //   const router = createMockRouter({});
-  //   render(
-  //     <RouterContext.Provider value={router}>
-  //       <Provider store={store}>
-  //         <LoginPage />
-  //       </Provider>
-  //     </RouterContext.Provider>
-  //   );
+  it('should redirect to home page when submitting correct credentials', async () => {
+    // Arrange
+    const spyPush = jest.spyOn(router, 'push');
 
-  //   await submitLoginForm("504270168", "alex1234");
-  //   await waitFor(() => expect(router.pathname).toBe('/home/careers'));
-  //   const homePageTitle = screen.getByRole('heading', { name: /Ingenieria en Sistemas de Información/i });
+    renderWithProviders(
+      <RouterContext.Provider value={router}>
+        <LoginPage />
+      </RouterContext.Provider>
+    );
 
-  //   expect(homePageTitle).toBeInTheDocument();
-  // });
+    // Act
+    const usernameInput = screen.getByPlaceholderText(/identificación/i);
+    const passwordInput = screen.getByPlaceholderText(/contraseña/i);
+    const submitButton = screen.getByRole('button', { name: /ingresar/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'alekelbar' } });
+    fireEvent.change(passwordInput, { target: { value: 'mBRuNX6U7dkEju' } });
+    fireEvent.click(submitButton);
+
+    // Assert
+    await waitFor(() => {
+      expect(spyPush).toHaveBeenCalledWith('/home/careers');
+    });
+  });
 });
 

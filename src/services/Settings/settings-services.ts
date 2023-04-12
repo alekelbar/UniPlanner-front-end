@@ -5,7 +5,6 @@ import { API_INSTANCE } from "../api-service";
 
 export class SettingService {
   private API: AxiosInstance;
-  private static instance: SettingService | null = null;
 
   public constructor() {
     this.API = API_INSTANCE;
@@ -14,7 +13,6 @@ export class SettingService {
   async getSetting(user: string) {
     try {
       const settings = await this.API.get<Setting>(`user-settings/${user}`);
-
       return settings.data;
     } catch (error: any) {
       if (!error.response) {
@@ -41,6 +39,7 @@ export class SettingService {
 
       return settings.data;
     } catch (error: any) {
+      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -64,7 +63,6 @@ export class SettingService {
       );
 
       return setting.data;
-      
     } catch (error: any) {
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;

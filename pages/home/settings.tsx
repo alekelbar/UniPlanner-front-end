@@ -188,7 +188,7 @@ const SettingsPage = () => {
                 {formik.touched.importance && formik.errors.importance && (
                   <Typography variant='caption' color={'error'}>{formik.errors.importance}</Typography>
                 )}
-                <Button type='submit' variant='contained'>Aplicar cambios</Button>
+                <Button data-testid='aply-changes' type='submit' variant='contained'>Aplicar cambios</Button>
               </Stack>
             </Grid>
           </Grid>

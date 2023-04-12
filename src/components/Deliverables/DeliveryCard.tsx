@@ -22,12 +22,12 @@ interface DeliveryCardProps {
 }
 
 export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: DeliveryCardProps): JSX.Element {
-  const deadline = parseISO(deliverable.deadline.toString());
-
-  let create_at: Date | null = null;
 
   const { selected } = useAppSelector(s => s.setting);
 
+
+  let create_at: Date = new Date();
+  const deadline = parseISO(deliverable.deadline.toString());
   if (deliverable.createdAt) {
     create_at = parseISO(deliverable.createdAt.toString());
   }

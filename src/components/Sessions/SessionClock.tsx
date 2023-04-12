@@ -62,9 +62,9 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
 
   if (!selected) return <Loading />;
 
-
   return (
     <Backdrop
+      data-testid={'timer-back'}
       sx={{ color: '#fff', backdropFilter: 'blur(3px)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
       open={open}
     >

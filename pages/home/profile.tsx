@@ -12,7 +12,6 @@ import * as Yup from 'yup';
 import { Loading } from '../../src/components';
 import { isValidToken } from '../../src/helpers/isValidToken';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
 
@@ -117,7 +116,7 @@ const ProfilePage: React.FC = () => {
             <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
           )}
 
-          <Button type='submit' fullWidth variant='contained' color='success' sx={{ mb: .5 }}>
+          <Button data-testid='button-update' type='submit' fullWidth variant='contained' color='success' sx={{ mb: .5 }}>
             Actualizar
           </Button>
         </Stack>

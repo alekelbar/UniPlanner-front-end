@@ -1,35 +1,34 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
-import { store } from '../redux/store';
-import { Provider } from 'react-redux';
 import { createMockRouter } from './testUtils/MockRouter';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import ProfilePage from '../../pages/home/profile';
-import { setAuth } from '../redux/slices/auth/authSlice';
+import { renderWithProviders } from './testUtils/test-utils';
 
 
 describe('Profile tests', () => {
 
   it('Profile Module should be Rendered', () => {
 
-    store.dispatch(setAuth({
-      loading: false,
-      token: "asdfasdfasdfasdf",
-      user: {
-        email: "test@example.com",
-        fullname: "john doe",
-        id: 'randomID',
-        identification: '01110222'
+    const preloadedState = {
+      preloadedState: {
+        auth: {
+          loading: false,
+          token: '',
+          user: {
+            email: "test@example.com",
+            fullname: "john doe",
+            id: 'randomID',
+            identification: '01110222'
+          }
+        }
       }
-    }));
+    };
 
-    render(
+    renderWithProviders(
       <RouterContext.Provider value={createMockRouter({})}>
-        <Provider store={store}>
-          <ProfilePage />
-        </Provider>
-      </RouterContext.Provider>
-    );
+        <ProfilePage />
+      </RouterContext.Provider>, preloadedState);
 
     const form = screen.getByTestId('profile-form');
     expect(form).toBeInTheDocument();

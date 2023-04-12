@@ -28,6 +28,7 @@ export const startUserLogin = (login: UserLogin) => {
     const { loading, token, user } = logIn;
 
     dispatch(setAuth({ loading, token, user }));
+
     setLocalToken(logIn, "token");
 
     // Cargar las preferencias de usuario...
@@ -38,7 +39,7 @@ export const startUserLogin = (login: UserLogin) => {
 
     if (typeof settings === "string") {
       dispatch(stopLoadingApp());
-      return logIn;
+      return settings;
     }
 
     dispatch(updateSetting(settings));

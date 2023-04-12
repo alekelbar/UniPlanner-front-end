@@ -11,21 +11,18 @@ import { Loading } from '../../src/components/common/Loading';
 import { isValidToken } from '../../src/helpers/isValidToken';
 import { logOut } from '../../src/helpers/local-storage';
 import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
-import { Career as CareerPage } from '../../src/interfaces/career.interface';
 import { RESPONSES } from '../../src/interfaces/response-messages';
-import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadCareers } from '../../src/redux/thunks/careers-thunks';
 
 interface Props {
-  parseToken: UserState;
-  allCareers: CareerPage[];
 }
 
 const CareerPage: React.FC<Props> = () => {
 
   const { allCareers, loading: allCarrersLoading } = useAllCareers();
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 

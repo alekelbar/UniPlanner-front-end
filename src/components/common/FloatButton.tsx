@@ -10,7 +10,7 @@ interface AddFloatButtonProps {
 export function FloatButton ({ onAction, icon, sxProps }: AddFloatButtonProps): JSX.Element {
   // { position: 'fixed', bottom: 16, right: 16; }
   return (
-    <Box sx={{
+    <Box data-testid={'float-button'} sx={{
       ...sxProps
     }}>
       <Fab onClick={onAction} sx={{
