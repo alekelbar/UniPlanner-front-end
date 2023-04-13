@@ -46,6 +46,7 @@
     "eslint-config-next": "latest",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
+    "msw": "^1.2.1",
     "typescript": "latest",
     "uuid": "^9.0.0"
   }
