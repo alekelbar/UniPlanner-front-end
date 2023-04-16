@@ -1,5 +1,6 @@
 import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { useRouter } from 'next/router';
+import React from 'react';
 import Swal from 'sweetalert2';
 import { logOut } from '../../helpers/local-storage';
 import { Career } from '../../interfaces/career.interface';
@@ -13,7 +14,8 @@ interface CareerCardProps {
   career: Career;
 }
 
-export function CareerCard ({ career }: CareerCardProps): JSX.Element {
+
+export const CareerCard = React.memo(function CareerCard ({ career }: CareerCardProps): JSX.Element {
   const { name, _id } = career;
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -77,4 +79,4 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
       </CardContent>
     </Card>
   );
-}
+});

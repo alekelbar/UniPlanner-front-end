@@ -79,7 +79,6 @@ export default function CoursesPage ({ }: CoursesProps) {
   }, [actualPage]);
 
   useEffect(() => {
-
     if (courses.length === 0 && actualPage > 1) {
       reload(actualPage - 1);
     }

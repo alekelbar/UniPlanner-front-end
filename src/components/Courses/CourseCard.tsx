@@ -98,7 +98,7 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
           <Button
             variant='outlined'
             color='success'
-            onClick={() => { onOpenEdit(); dispatch(setSelectedCourse(course)); }}>
+            onClick={() => { dispatch(setSelectedCourse(course)); onOpenEdit(); }}>
             Actualizar
           </Button>
         </CardActions>

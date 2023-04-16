@@ -24,6 +24,8 @@ export class CourseService {
 
       return courses;
     } catch (error: any) {
+      console.log(error);
+
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -44,6 +46,8 @@ export class CourseService {
       const response = await this.API.delete<Course>(`courses/${course._id}`);
       return response;
     } catch (error: any) {
+      console.log(error);
+
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -65,8 +69,12 @@ export class CourseService {
     try {
       const response = await this.API.post<Course>(`courses`, course);
 
+      console.log("El curso que recibimos: ", course);
+      
       return response;
     } catch (error: any) {
+      console.log(error);
+
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }
@@ -90,6 +98,7 @@ export class CourseService {
 
       return response;
     } catch (error: any) {
+      console.log(error);
       if (!error.response) {
         return RESPONSES.INTERNAL_SERVER_ERROR;
       }

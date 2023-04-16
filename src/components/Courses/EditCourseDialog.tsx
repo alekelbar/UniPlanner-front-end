@@ -30,9 +30,9 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
 
   const formik = useFormik({
     initialValues: {
-      name: selectedCourse?.name || "",
-      courseDescription: selectedCourse?.courseDescription || "",
-      credits: selectedCourse?.credits || 4,
+      name: "",
+      courseDescription: "",
+      credits: 0,
     },
     onSubmit: async (values) => {
       const { courseDescription, credits, name } = values;
