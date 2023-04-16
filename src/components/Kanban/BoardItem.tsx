@@ -23,6 +23,7 @@ export const BoardItem = ({ task: { content, id, title }, idx }: BoardItemProps)
           {...draggableProvided.draggableProps}
           {...draggableProvided.dragHandleProps}
           ref={draggableProvided.innerRef}
+          style={draggableProvided.draggableProps.style}
         >
           <CardHeader titleTypographyProps={{
             textOverflow: 'wrap',

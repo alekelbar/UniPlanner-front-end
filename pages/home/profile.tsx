@@ -47,7 +47,7 @@ const ProfilePage: React.FC = () => {
 
         if (response === RESPONSES.UNAUTHORIZE) {
           await Swal.fire('Algo salio mal 😥', response);
-          router.push('/');
+          router.push('/auth');
           return;
         }
 
@@ -132,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }

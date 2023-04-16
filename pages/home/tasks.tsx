@@ -175,7 +175,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
       <EditTaskDialog onClose={onCloseEdit} open={openEdit} />
       <TimerClock
         open={openClock}
-        onClose={() => { setOpenClock(false); }} />
+        onClose={handleCloseClock} />
     </Stack>
   );
 }
@@ -187,7 +187,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }

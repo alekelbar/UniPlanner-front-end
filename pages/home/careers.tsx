@@ -40,7 +40,7 @@ const CareerPage: React.FC<Props> = () => {
       if (response == RESPONSES.UNAUTHORIZE) {
         dispatch(onLogOut());
         logOut();
-        router.push('/');
+        router.push('/auth');
       }
     })();
   }, []);
@@ -87,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }

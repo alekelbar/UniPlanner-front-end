@@ -12,7 +12,7 @@ interface KanbanAddProps {
   onClose: () => void;
 }
 
-export const KanbanAddTodo = ({ onClose, open }: KanbanAddProps): JSX.Element => {
+export const KanbanBoard = ({ onClose, open }: KanbanAddProps): JSX.Element => {
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(st => st.auth);

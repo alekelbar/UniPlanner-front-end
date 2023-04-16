@@ -1,10 +1,10 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import LoginPage from '../../pages/index';
-import { store } from '../redux/store';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
-import { createMockRouter } from './testUtils/MockRouter';
 import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
+import LoginPage from '../../pages/auth/index';
+import { store } from '../redux/store';
+import { createMockRouter } from './testUtils/MockRouter';
 import { renderWithProviders } from './testUtils/test-utils';
 
 describe('Login', () => {

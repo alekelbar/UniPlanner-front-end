@@ -25,7 +25,7 @@ const SettingsPage = () => {
     const response = await dispatch(startLoadSetting());
     if (response !== RESPONSES.SUCCESS) {
       if (response === RESPONSES.UNAUTHORIZE) {
-        router.push('/');
+        router.push('/auth');
         await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
         return;
       }
@@ -205,7 +205,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }

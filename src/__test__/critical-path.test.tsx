@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context";
 import { act } from "react-dom/test-utils";
-import LoginPage from "../../pages";
+import LoginPage from "../../pages/auth";
 import ProfilePage from "../../pages/home/profile";
 import SettingsPage from "../../pages/home/settings";
 import { CareerCard, CourseCard, LayoutComponent, SessionCard } from "../components";

@@ -67,7 +67,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
         if (response === RESPONSES.UNAUTHORIZE) {
           dispatch(onLogOut);
           logOut();
-          router.push('/');
+          router.push('/auth');
           await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 🔒');
           return;
         }
@@ -168,7 +168,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }

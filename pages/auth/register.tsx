@@ -3,6 +3,7 @@ import {
   Divider, Grid,
   InputLabel,
   MenuItem, Select,
+  Stack,
   TextField,
   Tooltip,
   Typography
@@ -13,18 +14,18 @@ import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
 import Swal from 'sweetalert2';
+import * as Yup from 'yup';
 
 
-import { startUserRegister } from '../src/redux/thunks/user-thunks';
-import { getNameByID } from '../src/services/identificationAPI/cedula-service';
-import { Link, Loading } from '../src/components';
-import { useAllCareers } from '../src/hooks/Carrers/useAllCarrers';
-import { RESPONSES } from '../src/interfaces/response-messages';
-import { UserState } from '../src/interfaces/users.interface';
-import { useAppDispatch } from '../src/redux/hooks';
-import { validateToken } from '../src/services/auth/validate-token';
+import { Link, Loading } from '../../src/components';
+import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
+import { RESPONSES } from '../../src/interfaces/response-messages';
+import { UserState } from '../../src/interfaces/users.interface';
+import { useAppDispatch } from '../../src/redux/hooks';
+import { startUserRegister } from '../../src/redux/thunks/user-thunks';
+import { validateToken } from '../../src/services/auth/validate-token';
+import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 
 
 const RegisterPage: React.FC = () => {
@@ -122,7 +123,10 @@ const RegisterPage: React.FC = () => {
   if (loading) return <Loading />;
 
   return (
-    <Container>
+    <Container sx={{
+      display: 'flex',
+      height: '90vh',
+    }}>
       <Grid container sx={{ display: 'grid', placeConteqnt: 'center' }}>
         <Box component={'form'} onSubmit={formik.handleSubmit} sx={{ p: 4, overflow: 'auto' }}>
           <Typography variant='h5' my={2} align='center' width={'100%'}>
@@ -145,11 +149,9 @@ const RegisterPage: React.FC = () => {
                     helperText="Un identificador único"
                     placeholder='Identificación' />
                 </Tooltip>
-
                 {formik.touched.id && formik.errors.id && (
                   <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
                 )}
-
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Tooltip title="Puedes modificar tu nombre a tu gusto">
@@ -164,11 +166,9 @@ const RegisterPage: React.FC = () => {
                     helperText="Su nombre completo"
                     placeholder='Nombre completo' />
                 </Tooltip>
-
                 {formik.touched.name && formik.errors.name && (
                   <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
                 )}
-
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -182,11 +182,9 @@ const RegisterPage: React.FC = () => {
                   helperText="Su correo electronico"
                   placeholder='Correo Electronico'
                 />
-
                 {formik.touched.email && formik.errors.email && (
                   <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
                 )}
-
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -200,11 +198,9 @@ const RegisterPage: React.FC = () => {
                   helperText="Su contraseña"
                   placeholder='Contraseña' type={'password'}
                 />
-
                 {formik.touched.password && formik.errors.password && (
                   <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>
                 )}
-
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -218,49 +214,47 @@ const RegisterPage: React.FC = () => {
                   helperText="Porfavor, confirme su contraseña"
                   placeholder='Confirma tu contraseña' type={'password'}
                 />
-
                 {formik.touched.repassword && formik.errors.repassword && (
                   <Typography variant='caption' color={'error'}>{formik.errors.repassword}</Typography>
                 )}
-
               </Grid>
             </Grid>
           </Grid>
           <Grid item my={1}>
-
             <InputLabel sx={{ textAlign: 'center' }} id="career">¿Cual carrera estudia?</InputLabel>
             <Tooltip title={"Mas adelante podras agregar otras"} placement='top-end'>
-              <Select
-                labelId='career'
-                fullWidth
-                sx={{ mt: 1 }}
-                value={formik.values.career}
-                label="career"
-                name={'career'}
-                onChange={formik.handleChange}
-              >
-                {allCareers.map(career => {
-                  return (
-                    <MenuItem key={career._id} value={career._id}>
-                      {career.name}
-                    </MenuItem>
-                  );
-
-                })}
-
-              </Select>
+              <Stack sx={{ placeItems: 'center' }}>
+                <Select
+                  labelId='career'
+                  sx={{ mt: 1 }}
+                  value={formik.values.career}
+                  label="career"
+                  name={'career'}
+                  onChange={formik.handleChange}
+                >
+                  {allCareers.map(career => {
+                    return (
+                      <MenuItem key={career._id} value={career._id}>
+                        {career.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </Stack>
             </Tooltip>
             {formik.touched.career && formik.errors.career && (
               <Typography variant='caption' color={'error'}>{formik.errors.career}</Typography>
             )}
           </Grid>
           <Grid item>
-            <Button type='submit' fullWidth variant='contained' color='primary' sx={{ mb: .5 }}>
-              ¡Registrarme!
-            </Button>
+            <Stack sx={{ placeItems: 'center' }}>
+              <Button type='submit' variant='contained' color='primary' sx={{ mb: .5 }}>
+                ¡Registrarme!
+              </Button>
+            </Stack>
             <Box mt={1}>
               <Link
-                href='/'
+                href='/auth'
                 sx={{ textDecoration: 'none', listStyle: 'none', mt: .5, color: 'text.secondary' }}
               >
                 <Typography variant='body1' align='center'>

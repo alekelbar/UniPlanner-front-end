@@ -1,8 +1,8 @@
 import { List, Paper, Typography } from "@mui/material";
+import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
 import { KanbanTaskModel } from "../../redux/slices/kanban/models/taskModel";
 import { BoardItem } from "./BoardItem";
-
 
 interface BoardListProps {
   droppableId: string;
@@ -10,19 +10,16 @@ interface BoardListProps {
   header: string;
 }
 
-export const BoardList = ({ droppableId, listOfItems, header }: BoardListProps): JSX.Element => {
+export const BoardList = React.memo(({ droppableId, listOfItems, header }: BoardListProps): JSX.Element => {
   return (
     <Paper sx={{
-      minWidth: '250px',
-      maxWidth: '30%',
-      minHeight: '70vh',
-      border: '2px solid',
       p: 2,
+      minWidth: '250px',
+      m: 1
     }}>
       <Typography
-        variant='caption'
-        fontSize={'1em'}
-        textAlign={'center'}>
+        variant='body1'
+      >
         {header}
       </Typography>
       <Droppable droppableId={droppableId}>
@@ -50,4 +47,4 @@ export const BoardList = ({ droppableId, listOfItems, header }: BoardListProps):
       </Droppable>
     </Paper>
   );
-};
+});

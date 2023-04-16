@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { Loading } from '../../src/components';
 import { AddCourseDialog } from '../../src/components/Courses/AddCourseDialog';
 import CourseCard from '../../src/components/Courses/CourseCard';
 import { EditCourseDialog } from '../../src/components/Courses/EditCourseDialog';
@@ -15,7 +16,6 @@ import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { startLoadCourses } from '../../src/redux/thunks/courses.thunks';
-import { Loading } from '../../src/components';
 
 interface CoursesProps {
 
@@ -63,7 +63,7 @@ export default function CoursesPage ({ }: CoursesProps) {
       if (response !== RESPONSES.SUCCESS) {
 
         if (response === RESPONSES.UNAUTHORIZE) {
-          router.push('/');
+          router.push('/auth');
           await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
           return;
         }
@@ -162,7 +162,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return !token || !(await isValidToken(JSON.parse(token).token))
     ? {
       redirect: {
-        destination: "/",
+        destination: "/auth",
         permanent: false,
       },
     }
