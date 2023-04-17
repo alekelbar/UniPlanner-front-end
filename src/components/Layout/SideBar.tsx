@@ -4,7 +4,7 @@ import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { logOut } from '../../helpers/local-storage';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import Link from '../common/Link';
 
@@ -23,7 +23,7 @@ interface Page {
 const pages: Page[] = [
   { inactiveColor: 'text.primary.dark', title: 'Carreras', color: 'text.primary', url: "careers", icon: <School sx={{ color: 'text.primary' }} /> },
   { inactiveColor: 'text.primary.dark', title: 'Tablero Kanban', color: 'text.primary', url: "kanban", icon: <Task sx={{ color: 'text.primary' }} /> },
-  { inactiveColor: 'text.primary.dark', title: 'Sesiones', color: 'text.primary', url: "sessions", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
+  { inactiveColor: 'text.primary.dark', title: 'Sesiones', color: 'text.primary', url: "sessions/", icon: <Timelapse sx={{ color: 'text.primary' }} /> },
   { inactiveColor: 'text.primary.dark', title: 'Perfil', color: 'text.primary', url: "profile", icon: <Person sx={{ color: 'text.primary' }} /> },
   { inactiveColor: 'text.primary.dark', title: 'Configuración', color: 'text.primary', url: "settings", icon: <Settings sx={{ color: 'text.primary' }} /> },
 ];
@@ -31,6 +31,8 @@ const pages: Page[] = [
 export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { user } = useAppSelector(state => state.auth);
 
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +83,7 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
               return (
                 <Grid item xs={12} key={page.title}>
                   <Link
-                    href={`/home/${page.url}`}
+                    href={`/home/${page.url + user?.id}`}
                     sx={{
                       cursor: 'pointer',
                       transition: 'all 0.3s',

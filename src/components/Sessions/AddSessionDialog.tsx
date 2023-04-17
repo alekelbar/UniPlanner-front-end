@@ -4,11 +4,9 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { CreateSession, SESSION_TYPES } from '../../interfaces/session-interface';
 import { useAppDispatch } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateSession } from '../../redux/thunks/session-thunks';
 
 
@@ -18,7 +16,7 @@ interface AddSessionDialogProps {
 }
 
 const initialValues: CreateSession = {
-  duration: 0,
+  duration: 1,
   name: "",
   type: SESSION_TYPES.WORKING,
 };
@@ -26,6 +24,7 @@ const initialValues: CreateSession = {
 export default function AddSessionDialog ({ onClose, open }: AddSessionDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const width = fullScreen ? '100%' : '50%';
@@ -33,33 +32,13 @@ export default function AddSessionDialog ({ onClose, open }: AddSessionDialogPro
   const formik = useFormik({
     initialValues,
     onSubmit: async (values) => {
-      const { duration, name, type } = values;
-      const response = await dispatch(startcreateSession({
-        name,
-        duration,
-        type,
+      const { query } = router;
+      const response = await dispatch(startcreateSession(query!.id as string, {
+        ...values
       }));
 
-      if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
-      }
+      if (response !== RESPONSES.SUCCESS)
+        await Swal.fire(response);
 
       formik.resetForm();
       onClose();
