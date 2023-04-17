@@ -4,23 +4,25 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { FloatButton, Loading } from '../../src/components';
-import AddSessionDialog from '../../src/components/Sessions/AddSessionDialog';
-import SessionCard from '../../src/components/Sessions/SessionCard';
-import SessionClock from '../../src/components/Sessions/SessionClock';
-import isInteger from '../../src/helpers/isInteger';
-import { isValidToken } from '../../src/helpers/isValidToken';
-import usePagination from '../../src/hooks/pagination';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import { setSelectedSession, useAppDispatch, useAppSelector } from '../../src/redux';
-import { startLoadSession } from '../../src/redux/thunks/session-thunks';
+import { FloatButton, Loading } from '../../../src/components';
+import AddSessionDialog from '../../../src/components/Sessions/AddSessionDialog';
+import SessionCard from '../../../src/components/Sessions/SessionCard';
+import SessionClock from '../../../src/components/Sessions/SessionClock';
+import isInteger from '../../../src/helpers/isInteger';
+import { isValidToken } from '../../../src/helpers/isValidToken';
+import usePagination from '../../../src/hooks/pagination';
+import { RESPONSES } from '../../../src/interfaces/response-messages';
+import { setSelectedSession, useAppDispatch, useAppSelector } from '../../../src/redux';
+import { startLoadSession } from '../../../src/redux/thunks/session-thunks';
 
 export default function SessionsPage (): JSX.Element {
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { query: { id } } = router;
 
-  const { sessions, count, loading } = useAppSelector(st => st.sessions);
+
+  const { sessions = [], count, loading } = useAppSelector(state => state.sessions);
   const [openClock, setOpenClock] = useState(false);
 
   const {
@@ -42,18 +44,10 @@ export default function SessionsPage (): JSX.Element {
   };
 
   const reload = async (page: number = 1) => {
-    const response = await dispatch(startLoadSession(page));
-
-    if (response !== RESPONSES.SUCCESS) {
-
-      if (response === RESPONSES.UNAUTHORIZE) {
-        router.push('/auth');
-        await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 😥', response);
-        return;
-      }
-
-      await Swal.fire('Algo salio mal 😥', response);
-      return;
+    if (id) {
+      const response = await dispatch(startLoadSession(id as string, page));
+      if (response !== RESPONSES.SUCCESS)
+        await Swal.fire(response);
     }
   };
 
@@ -81,7 +75,7 @@ export default function SessionsPage (): JSX.Element {
 
   }, [sessions]);
 
-  if (loading) return <Loading />;
+  if (loading) return (<Loading />);
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
