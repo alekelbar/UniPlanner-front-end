@@ -9,21 +9,13 @@ import {
 } from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
 
-export const startLoadCareers = () => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadCareers = (id: string) => {
+  return async (dispatch: AppDispatch) => {
     // cargando las carreras...
     dispatch(StartLoadingCareer());
-    const {
-      auth: { user },
-    } = getState();
-
-    
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
     
     const service = new CareerService();
-    const careers = await service.getCareers(user.identification);
+    const careers = await service.getCareers(id);
     
     if (typeof careers === "string") {
       dispatch(StopLoadingCareer());

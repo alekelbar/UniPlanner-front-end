@@ -22,11 +22,9 @@ export class CareerService {
     }
   }
 
-  async getCareers(identification: string) {
+  async getCareers(id: string) {
     try {
-      const { data } = await this.API.get<Career[]>(
-        `careers/${identification}`
-      );
+      const { data } = await this.API.get<Career[]>(`careers/${id}`);
       return data;
     } catch (error: any) {
       if (!error.response) {
