@@ -43,7 +43,7 @@ export const startLoadDeliveries = (page: number) => {
 export const startcreateDelivery = (deliverable: Deliverable) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    dispatch(startLoadingDeliveries());
+    // dispatch(startLoadingDeliveries());
 
     const {
       auth: { user },
@@ -60,12 +60,12 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
     const response = await service.createDeliverables(deliverable);
 
     if (typeof response === "string") {
-      dispatch(stopLoadingDeliveries());
+      // dispatch(stopLoadingDeliveries());
       return response;
     }
     const deliverie = response.data;
     dispatch(addDelivery(deliverie));
-    dispatch(stopLoadingDeliveries());
+    // dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };
 };
@@ -73,7 +73,7 @@ export const startcreateDelivery = (deliverable: Deliverable) => {
 export const startRemoveDelivery = (deliverable: Deliverable) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    dispatch(startLoadingDeliveries());
+    // dispatch(startLoadingDeliveries());
 
     const {
       auth: { user },
@@ -87,13 +87,13 @@ export const startRemoveDelivery = (deliverable: Deliverable) => {
     const response = await service.removeDeliverables(deliverable);
 
     if (typeof response === "string") {
-      dispatch(stopLoadingDeliveries());
+      // dispatch(stopLoadingDeliveries());
       return response;
     }
 
     const deliverie = response.data;
     dispatch(removeDelivery(deliverie));
-    dispatch(stopLoadingDeliveries());
+    // dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };
 };
@@ -101,7 +101,7 @@ export const startRemoveDelivery = (deliverable: Deliverable) => {
 export const startUpdateDelivery = (deliverable: Deliverable) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    dispatch(startLoadingDeliveries());
+    // dispatch(startLoadingDeliveries());
 
     const {
       auth: { user },
@@ -119,13 +119,13 @@ export const startUpdateDelivery = (deliverable: Deliverable) => {
     const response = await service.updateDeliverable(deliverable);
 
     if (typeof response === "string") {
-      dispatch(stopLoadingDeliveries());
+      // dispatch(stopLoadingDeliveries());
       return response;
     }
 
     const deliverie = response.data;
     dispatch(updateDeliverable(deliverie));
-    dispatch(stopLoadingDeliveries());
+    // dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };
 };

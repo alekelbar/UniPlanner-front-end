@@ -5,7 +5,7 @@ import { Course, CoursesState } from "../../../interfaces/course.interface";
 // Define the initial state using that type
 const initialState: CoursesState = {
   courses: [],
-  loading: true,
+  loading: false,
   error: null,
   count: 0,
   selected: null,

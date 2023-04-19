@@ -5,6 +5,8 @@ import {
   addCourse,
   removeCourse,
   setCourses,
+  startLoadingCourses,
+  stopLoadingCourses,
   updateCourse,
 } from "../slices/Courses/coursesSlice";
 import { AppDispatch, RootState } from "../store";
@@ -12,7 +14,7 @@ import { AppDispatch, RootState } from "../store";
 export const startLoadCourses = (careerId: string, page: number) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    // dispatch(startLoadingCourses());
+    dispatch(startLoadingCourses());
     const {
       auth: { user },
     } = getState();
@@ -25,13 +27,13 @@ export const startLoadCourses = (careerId: string, page: number) => {
     const response = await service.getUserCourse(user.id, careerId, page);
 
     if (typeof response === "string") {
-      // dispatch(stopLoadingCourses());
+      dispatch(stopLoadingCourses());
       return response;
     }
 
     const { count, courses } = response.data;
     dispatch(setCourses({ courses, count }));
-    // dispatch(stopLoadingCourses());
+    dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
@@ -39,7 +41,6 @@ export const startLoadCourses = (careerId: string, page: number) => {
 export const startRemoveCourse = (course: Course) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    // dispatch(startLoadingCourses());
     const {
       auth: { user },
     } = getState();
@@ -53,12 +54,10 @@ export const startRemoveCourse = (course: Course) => {
     const response = await service.removeCourse(course);
 
     if (typeof response === "string") {
-      // dispatch(stopLoadingCourses());
       return response;
     }
 
     dispatch(removeCourse(response.data));
-    // dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
@@ -70,7 +69,6 @@ export const startAddCourse = (
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    // dispatch(startLoadingCourses());
     const {
       auth: { user },
       career: { selected },
@@ -92,12 +90,10 @@ export const startAddCourse = (
     const response = await service.createCourse(course);
 
     if (typeof response === "string") {
-      // dispatch(stopLoadingCourses());
       return response;
     }
 
     dispatch(addCourse(response.data));
-    // dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
@@ -109,7 +105,6 @@ export const startUpdateCourse = (
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     // cargando LOS CURSOS...
-    // dispatch(startLoadingCourses());
     const {
       auth: { user },
       career: { selected: selectedCareer },
@@ -133,12 +128,10 @@ export const startUpdateCourse = (
     const response = await service.updateCourse(id as string, course);
 
     if (typeof response === "string") {
-      // dispatch(stopLoadingCourses());
       return response;
     }
 
     dispatch(updateCourse(response.data));
-    // dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
