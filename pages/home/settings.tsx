@@ -1,5 +1,5 @@
-import { ColorLens, Settings } from '@mui/icons-material';
-import { Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
+import { ColorLens } from '@mui/icons-material';
+import { Button, Container, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -41,8 +41,6 @@ const SettingsPage = () => {
 
   useEffect(() => {
     if (selected) {
-      formik.setFieldValue('importance', selected.importance);
-      formik.setFieldValue('urgency', selected.urgency);
       formik.setFieldValue('do', selected.do);
       formik.setFieldValue('prepare', selected.prepare);
       formik.setFieldValue('delegate', selected.delegate);
@@ -95,103 +93,79 @@ const SettingsPage = () => {
           <Typography variant='h5'>Configuraciones de usuario</Typography>
         </Stack>
         <Container>
-          {/* Dividir el area en dos partes */}
-          <Grid container direction={'row'} >
-            {/* Parte A */}
-            <Grid item xs={12} sm={6}>
-              <Stack direction={'row'} justifyContent={'center'}>
-                <Typography variant='subtitle1'>
-                  <ColorLens sx={{ fontSize: '4em' }} />
-                </Typography>
-              </Stack>
-              <Stack mt={3}
-                direction={'column'}
-                alignItems={'center'}
-                spacing={2}
-                justifyContent={'space-evenly'}
-                width={'100%'}>
-                <TextField
-                  type="color"
-                  sx={{
-                    width: '70%'
-                  }}
-                  name={'do'}
-                  value={formik.values.do}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  helperText={'Realizar'}
-                />
-                {formik.touched.do && formik.errors.do && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.do}</Typography>
-                )}
-                <TextField
-                  type="color"
-                  sx={{
-                    width: '70%'
-                  }}
-                  name={'prepare'}
-                  value={formik.values.prepare}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  helperText={'Preparar'}
-                />
-                {formik.touched.prepare && formik.errors.prepare && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.prepare}</Typography>
-                )}
-                <TextField
-                  type="color"
-                  sx={{
-                    width: '70%'
-                  }}
-                  name={'delegate'}
-                  value={formik.values.delegate}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  helperText={'Delegar'}
-                />
-                {formik.touched.delegate && formik.errors.delegate && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.delegate}</Typography>
-                )}
-                <TextField
-                  type="color"
-                  sx={{
-                    width: '70%'
-                  }}
-                  name={'ignore'}
-                  value={formik.values.ignore}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  helperText={'Ignorar'}
-                />
-                {formik.touched.ignore && formik.errors.ignore && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.ignore}</Typography>
-                )}
-              </Stack>
-            </Grid>
-            {/* Parte B */}
-            <Grid item xs={12} sm={6}>
-              <Stack direction={'row'} justifyContent={'center'}>
-                <Typography variant='subtitle1'>
-                  <Settings sx={{ fontSize: '4em' }} color='secondary' />
-                </Typography>
-              </Stack>
-              <Stack direction={'column'} alignItems={'center'} spacing={2}>
-                <TextField
-                  sx={{
-                    maxWidth: '80%',
-                  }}
-                  name={'importance'}
-                  value={formik.values.importance}
-                  onChange={formik.handleChange}
-                  helperText={'¿Apartir de cuanto valor una tarea es considerada importante?'}
-                  type='number' />
-                {formik.touched.importance && formik.errors.importance && (
-                  <Typography variant='caption' color={'error'}>{formik.errors.importance}</Typography>
-                )}
-                <Button data-testid='aply-changes' type='submit' variant='contained'>Aplicar cambios</Button>
-              </Stack>
-            </Grid>
-          </Grid>
+          {/* Parte A */}
+          <Stack direction={'row'} justifyContent={'center'}>
+            <Typography variant='subtitle1'>
+              <ColorLens sx={{ fontSize: '4em' }} />
+            </Typography>
+          </Stack>
+          <Stack mt={3}
+            direction={'column'}
+            alignItems={'center'}
+            spacing={2}
+            justifyContent={'space-evenly'}
+            width={'100%'}>
+            <TextField
+              type="color"
+              sx={{
+                width: '70%'
+              }}
+              name={'do'}
+              value={formik.values.do}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={'Realizar'}
+            />
+            {formik.touched.do && formik.errors.do && (
+              <Typography variant='caption' color={'error'}>{formik.errors.do}</Typography>
+            )}
+            <TextField
+              type="color"
+              sx={{
+                width: '70%'
+              }}
+              name={'prepare'}
+              value={formik.values.prepare}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={'Preparar'}
+            />
+            {formik.touched.prepare && formik.errors.prepare && (
+              <Typography variant='caption' color={'error'}>{formik.errors.prepare}</Typography>
+            )}
+            <TextField
+              type="color"
+              sx={{
+                width: '70%'
+              }}
+              name={'delegate'}
+              value={formik.values.delegate}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={'Delegar'}
+            />
+            {formik.touched.delegate && formik.errors.delegate && (
+              <Typography variant='caption' color={'error'}>{formik.errors.delegate}</Typography>
+            )}
+            <TextField
+              type="color"
+              sx={{
+                width: '70%'
+              }}
+              name={'ignore'}
+              value={formik.values.ignore}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              helperText={'Ignorar'}
+            />
+            {formik.touched.ignore && formik.errors.ignore && (
+              <Typography variant='caption' color={'error'}>{formik.errors.ignore}</Typography>
+            )}
+          </Stack>
+          {/* Parte B */}
+          <Stack direction={'row'} justifyContent={'center'} mt={1}>
+            <Button sx={{ width: '50%' }} data-testid='aply-changes' type='submit' variant='contained'>Aplicar cambios</Button>
+          </Stack>
         </Container>
       </Paper>
     </Container>
