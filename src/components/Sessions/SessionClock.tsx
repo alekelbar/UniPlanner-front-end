@@ -60,7 +60,7 @@ export default function SessionClock ({ open, onClose }: SessionClockProps): JSX
       handleTimer();
   }, [open]);
 
-  if (!selected) return <Loading />;
+  if (open && !selected) return <Loading />;
 
   return (
     <Backdrop
