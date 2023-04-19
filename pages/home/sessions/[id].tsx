@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { FloatButton, Loading } from '../../../src/components';
 import AddSessionDialog from '../../../src/components/Sessions/AddSessionDialog';
+import { Timer } from '../../../src/components/Sessions/Clock/Timer';
 import SessionCard from '../../../src/components/Sessions/SessionCard';
-import SessionClock from '../../../src/components/Sessions/SessionClock';
 import isInteger from '../../../src/helpers/isInteger';
 import { isValidToken } from '../../../src/helpers/isValidToken';
 import usePagination from '../../../src/hooks/pagination';
@@ -22,7 +22,7 @@ export default function SessionsPage (): JSX.Element {
   const { query: { id } } = router;
 
 
-  const { sessions = [], count, loading } = useAppSelector(state => state.sessions);
+  const { sessions = [], count, loading, selected } = useAppSelector(state => state.sessions);
   const [openClock, setOpenClock] = useState(false);
 
   const {
@@ -126,7 +126,7 @@ export default function SessionsPage (): JSX.Element {
         icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}
         sxProps={{ position: 'fixed', bottom: 16, right: 16 }} />
       <AddSessionDialog onClose={onCloseCreate} open={openCreate} />
-      <SessionClock onClose={() => { setOpenClock(false); }} open={openClock} />
+      <Timer session={selected} dialogHandler={{ open: openClock, onClose: () => { setOpenClock(false); } }} />
     </Stack>
   );
 }

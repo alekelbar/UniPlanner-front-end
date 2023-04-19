@@ -4,7 +4,7 @@ import { Session, SessionState } from "../../../interfaces/session-interface";
 const initialState: SessionState = {
   count: 0,
   loading: false,
-  selected: null,
+  selected: { _id: "", duration: 0, name: "unknown", type: "RESTING" },
   sessions: [],
 };
 
