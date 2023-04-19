@@ -1,10 +1,8 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
-import { createMockRouter } from './testUtils/MockRouter';
-import RegisterPage from '../../pages/register';
 import { act } from 'react-dom/test-utils';
+import RegisterPage from '../../pages/auth/register';
+import { createMockRouter } from './testUtils/MockRouter';
 import { renderWithProviders } from './testUtils/test-utils';
 
 
