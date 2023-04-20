@@ -1,6 +1,7 @@
 import {
   Container,
   Divider, Grid,
+  IconButton,
   InputLabel,
   MenuItem, Select,
   Stack,
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 
 
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, Loading } from '../../src/components';
 import { useAllCareers } from '../../src/hooks/Carrers/useAllCarrers';
 import { RESPONSES } from '../../src/interfaces/response-messages';
@@ -25,21 +27,21 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserRegister } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
-import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 
 
 const RegisterPage: React.FC = () => {
 
   const { allCareers, loading } = useAllCareers();
   const dispatch = useAppDispatch();
-  const [Message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       id: '',
-      name: Message,
+      name: "",
       email: '',
       career: '',
       password: '',
@@ -102,24 +104,6 @@ const RegisterPage: React.FC = () => {
       formik.setFieldValue('career', allCareers[0]._id);
   }, [allCareers]);
 
-
-  const handleIdentification = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    formik.setFieldValue('id', value);
-
-    if (value.length == 9) {
-      //  TODO: petición HTPP para la cedula...
-      const { data } = await getNameByID(value);
-      if (data.resultcount === 1) {
-        const { nombre } = data;
-        setMessage((nombre as string).toLowerCase());
-        formik.setFieldValue('name', (nombre as string).toLowerCase());
-        return;
-      }
-      setMessage('Identificación no encontrada');
-    }
-  };
-
   if (loading) return <Loading called='register' />;
 
   return (
@@ -132,23 +116,20 @@ const RegisterPage: React.FC = () => {
           <Typography variant='h5' my={2} align='center' width={'100%'}>
             Registro
             <Divider sx={{ my: 1 }} />
-            <Typography variant='caption' color={'secondary'}>{Message}</Typography>
           </Typography>
           <Grid container spacing={1} flexDirection='column' sx={{ placeItems: 'center' }}>
             <Grid container spacing={1} maxWidth="md">
               <Grid item xs={12} sm={6}>
-                <Tooltip title="Te recomendamos usar tú cedula para identificarte" placement='top'>
-                  <TextField
-                    autoComplete='off'
-                    onBlur={formik.handleBlur}
-                    fullWidth
-                    value={formik.values.id}
-                    onChange={handleIdentification}
-                    name={'id'}
-                    variant='filled'
-                    helperText="Un identificador único"
-                    placeholder='Identificación' />
-                </Tooltip>
+                <TextField
+                  autoComplete='off'
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  value={formik.values.id}
+                  onChange={formik.handleChange}
+                  name={'id'}
+                  variant='filled'
+                  helperText="Usuario"
+                  placeholder='alekelbar...' />
                 {formik.touched.id && formik.errors.id && (
                   <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
                 )}
@@ -163,8 +144,8 @@ const RegisterPage: React.FC = () => {
                     onChange={formik.handleChange}
                     name={'name'}
                     variant='filled'
-                    helperText="Su nombre completo"
-                    placeholder='Nombre completo' />
+                    helperText="Nombre"
+                    placeholder='John Doe...' />
                 </Tooltip>
                 {formik.touched.name && formik.errors.name && (
                   <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
@@ -179,8 +160,8 @@ const RegisterPage: React.FC = () => {
                   onChange={formik.handleChange}
                   name={'email'}
                   variant='filled'
-                  helperText="Su correo electronico"
-                  placeholder='Correo Electronico'
+                  helperText="Correo electronico"
+                  placeholder='you@gmail.com'
                 />
                 {formik.touched.email && formik.errors.email && (
                   <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
@@ -195,8 +176,18 @@ const RegisterPage: React.FC = () => {
                   onChange={formik.handleChange}
                   name={'password'}
                   variant='filled'
-                  helperText="Su contraseña"
-                  placeholder='Contraseña' type={'password'}
+                  helperText="Contraseña"
+                  placeholder='MyPassword_secure' type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => setShowPassword(prev => !prev)}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    )
+                  }}
                 />
                 {formik.touched.password && formik.errors.password && (
                   <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>
@@ -212,7 +203,17 @@ const RegisterPage: React.FC = () => {
                   name={'repassword'}
                   variant='filled'
                   helperText="Porfavor, confirme su contraseña"
-                  placeholder='Confirma tu contraseña' type={'password'}
+                  placeholder='Confirma tu contraseña' type={showConfirmPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => setShowConfirmPassword(prev => !prev)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    )
+                  }}
                 />
                 {formik.touched.repassword && formik.errors.repassword && (
                   <Typography variant='caption' color={'error'}>{formik.errors.repassword}</Typography>

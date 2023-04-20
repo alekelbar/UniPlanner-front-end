@@ -1,6 +1,7 @@
 import {
   Container,
-  Divider, Grid, TextField, Tooltip, Typography
+  Divider, Grid, TextField,
+  Typography
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
@@ -17,7 +18,6 @@ import { UserState } from '../../src/interfaces/users.interface';
 import { useAppDispatch } from '../../src/redux/hooks';
 import { startUserLogin } from '../../src/redux/thunks/user-thunks';
 import { validateToken } from '../../src/services/auth/validate-token';
-import { getNameByID } from '../../src/services/identificationAPI/cedula-service';
 
 
 const LoginPage: React.FC = () => {
@@ -67,22 +67,6 @@ const LoginPage: React.FC = () => {
     })
   });
 
-  const handleIdentification = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    formik.setFieldValue('id', value);
-
-    if (value.length == 9) {
-      //  TODO: petición HTPP para la cedula...
-      const { data } = await getNameByID(value);
-      if (data.resultcount === 1) {
-        const { nombre } = data;
-        setMessageName(nombre);
-        formik.setFieldValue('name', nombre);
-        return;
-      }
-      setMessageName('Identificación no encontrada');
-    }
-  };
 
   return (
     <Container sx={{
@@ -95,24 +79,19 @@ const LoginPage: React.FC = () => {
             <Typography variant='h5' my={2} align='center' width={'100%'}>
               Ingreso
               <Divider sx={{ mt: 1 }} />
-              <Tooltip title="Tú cedula solo es una medida de seguridad, pero puedes acceder con otro numero que te identifiqué solo a tí." placement='top-end'>
-                <Typography variant='caption' color={'text.primary'}>{messageName}</Typography>
-              </Tooltip>
             </Typography>
             <Grid container spacing={2} maxWidth="md">
               <Grid item xs={12} sm={6}>
-                <Tooltip title="Te recomendamos usar tú cedula para identificarte" placement='top'>
-                  <TextField
-                    autoComplete='off'
-                    onBlur={formik.handleBlur}
-                    fullWidth onChange={handleIdentification}
-                    value={formik.values.id}
-                    name='id'
-                    variant='filled'
-                    placeholder='Identificación'
-                    helperText="Un identificador único"
-                  />
-                </Tooltip>
+                <TextField
+                  autoComplete='off'
+                  onBlur={formik.handleBlur}
+                  fullWidth onChange={formik.handleChange}
+                  value={formik.values.id}
+                  name='id'
+                  variant='filled'
+                  placeholder='Identificación'
+                  helperText="Un identificador único"
+                />
                 {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>}
               </Grid>
               <Grid item xs={12} sm={6}>
