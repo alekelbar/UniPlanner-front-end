@@ -4,13 +4,11 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { Loading } from '../../../src/components';
-import { isValidToken } from '../../../src/helpers/isValidToken';
 import { RESPONSES } from '../../../src/interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../../src/redux/hooks';
 import { startUpdateUser } from '../../../src/redux/thunks/user-thunks';
@@ -26,10 +24,6 @@ const ProfilePage: React.FC = () => {
 
   const { user } = useAppSelector(state => state.auth);
 
-  if (!user) {
-    // router.push('/auth');
-  }
-
   const formik = useFormik({
     initialValues: {
       id: user.identification,
@@ -39,25 +33,35 @@ const ProfilePage: React.FC = () => {
     onSubmit: async (values) => {
       const { email, id: identification, name: fullname } = values;
 
-      const response = await dispatch(startUpdateUser({
-        email,
-        fullname,
-        identification
-      }));
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Recuerda tus credenciales',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'Cancelar'
+      });
 
-      if (response !== RESPONSES.SUCCESS) {
+      if (result.isConfirmed) {
+        const response = await dispatch(startUpdateUser({
+          email,
+          fullname,
+          identification
+        }));
 
-        if (response === RESPONSES.UNAUTHORIZE) {
-          await Swal.fire('Algo salio mal 😥', response);
-          router.push('/auth');
-          return;
+        if (response !== RESPONSES.SUCCESS) {
+          await Swal.fire(response);
         }
-
-        await Swal.fire('Algo salio mal 😥', response);
-        return;
+        await Swal.fire({
+          title: 'Actualizado',
+          text: 'Cambios aplicados',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK',
+        });
       }
-
-      await Swal.fire('Tú información fue actualizada con exito 🥰');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -126,16 +130,3 @@ const ProfilePage: React.FC = () => {
 
 export default ProfilePage;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { token } = ctx.req.cookies;
-  return !token || !(await isValidToken(JSON.parse(token).token))
-    ? {
-      redirect: {
-        destination: "/auth",
-        permanent: false,
-      },
-    }
-    : {
-      props: {},
-    };
-};
