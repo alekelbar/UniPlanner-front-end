@@ -29,7 +29,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
 
   const formik = useFormik({
     initialValues: {
-      career: '',
+      career: careers.at(0)?._id || '',
     },
     onSubmit: async (values) => {
       const { career } = values;
