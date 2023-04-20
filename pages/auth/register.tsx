@@ -202,8 +202,8 @@ const RegisterPage: React.FC = () => {
                   onChange={formik.handleChange}
                   name={'repassword'}
                   variant='filled'
-                  helperText="Porfavor, confirme su contraseña"
-                  placeholder='Confirma tu contraseña' type={showConfirmPassword ? 'text' : 'password'}
+                  helperText="confirme su contraseña"
+                  placeholder='MyPassword_secure' type={showConfirmPassword ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
                       <IconButton

@@ -19,7 +19,7 @@ export const UNATheme = createTheme({
     },
     text: {
       primary: "#fff",
-      secondary: "#aaa",
+      secondary: "#AAA",
     },
   },
   typography: {

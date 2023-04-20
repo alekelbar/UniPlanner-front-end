@@ -108,7 +108,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
 
   if (!selectedDelivery) return <NotFoundPage />;
 
-  if (loading) return <Loading called='task'/>;
+  if (loading) return <Loading called='task' />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
@@ -117,6 +117,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
         zIndex: '10'
       }}>
         <Typography
+          mt={2}
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>

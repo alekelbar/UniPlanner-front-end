@@ -98,6 +98,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
         zIndex: '10'
       }}>
         <Typography
+          mt={2}
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
