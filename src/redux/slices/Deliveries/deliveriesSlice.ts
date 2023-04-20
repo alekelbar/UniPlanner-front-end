@@ -8,7 +8,7 @@ import {
 // Define the initial state using that type
 const initialState: DeliverableState = {
   deliverables: [],
-  loading: true,
+  loading: false,
   error: null,
   count: 0,
   selected: null,

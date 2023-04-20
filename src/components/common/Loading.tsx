@@ -1,7 +1,13 @@
 import { Backdrop, CircularProgress, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-export function Loading (): JSX.Element {
+interface ILoadingProps {
+  called?: string;
+}
+
+export function Loading ({ called = ' unknow' }: ILoadingProps): JSX.Element {
+  console.log('called by: ', called);
+  
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

@@ -108,7 +108,7 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
 
   if (!selectedDelivery) return <NotFoundPage />;
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading called='task'/>;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

@@ -7,7 +7,7 @@ import {
   removeDelivery,
   startLoadingDeliveries,
   stopLoadingDeliveries,
-  updateDeliverable,
+  updateDeliverable
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";
 

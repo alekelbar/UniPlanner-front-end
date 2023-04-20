@@ -4,7 +4,15 @@ import { Setting, SettingState } from "../../../interfaces/settings-interfaces";
 const initialState: SettingState = {
   error: null,
   loading: false,
-  selected: null,
+  selected: {
+    delegate: "",
+    do: "",
+    ignore: "",
+    importance: 0,
+    prepare: "",
+    urgency: 0,
+    user: "",
+  },
 };
 
 export const settingSlice = createSlice({

@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '../../redux';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
-import { Loading } from '../common';
 import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
 
 interface DeliveryCardProps {
@@ -23,7 +22,7 @@ interface DeliveryCardProps {
 
 export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: DeliveryCardProps): JSX.Element {
 
-  const { selected } = useAppSelector(s => s.setting);
+  const { selected } = useAppSelector(state => state.setting);
 
 
   let create_at: Date = new Date();
@@ -89,7 +88,6 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     reload(actualPage);
   };
 
-  if (!selected) return <Loading />;
   const { importance, urgency } = deliverable;
   const { do: doing, delegate, ignore, prepare } = selected;
 

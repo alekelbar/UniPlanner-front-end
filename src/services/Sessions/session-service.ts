@@ -10,7 +10,7 @@ export class SessionService {
 
   async getSessions(user: string, page: number) {
     try {
-      const sessions = await this.API.get<{
+      return await this.API.get<{
         count: number;
         sessions: Session[];
       }>(`sessions/${user}`, {
@@ -18,8 +18,6 @@ export class SessionService {
           page: page - 1,
         },
       });
-
-      return sessions;
     } catch (error: any) {
       if (error.response) return error.response;
       return error.message;
@@ -28,9 +26,7 @@ export class SessionService {
 
   async createSessions(createSession: CreateSession) {
     try {
-      const session = await this.API.post<Session>(`sessions`, createSession);
-
-      return session;
+      return await this.API.post<Session>(`sessions`, createSession);
     } catch (error: any) {
       if (!error.response) return error.response;
       return error.message;
@@ -39,10 +35,7 @@ export class SessionService {
 
   async removeSessions(removeSession: Session) {
     try {
-      const session = await this.API.delete<Session>(
-        `sessions/${removeSession._id}`
-      );
-      return session;
+      return await this.API.delete<Session>(`sessions/${removeSession._id}`);
     } catch (error: any) {
       if (error.response) return error.response;
       return error.message;

@@ -120,7 +120,7 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading called='register' />;
 
   return (
     <Container sx={{

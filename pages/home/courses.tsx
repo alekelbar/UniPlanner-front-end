@@ -98,7 +98,7 @@ export default function CoursesPage ({ }: CoursesProps) {
   }, [courses]);
 
   if (!selected) return <NotFoundPage />;
-  if (loading) return <Loading />;
+  if (loading) return <Loading called='courses' />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

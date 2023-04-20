@@ -75,7 +75,7 @@ export default function SessionsPage (): JSX.Element {
 
   }, [sessions]);
 
-  if (loading) return (<Loading />);
+  if (loading) return (<Loading called='session/id' />);
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

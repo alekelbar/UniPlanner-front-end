@@ -7,7 +7,6 @@ import { LayoutComponent } from '../src/components/Layout'; // No importar esto 
 import { createEmotionCache } from '../src/config';
 import { ThemeProviderWrapper } from '../src/context/wrapperProvider';
 import { store } from '../src/redux';
-import { ReduxPersistWrapper } from '../src/redux/reduxPersist/wrapper';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -26,12 +25,10 @@ export default function MyApp (props: MyAppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ThemeProviderWrapper>
-          <ReduxPersistWrapper>
-            <LayoutComponent>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </LayoutComponent>
-          </ReduxPersistWrapper>
+          <LayoutComponent>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </LayoutComponent>
         </ThemeProviderWrapper>
       </CacheProvider>
     </Provider>

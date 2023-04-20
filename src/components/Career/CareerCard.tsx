@@ -1,13 +1,10 @@
 import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
-import { logOut } from '../../helpers/local-storage';
 import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
 
 interface CareerCardProps {
@@ -15,31 +12,18 @@ interface CareerCardProps {
 }
 
 
-export const CareerCard = React.memo(function CareerCard ({ career }: CareerCardProps): JSX.Element {
+export const CareerCard = function CareerCard ({ career }: CareerCardProps): JSX.Element {
+
   const { name, _id } = career;
   const dispatch = useAppDispatch();
+
   const router = useRouter();
+  const { query: { id } } = router;
 
   const handleRemove = async () => {
-    const response = await dispatch(startRemoveCareer(_id));
+    const response = await dispatch(startRemoveCareer(id as string, _id));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut);
-          logOut();
-          return;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-          return;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     return;
   };
@@ -79,4 +63,4 @@ export const CareerCard = React.memo(function CareerCard ({ career }: CareerCard
       </CardContent>
     </Card>
   );
-});
+};

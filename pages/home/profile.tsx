@@ -68,7 +68,7 @@ const ProfilePage: React.FC = () => {
     }),
   });
 
-  if (!user) return <Loading />;
+  if (!user) return <Loading called='profile'/>;
 
 
   return (

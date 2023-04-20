@@ -2,7 +2,6 @@ import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Pagination, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Loading } from '../../src/components';
@@ -12,11 +11,9 @@ import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliver
 import { FloatButton } from '../../src/components/common/FloatButton';
 import isInteger from '../../src/helpers/isInteger';
 import { isValidToken } from '../../src/helpers/isValidToken';
-import { logOut } from '../../src/helpers/local-storage';
 import usePagination from '../../src/hooks/pagination';
 import { RESPONSES } from '../../src/interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../src/redux';
-import { onLogOut } from '../../src/redux/slices/auth/authSlice';
 import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks';
 import NotFound from '../404';
 
@@ -25,7 +22,6 @@ interface DeliveriesProps {
 }
 
 export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { selected: selectedCourse } = useAppSelector(st => st.courses);
@@ -59,19 +55,11 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
     setOpenEdit(false);
   };
 
-
   const reload = async (page: number = 1) => {
     if (selectedCourse) {
       const response = await dispatch(startLoadDeliveries(page));
       if (response !== RESPONSES.SUCCESS) {
-        if (response === RESPONSES.UNAUTHORIZE) {
-          dispatch(onLogOut);
-          logOut();
-          router.push('/auth');
-          await Swal.fire('Parece que tú sesión expiro, inicia sesión porfavor... 🔒');
-          return;
-        }
-        await Swal.fire('Algo salio mal 😥', response);
+        await Swal.fire(response);
       }
     }
   };
@@ -101,7 +89,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
 
 
   if (!selectedCourse) return <NotFound />;
-  if (loading) return <Loading />;
+  if (loading) return <Loading called='deliveries' />;
 
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>

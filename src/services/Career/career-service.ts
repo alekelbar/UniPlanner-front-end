@@ -2,7 +2,6 @@
 
 import { AxiosInstance } from "axios";
 import { Career } from "../../interfaces/career.interface";
-import { RESPONSES } from "../../interfaces/response-messages";
 import { API_INSTANCE } from "../api-service";
 
 export class CareerService {
@@ -16,79 +15,36 @@ export class CareerService {
   public async listAll() {
     try {
       return await this.API.get<Career[]>("careers/find/all");
-    } catch (error) {
-      console.log(error);
-      return RESPONSES.INTERNAL_SERVER_ERROR;
+    } catch (error: any) {
+      if (error.response) return error.response;
+      return error.message;
     }
   }
 
   async getCareers(id: string) {
     try {
-      const { data } = await this.API.get<Career[]>(`careers/${id}`);
-      return data;
+      return await this.API.get<Career[]>(`careers/${id}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) return error.response;
+      return error.message;
     }
   }
 
-  async addCareer(idUser: string, idCareer: string) {
+  async addCareer(careerId: string, userId: string) {
     try {
-      const { data } = await this.API.post<Career>(
-        `careers/${idCareer}/${idUser}`
-      );
-
-      return data;
+      return await this.API.post<Career>(`careers/${careerId}/${userId}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 404:
-          return RESPONSES.NOT_FOUND;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) return error.response;
+      return error.message;
     }
   }
 
   async removeCareer(idUser: string, idCareer: string) {
     try {
-      const { data } = await this.API.delete<Career>(
-        `careers/${idCareer}/${idUser}`
-      );
-
-      return data;
+      return await this.API.delete<Career>(`careers/${idCareer}/${idUser}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 404:
-          return RESPONSES.NOT_FOUND;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) return error.response;
+      else return error.message;
     }
   }
 }

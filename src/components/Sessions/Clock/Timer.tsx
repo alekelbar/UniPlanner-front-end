@@ -118,7 +118,7 @@ export const Timer: React.FC<ITimer> = ({ session, dialogHandler }) => {
       handleTimer();
   }, [open]);
 
-  if (open && !session) return <Loading />;
+  if (open && !session) return <Loading called="timer" />;
 
   return (
     <Backdrop

@@ -17,9 +17,9 @@ export const startLoadSession = (userId: string, page: number) => {
     const response = await new SessionService().getSessions(userId, page);
 
     const { data } = response;
-    if (!data) {
+    if (response.status !== 200) {
       dispatch(stopLoadingSession());
-      return response;
+      return data.message;
     }
 
     dispatch(loadSessions(data));
@@ -39,11 +39,11 @@ export const startcreateSession = (
     });
 
     const { data } = response;
-    if (data) {
-      console.log(data);
-      dispatch(addSession(data));
-      return RESPONSES.SUCCESS;
+    if (response.status !== 200) {
+      return data.message;
     }
+
+    dispatch(addSession(data));
     return response;
   };
 };
@@ -54,11 +54,11 @@ export const startRemoveSession = (delSession: Session) => {
     const response = await new SessionService().removeSessions(delSession);
 
     const { data } = response;
-    if (!data) {
-      return response;
+    if (response.status !== 200) {
+      return data.message;
     }
+
     dispatch(removeSession(data));
-    dispatch(stopLoadingSession());
     return RESPONSES.SUCCESS;
   };
 };

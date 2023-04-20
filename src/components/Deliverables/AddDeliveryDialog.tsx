@@ -110,7 +110,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
     }),
   });
 
-  if (!selected) return <Loading />;
+  if (open && !selected) return <Loading called='addDelivery' />;
 
   return (
     <>

@@ -32,7 +32,6 @@
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "latest",
     "react-redux": "^8.0.5",
-    "redux-persist": "^6.0.0",
     "sweetalert2": "^11.7.2",
     "yup": "^1.0.0"
   },

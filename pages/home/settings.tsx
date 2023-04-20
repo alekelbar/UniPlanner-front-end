@@ -84,7 +84,7 @@ const SettingsPage = () => {
     })
   });
 
-  if (!selected) return <Loading />;
+  if (!selected) return <Loading called='settings' />;
 
   return (
     <Container>

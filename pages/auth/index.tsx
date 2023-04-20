@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
         });
         return;
       }
-      router.push('/home/careers');
+      router.push('/');
     },
     validationSchema: Yup.object({
       id: Yup

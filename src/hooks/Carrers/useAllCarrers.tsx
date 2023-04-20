@@ -2,32 +2,35 @@ import { useEffect, useState } from 'react';
 import { Career } from '../../interfaces/career.interface';
 import { CareerService } from '../../services';
 
+const initialState = {
+  allCareers: [] as Career[],
+  error: null,
+  loading: true
+};
 
+export const useAllCareers = (dependencies: any = []) => {
 
-export const useAllCareers = () => {
-
-  const [allCareers, setAllCareers] = useState<Career[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
+  const [careersState, setCareersState] = useState(initialState);
 
   const getAllCareers = async () => {
     const service = new CareerService();
     const response = await service.listAll();
 
-    if (typeof response !== "string") {
-      setAllCareers(response.data);
-      setLoading(false);
-      setError(null);
-      return;
+    if (response.status === 200) {
+      return setCareersState({
+        allCareers: response.data,
+        error: null,
+        loading: false
+      });
     }
-    setLoading(false);
-    setError(response);
+    setCareersState({ ...initialState, error: response });
   };
 
   useEffect(() => {
     getAllCareers();
-  }, []);
+  }, dependencies);
+
+  const { allCareers, error, loading } = careersState;
 
   return {
     allCareers,

@@ -21,5 +21,5 @@ export interface Setting {
 export interface SettingState {
   loading: boolean;
   error: string | null;
-  selected: Setting | null;
+  selected: Setting;
 }
