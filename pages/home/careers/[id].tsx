@@ -11,6 +11,7 @@ import { FloatButton } from '../../../src/components/common/FloatButton';
 import { Loading } from '../../../src/components/common/Loading';
 import { isValidToken } from '../../../src/helpers/isValidToken';
 import { useAllCareers } from '../../../src/hooks/Carrers/useAllCarrers';
+import { Career } from '../../../src/interfaces/career.interface';
 import { RESPONSES } from '../../../src/interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../../src/redux/hooks';
 import { startLoadCareers } from '../../../src/redux/thunks/careers-thunks';
@@ -18,11 +19,21 @@ import { startLoadCareers } from '../../../src/redux/thunks/careers-thunks';
 interface Props {
 }
 
+function getUniqueCareeers (carr1: Career[], carr2: Career[]) {
+  const mergeArr = [...carr1, ...carr2];
+
+  return mergeArr.filter(e => {
+    return !carr2.find(c => c._id === e._id);
+  });
+}
+
 const CareerPage: React.FC<Props> = () => {
   const router = useRouter();
   const { query } = router;
 
   const dispatch = useAppDispatch();
+  const { careers, loading } = useAppSelector(state => state.career);
+
 
   useEffect(() => {
     (async () => {
@@ -30,9 +41,8 @@ const CareerPage: React.FC<Props> = () => {
       if (response !== RESPONSES.SUCCESS)
         await Swal.fire(response);
     })();
-  }, [dispatch, query.id]);
+  }, [query.id]);
 
-  const { careers, loading } = useAppSelector(state => state.career);
 
   const { allCareers, loading: allCarrersLoading } = useAllCareers([careers]);
 
@@ -66,7 +76,7 @@ const CareerPage: React.FC<Props> = () => {
 
       <AddCareerDialog
         onClose={onClose}
-        open={open} careers={[...new Set([...allCareers, ...careers])]} />
+        open={open} careers={getUniqueCareeers(allCareers, careers)} />
     </Container>
   );
 };
