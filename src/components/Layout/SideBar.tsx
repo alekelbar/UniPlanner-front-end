@@ -78,21 +78,21 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
       <Divider sx={{ mb: 2 }} />
       <List>
         {pages.map(page => (
-          <ListItem
+          <Link
             key={page.title}
+            href={`/home/${page.url + user?.id}`}
+            underline='none'
             sx={{
-              backgroundColor: router.pathname.includes(page.url)
-                ? ({ palette: { primary } }) => primary.dark
-                : 'transparent',
+              color: router.pathname.includes(page.url)
+                ? 'common.white'
+                : 'text.primary',
             }}
           >
-            <Link
-              href={`/home/${page.url + user?.id}`}
-              underline='none'
+            <ListItem
               sx={{
-                color: router.pathname.includes(page.url)
-                  ? 'common.white'
-                  : 'text.primary',
+                backgroundColor: router.pathname.includes(page.url)
+                  ? ({ palette: { primary } }) => primary.dark
+                  : 'transparent',
               }}
             >
               <Stack direction={'row'}>
@@ -101,8 +101,8 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
                 </ListItemIcon>
                 <ListItemText primary={page.title} />
               </Stack>
-            </Link>
-          </ListItem>
+            </ListItem>
+          </Link>
         ))}
         <Divider sx={{ mt: 2, mb: 2 }} />
         <ListItem disablePadding>

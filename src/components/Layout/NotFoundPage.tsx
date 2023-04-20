@@ -1,14 +1,10 @@
 import { Button, Container, Divider, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useAppSelector } from '../../redux';
 
 export default function NotFoundPage (): JSX.Element {
   const router = useRouter();
-
-  const { user } = useAppSelector(state => state.auth);
-
   const handleGoHome = () => {
-    router.push(`/home/careers/${user?.id}`);
+    router.push(`/`);
   };
 
   return (
