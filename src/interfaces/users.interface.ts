@@ -20,7 +20,7 @@ export interface UserToken {
 
 export interface UserState {
   token: string | null;
-  user: UserToken | null;
+  user: UserToken;
   loading: boolean;
 }
 

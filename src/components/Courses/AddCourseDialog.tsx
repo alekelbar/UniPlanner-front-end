@@ -74,30 +74,6 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
 
   type FormikIndex = keyof FormikTouched<{ name: string; courseDescription: string; credits: number; }>;
 
-  const CustomTextField:
-    React.FC<{ name: FormikIndex, placeholder: string, helperText: string; }> =
-    ({ helperText, name,
-      placeholder }): JSX.Element => {
-      return (
-        <>
-          <TextField
-            helperText={helperText}
-            placeholder={placeholder}
-            value={formik.values[name]}
-            fullWidth
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            rows={2}
-            multiline
-            autoComplete='off'
-            type={"text"} />
-          {formik.touched[name] && formik.errors[name] && (
-            <Typography variant='caption' color={'error'}>{formik.errors[name]}</Typography>
-          )}
-        </>
-      );
-    };
-
   return (
     <>
       <Dialog

@@ -9,11 +9,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { Loading } from '../../src/components';
-import { isValidToken } from '../../src/helpers/isValidToken';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
-import { startUpdateUser } from '../../src/redux/thunks/user-thunks';
+import { Loading } from '../../../src/components';
+import { isValidToken } from '../../../src/helpers/isValidToken';
+import { RESPONSES } from '../../../src/interfaces/response-messages';
+import { useAppDispatch, useAppSelector } from '../../../src/redux/hooks';
+import { startUpdateUser } from '../../../src/redux/thunks/user-thunks';
 
 interface Props {
 }
@@ -24,16 +24,18 @@ const ProfilePage: React.FC = () => {
 
   const router = useRouter();
 
-  const { user } = useAppSelector(st => st.auth);
+  const { user } = useAppSelector(state => state.auth);
 
+  if (!user) {
+    // router.push('/auth');
+  }
 
   const formik = useFormik({
     initialValues: {
-      id: user ? user.identification : '',
-      name: user ? user.fullname : '',
-      email: user ? user.email : '',
+      id: user.identification,
+      name: user.fullname,
+      email: user.email,
     },
-
     onSubmit: async (values) => {
       const { email, id: identification, name: fullname } = values;
 
@@ -56,7 +58,6 @@ const ProfilePage: React.FC = () => {
       }
 
       await Swal.fire('Tú información fue actualizada con exito 🥰');
-
     },
     validationSchema: Yup.object({
       id: Yup
@@ -68,11 +69,9 @@ const ProfilePage: React.FC = () => {
     }),
   });
 
-  if (!user) return <Loading called='profile'/>;
-
-
+  if (!user) return <Loading called='profile' />;
   return (
-    <Container maxWidth="md" sx={{ mt: 2, display: 'block' }}>
+    <Container maxWidth={'sm'} sx={{ mt: 2, display: 'block' }}>
       <Paper data-testid='profile-form' component={'form'} onSubmit={formik.handleSubmit} sx={{ py: 4, px: 2 }}>
         <Stack spacing={1} direction="column" sx={{ placeItems: 'center' }}>
           <IconButton>
@@ -86,7 +85,7 @@ const ProfilePage: React.FC = () => {
             name={'id'}
             type={'text'}
             variant='filled'
-            helperText="Su usuario"
+            helperText="Usuario"
           />
           {formik.touched.id && formik.errors.id && (
             <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>
@@ -110,7 +109,7 @@ const ProfilePage: React.FC = () => {
             onChange={formik.handleChange}
             name={'email'}
             variant='filled'
-            helperText="Dirección de correo electronico"
+            helperText="Correo Electronico"
           />
           {formik.touched.email && formik.errors.email && (
             <Typography variant='caption' color={'error'}>{formik.errors.email}</Typography>
