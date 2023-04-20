@@ -12,21 +12,11 @@ export class SettingService {
 
   async getSetting(user: string) {
     try {
-      const settings = await this.API.get<Setting>(`user-settings/${user}`);
-      return settings.data;
+      return await this.API.get<Setting>(`user-settings/${user}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) {
+        return error.response;
+      } else return error.message;
     }
   }
 
