@@ -119,7 +119,7 @@ const RegisterPage: React.FC = () => {
                   helperText="Usuario"
                   placeholder='alekelbar...' />
                 {formik.touched.id && formik.errors.id && (
-                  <Typography variant='caption' color={'primary.main'}>{formik.errors.id}</Typography>
+                  <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.id}</Typography>
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -136,7 +136,7 @@ const RegisterPage: React.FC = () => {
                     placeholder='John Doe...' />
                 </Tooltip>
                 {formik.touched.name && formik.errors.name && (
-                  <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
+                  <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -152,7 +152,7 @@ const RegisterPage: React.FC = () => {
                   placeholder='you@gmail.com'
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <Typography variant='caption' color={'primary.main'}>{formik.errors.email}</Typography>
+                  <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.email}</Typography>
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -178,7 +178,7 @@ const RegisterPage: React.FC = () => {
                   }}
                 />
                 {formik.touched.password && formik.errors.password && (
-                  <Typography variant='caption' color={'primary.main'}>{formik.errors.password}</Typography>
+                  <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.password}</Typography>
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -204,7 +204,7 @@ const RegisterPage: React.FC = () => {
                   }}
                 />
                 {formik.touched.repassword && formik.errors.repassword && (
-                  <Typography variant='caption' color={'primary.main'}>{formik.errors.repassword}</Typography>
+                  <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.repassword}</Typography>
                 )}
               </Grid>
             </Grid>
@@ -232,7 +232,7 @@ const RegisterPage: React.FC = () => {
               </Stack>
             </Tooltip>
             {formik.touched.career && formik.errors.career && (
-              <Typography variant='caption' color={'primary.main'}>{formik.errors.career}</Typography>
+              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.career}</Typography>
             )}
           </Grid>
           <Grid item>

@@ -114,7 +114,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.name && formik.errors.name && (
-                    <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
+                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
                   )}
                   <TextField
                     fullWidth
@@ -129,7 +129,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.courseDescription && formik.errors.courseDescription && (
-                    <Typography variant='caption' color={'primary.main'}>{formik.errors.courseDescription}</Typography>
+                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.courseDescription}</Typography>
                   )}
                   <TextField
                     fullWidth
@@ -144,7 +144,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.credits && formik.errors.credits && (
-                    <Typography variant='caption' color={'primary.main'}>{formik.errors.credits}</Typography>
+                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.credits}</Typography>
                   )}
                   <Button
                     fullWidth

@@ -54,7 +54,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     if (deliverable.status === DELIVERABLE_STATUS.PENDING) {
       if (isAfter(new Date(), deadline)) {
         return (
-          <Typography component={'div'} variant="body2" sx={{
+          <Typography component={'div'} variant="h6" sx={{
             color: (theme) => theme.palette.error.main
           }}>
             No entregado | {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
@@ -62,7 +62,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
         );
       }
       return (
-        <Typography component={'div'} variant="body2" sx={{
+        <Typography component={'div'} variant="h6" sx={{
           color: (theme) => theme.palette.warning.main
         }}>
           Se entrega: {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
@@ -71,7 +71,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     }
 
     return (
-      <Typography component={'div'} variant="body2" sx={{
+      <Typography component={'div'} variant="h6" sx={{
         color: (theme) => theme.palette.success.main
       }}>
         Entregado
@@ -110,7 +110,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
       <CardHeader
         title={deliverable.name}
         titleTypographyProps={{
-          variant: 'body1'
+          variant: 'h5'
         }}
         subheader={
           <>

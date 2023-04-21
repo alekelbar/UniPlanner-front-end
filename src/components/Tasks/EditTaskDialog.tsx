@@ -116,7 +116,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               helperText="¿Como va a nombrar a esta tarea?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -133,7 +133,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               helperText="¿Como describe esta tarea?" />
 
             {formik.touched.descripcion && formik.errors.descripcion && (
-              <Typography variant='caption' color={'primary.main'}>{formik.errors.descripcion}</Typography>
+              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.descripcion}</Typography>
             )}
 
             <Select
@@ -146,7 +146,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               <MenuItem value={TASK_STATUS.IMCOMPLETED}>{TASK_STATUS.IMCOMPLETED}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'primary.main'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.status}</Typography>
             )}
 
             <Button

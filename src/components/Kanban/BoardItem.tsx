@@ -16,7 +16,7 @@ export const BoardItem = ({ task: { content, id, title }, idx }: BoardItemProps)
       {(draggableProvided) => (
         <Card
           sx={{
-            bgcolor: 'secondary.dark',
+            bgcolor: theme => theme.palette.secondary.dark,
             my: 2,
             transition: 'all 0.3s'
           }}
@@ -26,8 +26,10 @@ export const BoardItem = ({ task: { content, id, title }, idx }: BoardItemProps)
           style={draggableProvided.draggableProps.style}
         >
           <CardHeader titleTypographyProps={{
-            textOverflow: 'wrap',
-          }} title={title} subheader={content} />
+            textOverflow: 'wrap', variant: 'subtitle1'
+          }} title={title} subheader={content} subheaderTypographyProps={{
+            variant: 'subtitle2'
+          }} />
           <CardContent sx={{ display: 'flex', justifyContent: 'end' }}>
             <Button>
               <Delete color='error' />

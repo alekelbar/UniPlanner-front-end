@@ -90,7 +90,7 @@ export const KanbanAdd = ({ onClose, open }: KanbanAddProps): JSX.Element => {
             helperText="¿Como va a nombrar a esta tarea?" />
 
           {formik.touched.title && formik.errors.title && (
-            <Typography variant='caption' color={'primary.main'}>{formik.errors.title}</Typography>
+            <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.title}</Typography>
           )}
 
           <TextField
@@ -107,7 +107,7 @@ export const KanbanAdd = ({ onClose, open }: KanbanAddProps): JSX.Element => {
             helperText="¿Como va a nombrar a esta tarea?" />
 
           {formik.touched.content && formik.errors.content && (
-            <Typography variant='caption' color={'primary.main'}>{formik.errors.content}</Typography>
+            <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.content}</Typography>
           )}
           <Button
             fullWidth

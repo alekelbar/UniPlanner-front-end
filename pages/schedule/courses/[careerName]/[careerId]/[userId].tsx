@@ -88,13 +88,12 @@ export default function CoursesPage ({ }: CoursesProps) {
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.secondary.main,
+        backgroundColor: ({ palette }) => palette.primary.main,
         zIndex: '10'
       }}>
         <Typography
-          mt={2}
+          mt={1}
           align='center'
-          color={'primary'}
           variant='subtitle1'>
           {`${careerName}`}
         </Typography>

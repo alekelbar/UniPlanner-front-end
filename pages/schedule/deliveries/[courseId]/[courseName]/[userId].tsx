@@ -101,13 +101,13 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box component={'div'} position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.secondary.main,
+        backgroundColor: ({ palette }) => palette.primary.main,
         zIndex: '10'
       }}>
         <Typography
-          mt={2}
+          mt={1}
           align='center'
-          color={'primary'}
+          // color={'primary'}
           variant='subtitle1'>
           {`${courseName}`}
         </Typography>

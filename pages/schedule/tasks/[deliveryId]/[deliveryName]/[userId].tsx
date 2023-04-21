@@ -12,11 +12,9 @@ import TimerClock from '../../../../../src/components/Tasks/TimerClock';
 import { FloatButton } from '../../../../../src/components/common/FloatButton';
 import isInteger from '../../../../../src/helpers/isInteger';
 import { isValidToken } from '../../../../../src/helpers/isValidToken';
-import { logOut } from '../../../../../src/helpers/local-storage';
 import usePagination from '../../../../../src/hooks/pagination';
 import { RESPONSES } from '../../../../../src/interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../../../../src/redux';
-import { onLogOut } from '../../../../../src/redux/slices/auth/authSlice';
 import { startLoadTasks } from '../../../../../src/redux/thunks/tasks-thunks';
 
 
@@ -106,13 +104,13 @@ export default function TasksPage ({ }: TaskProps): JSX.Element {
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.secondary.main,
+        backgroundColor: ({ palette }) => palette.primary.main,
         zIndex: '10'
       }}>
         <Typography
           mt={2}
           align='center'
-          color={'primary'}
+          // color={'primary'}
           variant='subtitle1'>
           {`${deliveryName}`}
         </Typography>

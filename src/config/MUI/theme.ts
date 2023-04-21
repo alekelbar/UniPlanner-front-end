@@ -12,14 +12,18 @@ export const UNATheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#00ADB5",
+      main: "#d32f2f", // Rojo Pantone 185
     },
     secondary: {
-      main: "#393E46",
+      main: "#757575", // Gris Pantone Cool Gray 6
+    },
+    background: {
+      default: "#222", // Fondo oscuro
+      paper: "#333", // Fondo oscuro más claro para componentes
     },
     text: {
-      primary: "#fff",
-      secondary: "#AAA",
+      primary: "#fff", // Texto blanco
+      secondary: "#aaa", // Texto gris claro
     },
   },
   typography: {

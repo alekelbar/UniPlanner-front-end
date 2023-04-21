@@ -75,7 +75,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
               })}
             </Select>
             {formik.touched.career && formik.errors.career && (
-              <Typography variant='caption' color={'error'}>{formik.errors.career}</Typography>
+              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.career}</Typography>
             )}
             <Button
               type="submit"

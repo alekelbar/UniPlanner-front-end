@@ -17,10 +17,10 @@ export const SessionPagination = () => {
 
   return (
     <Box position='sticky' top={0} sx={{
-      backgroundColor: ({ palette }) => palette.primary.dark,
+      backgroundColor: ({ palette }) => palette.primary.main,
       zIndex: '10'
     }}>
-      <Typography align='center' bgcolor={'secondary'} variant='subtitle1'>{`Sessiones de Usuario`}</Typography>
+      <Typography mt={1} align='center' bgcolor={'primary'} variant='subtitle1'>{`Sessiones de Usuario`}</Typography>
       <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
         <Grid item>
           <Pagination

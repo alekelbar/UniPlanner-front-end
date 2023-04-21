@@ -20,7 +20,7 @@ export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
           }}
           onClick={onOpen}
         >
-          <Menu sx={{ fontSize: '2em' }} />
+          <Menu sx={{ fontSize: '2em' }} color='primary' />
         </Button>
         <Typography variant="h4">
           UniPlanner
