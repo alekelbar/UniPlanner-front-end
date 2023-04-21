@@ -2,16 +2,15 @@ import { Add } from '@mui/icons-material';
 import { Container } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { FloatButton } from '../../src/components';
-import { BoardList } from '../../src/components/Kanban/BoardList';
-import { KanbanBoard } from '../../src/components/Kanban/KanbanForm';
-import { useKanbanBoard } from '../../src/components/Kanban/hooks/useKanbanBoard';
-import { isValidToken } from '../../src/helpers/isValidToken';
+import { FloatButton } from '../../../src/components';
+import { BoardList } from '../../../src/components/Kanban/BoardList';
+import { KanbanBoard } from '../../../src/components/Kanban/KanbanForm';
+import { useKanbanBoard } from '../../../src/components/Kanban/hooks/useKanbanBoard';
+import { isValidToken } from '../../../src/helpers/isValidToken';
 
 // model ...
 
 const Kanban = () => {
-
   const {
     data: {
       OpenAdd,
@@ -43,9 +42,9 @@ const Kanban = () => {
         maxHeight: '70vh',
       }}>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <BoardList header={todo + ' 📝'} droppableId={todo} listOfItems={lists.TODO} />
-          <BoardList header={doing + ' ✏️'} droppableId={doing} listOfItems={lists.DOING} />
-          <BoardList header={done + ' ✔️'} droppableId={done} listOfItems={lists.DONE} />
+          <BoardList header={'TO-DO 📝'} droppableId={todo} listOfItems={lists.TODO} />
+          <BoardList header={'DOING ✏️'} droppableId={doing} listOfItems={lists.DOING} />
+          <BoardList header={'DONE ✔️'} droppableId={done} listOfItems={lists.DONE} />
           <FloatButton
             onAction={onOpen}
             icon={<Add sx={{ fontSize: { md: '2.5em' } }} />}

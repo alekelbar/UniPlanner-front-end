@@ -1,10 +1,10 @@
 import { Theme } from "@mui/material";
 import { createContext } from "react";
 
-export type ThemeContext = {
+export type SwitchThemeContext = {
   onChangeTheme: (theme: Theme) => void;
 };
 
-export const ThemeContext = createContext<ThemeContext>({
+export const OnChangeThemeContext = createContext<SwitchThemeContext>({
   onChangeTheme: (theme: Theme) => {},
 });

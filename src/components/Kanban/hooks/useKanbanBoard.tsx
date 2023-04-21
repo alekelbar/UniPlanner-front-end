@@ -30,9 +30,6 @@ export const useKanbanBoard = () => {
     setLoading(false);
   }, [tasks]);
 
-
-
-
   const onOpen = () => {
     setOpenAdd(true);
   };

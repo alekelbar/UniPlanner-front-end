@@ -1,5 +1,5 @@
 import { ColorLens } from '@mui/icons-material';
-import { Button, Container, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Paper, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -13,6 +13,10 @@ import { startLoadSetting, startUpdateSetting } from '../../../src/redux/thunks/
 import { Formik } from 'formik';
 
 const SettingsPage = () => {
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '50%';
 
   const router = useRouter();
   const { query } = router;
@@ -51,13 +55,13 @@ const SettingsPage = () => {
   if (loading) return <Loading called='settings' />;
 
   return (
-    <Container>
+    <Container sx={{ mt: 9, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <Formik initialValues={selected} onSubmit={handleSubmit}>
         {props => (
           <>
-            <Paper sx={{ my: 2, width: '100%', py: 2 }} component={'form'} onSubmit={props.handleSubmit}>
+            <Paper sx={{ width, py: 2 }} component={'form'} onSubmit={props.handleSubmit}>
               <Stack justifyContent={'center'} alignItems={'center'} direction={'row'}>
-                <Typography variant='h5'>Configuraciones de usuario</Typography>
+                <Typography variant='h2' fontSize={'1em'}>Configuraciones de usuario</Typography>
               </Stack>
               <Container>
                 {/* Parte A */}
@@ -67,10 +71,10 @@ const SettingsPage = () => {
                   </Typography>
                 </Stack>
                 <Stack mt={3}
-                  direction={'column'}
+                  direction={'row'}
                   alignItems={'center'}
                   spacing={2}
-                  justifyContent={'space-evenly'}
+                  justifyContent={'center'}
                   width={'100%'}>
                   <TextField
                     type="color"

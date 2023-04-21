@@ -1,8 +1,9 @@
-import { List, Paper, Typography } from "@mui/material";
+import { List, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import React from 'react';
 import { Droppable } from "react-beautiful-dnd";
 import { KanbanTaskModel } from "../../redux/slices/kanban/models/taskModel";
 import { BoardItem } from "./BoardItem";
+import styles from './css/BoardList.module.css';
 
 interface BoardListProps {
   droppableId: string;
@@ -11,11 +12,18 @@ interface BoardListProps {
 }
 
 export const BoardList = React.memo(({ droppableId, listOfItems, header }: BoardListProps): JSX.Element => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const width = fullScreen ? '100%' : '30%';
+
   return (
     <Paper sx={{
       p: 2,
-      minWidth: '250px',
-      m: 1
+      minWidth: width,
+      m: 1,
+      transition: 'all 0.5s ease-in-out',
+      scrollBehavior: 'smooth',
+      ...styles
     }}>
       <Typography
         variant='body1'
