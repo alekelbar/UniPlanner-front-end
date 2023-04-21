@@ -10,7 +10,6 @@ export default function usePagination (limit: number, page: number = 1) {
     setActualPage(value);
   };
 
-
   return {
     actualPage,
     handleChangePage,

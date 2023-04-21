@@ -15,7 +15,6 @@ export const useSession = () => {
   const { query: { user } } = router;
 
   const { sessions = [], count, loading, selected } = useAppSelector(state => state.sessions);
-  const [openClock, setOpenClock] = useState(false);
 
   const {
     actualPage,
@@ -23,6 +22,16 @@ export const useSession = () => {
     totalPages,
     setTotalPages,
   } = usePagination(count);
+
+  const [openClock, setOpenClock] = useState(false);
+
+  const onOpenClock = () => {
+    setOpenClock(true);
+  };
+
+  const onCloseClock = () => {
+    setOpenClock(false);
+  };
 
   const [openCreate, setOpenCreate] = useState(false);
 
@@ -72,10 +81,9 @@ export const useSession = () => {
       selected,
       sessions,
       reload,
-      dispatch
     },
     clock: {
-      openClock, setOpenClock
+      openClock, onOpenClock, onCloseClock
     },
     pagination: {
       handleChangePage, totalPages, actualPage

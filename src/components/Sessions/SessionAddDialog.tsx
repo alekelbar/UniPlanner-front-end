@@ -1,19 +1,14 @@
 import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/system';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import Swal from 'sweetalert2';
+import { useAppDispatch } from '../../../src/redux';
+import { useContext } from 'react';
+import { CreateSession, SESSION_TYPES } from '../../../src/interfaces/session-interface';
 import * as Yup from 'yup';
-import { RESPONSES } from '../../interfaces/response-messages';
-import { CreateSession, SESSION_TYPES } from '../../interfaces/session-interface';
-import { useAppDispatch } from '../../redux';
+import { useFormik } from 'formik';
 import { startcreateSession } from '../../redux/thunks/session-thunks';
-
-
-interface AddSessionDialogProps {
-  open: boolean,
-  onClose: () => void,
-}
+import { useRouter } from 'next/router';
+import { RESPONSES } from '../../interfaces/response-messages';
+import Swal from 'sweetalert2';
+import { sessionPageContext } from './SessionPage';
 
 const initialValues: CreateSession = {
   duration: 1,
@@ -21,11 +16,21 @@ const initialValues: CreateSession = {
   type: SESSION_TYPES.WORKING,
 };
 
-export default function AddSessionDialog ({ onClose, open }: AddSessionDialogProps): JSX.Element {
+export const SessionAddDialog = () => {
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const theme = useTheme();
+  const {
+    dialogHandler: {
+      openCreate: open,
+      onCloseCreate: onClose
+    },
+    theming: {
+      theme
+    }
+  } = useContext(sessionPageContext);
+
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const width = fullScreen ? '100%' : '50%';
 
@@ -143,4 +148,4 @@ export default function AddSessionDialog ({ onClose, open }: AddSessionDialogPro
       </Dialog>
     </>
   );
-}
+};

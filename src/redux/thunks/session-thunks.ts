@@ -39,13 +39,12 @@ export const startcreateSession = (
     });
 
     const { data } = response;
-
     if (response.status !== 201) {
-      return data.message;
+      return response;
     }
 
     dispatch(addSession(data));
-    return response;
+    return RESPONSES.SUCCESS;
   };
 };
 
