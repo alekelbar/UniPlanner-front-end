@@ -11,37 +11,37 @@ interface Page {
 export const pages: Page[] = [
   {
     inactiveColor: "text.primary.dark",
-    title: "Carreras",
+    title: "Agenda",
     color: "text.primary",
-    url: "careers/",
+    url: "/schedule/careers/",
     icon: <School sx={{ color: "text.primary" }} />,
   },
   {
     inactiveColor: "text.primary.dark",
     title: "Tablero Kanban",
     color: "text.primary",
-    url: "kanban/",
+    url: "/tools/kanban/",
     icon: <Task sx={{ color: "text.primary" }} />,
   },
   {
     inactiveColor: "text.primary.dark",
     title: "Sesiones",
     color: "text.primary",
-    url: "sessions/",
+    url: "/tools/sessions/",
     icon: <Timelapse sx={{ color: "text.primary" }} />,
   },
   {
     inactiveColor: "text.primary.dark",
     title: "Perfil",
     color: "text.primary",
-    url: "profile/",
+    url: "/tools/profile/",
     icon: <Person sx={{ color: "text.primary" }} />,
   },
   {
     inactiveColor: "text.primary.dark",
     title: "Configuración",
     color: "text.primary",
-    url: "settings/",
+    url: "/tools/settings/",
     icon: <Settings sx={{ color: "text.primary" }} />,
   },
 ];

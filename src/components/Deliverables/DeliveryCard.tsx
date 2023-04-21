@@ -153,7 +153,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
               <Button
                 onClick={() => {
                   dispatch(setSelectedDelivery(deliverable));
-                  router.push('/home/tasks');
+                  router.push('/schedule/tasks');
                 }}
                 sx={{
                   cursor: 'pointer',

@@ -4,18 +4,19 @@ import { Stack } from '@mui/system';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { Loading } from '../../src/components';
-import AddDeliveryDialog from '../../src/components/Deliverables/AddDeliveryDialog';
-import { DeliveryCard } from '../../src/components/Deliverables/DeliveryCard';
-import EditDeliverableDialog from '../../src/components/Deliverables/EditDeliverableDialog';
-import { FloatButton } from '../../src/components/common/FloatButton';
-import isInteger from '../../src/helpers/isInteger';
-import { isValidToken } from '../../src/helpers/isValidToken';
-import usePagination from '../../src/hooks/pagination';
-import { RESPONSES } from '../../src/interfaces/response-messages';
-import { useAppDispatch, useAppSelector } from '../../src/redux';
-import { startLoadDeliveries } from '../../src/redux/thunks/deliverables-thunks';
-import NotFound from '../404';
+import { Loading } from '../../../../../src/components';
+import AddDeliveryDialog from '../../../../../src/components/Deliverables/AddDeliveryDialog';
+import { DeliveryCard } from '../../../../../src/components/Deliverables/DeliveryCard';
+import EditDeliverableDialog from '../../../../../src/components/Deliverables/EditDeliverableDialog';
+import { FloatButton } from '../../../../../src/components/common/FloatButton';
+import isInteger from '../../../../../src/helpers/isInteger';
+import { isValidToken } from '../../../../../src/helpers/isValidToken';
+import usePagination from '../../../../../src/hooks/pagination';
+import { RESPONSES } from '../../../../../src/interfaces/response-messages';
+import { useAppDispatch, useAppSelector } from '../../../../../src/redux';
+import { startLoadDeliveries } from '../../../../../src/redux/thunks/deliverables-thunks';
+import NotFound from '../../../../404';
+import { useRouter } from 'next/router';
 
 interface DeliveriesProps {
 
@@ -23,8 +24,8 @@ interface DeliveriesProps {
 
 export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const { query: { courseId, courseName } } = useRouter();
 
-  const { selected: selectedCourse } = useAppSelector(st => st.courses);
   const { deliverables, count, loading } = useAppSelector(st => st.deliveries);
 
   const {
@@ -56,11 +57,9 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   };
 
   const reload = async (page: number = 1) => {
-    if (selectedCourse) {
-      const response = await dispatch(startLoadDeliveries(page));
-      if (response !== RESPONSES.SUCCESS) {
-        await Swal.fire(response);
-      }
+    const response = await dispatch(startLoadDeliveries(courseId as string, page));
+    if (response !== RESPONSES.SUCCESS) {
+      await Swal.fire(response);
     }
   };
 
@@ -88,7 +87,6 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   }, [deliverables]);
 
 
-  if (!selectedCourse) return <NotFound />;
   if (loading) return <Loading called='deliveries' />;
 
   return (
@@ -102,7 +100,7 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
           align='center'
           bgcolor={'secondary'}
           variant='subtitle1'>
-          {`${selectedCourse.name}`}
+          {`${courseName}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>

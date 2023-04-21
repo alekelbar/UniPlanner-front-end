@@ -30,7 +30,7 @@ export const CareerCard = function CareerCard ({ career }: CareerCardProps): JSX
 
   const handleSelectedCareer = () => {
     dispatch(setSelectedCareer(career));
-    router.push(`/home/courses/${career.name}/${career._id}/${user}`);
+    router.push(`/schedule/courses/${career.name}/${career._id}/${user}`);
   };
 
   return (

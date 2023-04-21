@@ -12,31 +12,20 @@ export class DeliverableService {
     this.API = API_INSTANCE;
   }
 
-  async getDeliverables(course: Course, page: number) {
+  async getDeliverables(course: string, page: number) {
     try {
-      const deliverables = await this.API.get<{
+      return await this.API.get<{
         count: number;
         deliverables: Deliverable[];
-      }>(`deliverables/course/${course._id}`, {
+      }>(`deliverables/course/${course}`, {
         params: {
           page: page - 1,
         },
       });
-
-      return deliverables;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) {
+        return error.response;
+      } else return error.message;
     }
   }
 

@@ -46,33 +46,35 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
         </List>
         <Divider sx={{ mb: 2 }} />
         <List>
-          {pages.map(page => (
-            <Link
-              key={page.title}
-              href={`/home/${page.url + user?.id}`}
-              underline='none'
-              sx={{
-                color: router.pathname.includes(page.url)
-                  ? 'common.white'
-                  : 'text.primary',
-              }}
-            >
-              <ListItem
+          {pages.map(page => {
+            return (
+              <Link
+                key={page.title}
+                href={`${page.url + user?.id}`}
+                underline='none'
                 sx={{
-                  backgroundColor: router.pathname.includes(page.url)
-                    ? ({ palette: { primary } }) => primary.dark
-                    : 'transparent',
+                  color: router.pathname.includes(page.url.split('/')[2])
+                    ? 'common.white'
+                    : 'text.primary',
                 }}
               >
-                <Stack direction={'row'}>
-                  <ListItemIcon sx={{ color: 'inherit' }}>
-                    {page.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={page.title} />
-                </Stack>
-              </ListItem>
-            </Link>
-          ))}
+                <ListItem
+                  sx={{
+                    backgroundColor: router.pathname.includes(page.url.split('/')[2])
+                      ? ({ palette: { primary } }) => primary.dark
+                      : 'transparent',
+                  }}
+                >
+                  <Stack direction={'row'}>
+                    <ListItemIcon sx={{ color: 'inherit' }}>
+                      {page.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={page.title} />
+                  </Stack>
+                </ListItem>
+              </Link>
+            );
+          })}
           <Divider sx={{ mt: 2, mb: 2 }} />
           <ListItem>
             <Button

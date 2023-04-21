@@ -70,7 +70,7 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
           color='secondary'
           onClick={() => {
             dispatch(setSelectedCourse(course));
-            router.push('/home/deliveries');
+            router.push(`/schedule/deliveries/${course._id}/${course.name}/${userId}`);
           }}
         >VER ENTREGABLES
         </Button>

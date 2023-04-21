@@ -76,7 +76,7 @@ const RegisterPage: React.FC = () => {
         return;
       }
 
-      router.push('/home/careers');
+      router.push('/schedule/careers');
     },
     validationSchema: Yup.object({
       id: Yup
@@ -282,7 +282,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if ((await validateToken(tokenString))) {
       return {
         redirect: {
-          destination: '/home/careers',
+          destination: '/schedule/careers',
           permanent: false,
         },
       };

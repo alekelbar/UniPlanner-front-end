@@ -145,7 +145,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if ((await validateToken(tokenString))) {
       return {
         redirect: {
-          destination: '/home/careers',
+          destination: '/schedule/careers',
           permanent: false,
         },
       };

@@ -7,33 +7,24 @@ import {
   removeDelivery,
   startLoadingDeliveries,
   stopLoadingDeliveries,
-  updateDeliverable
+  updateDeliverable,
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";
 
-export const startLoadDeliveries = (page: number) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadDeliveries = (courseId: string, page: number) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
 
-    const {
-      auth: { user },
-      courses: { selected: selectedCourse },
-    } = getState();
-
-    if (!user || !selectedCourse) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
     const service = new DeliverableService();
-    const response = await service.getDeliverables(selectedCourse, page);
+    const response = await service.getDeliverables(courseId, page);
 
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingDeliveries());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(loadDeliveries(data));
     dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;

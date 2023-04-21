@@ -1,4 +1,4 @@
-@keyframes fade-in {
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -7,6 +7,6 @@
   }
 }
 
-.kanban-board__list {
-  animation: fade-in 1s ease-in-out;
+.kanban_board__list {
+  animation: fadeIn 1s ease-in-out;
 }
