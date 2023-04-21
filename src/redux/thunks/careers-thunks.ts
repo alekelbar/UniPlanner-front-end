@@ -30,7 +30,7 @@ export const startLoadCareers = (id: string) => {
 };
 
 export const startAddCareer = (careerId: string, userId: string) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // agregando una carrera
     dispatch(StartLoadingCareer());
 

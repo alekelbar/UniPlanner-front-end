@@ -20,7 +20,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
 
 
   const router = useRouter();
-  const { query: { id } } = router;
+  const { query: { user } } = router;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -34,7 +34,7 @@ export function AddCareerDialog ({ careers, onClose, open }: AddCareerDialogProp
     onSubmit: async (values) => {
       const { career } = values;
 
-      const response = await dispatch(startAddCareer(career, id as string));
+      const response = await dispatch(startAddCareer(career, user as string));
       if (response !== RESPONSES.SUCCESS) {
         await Swal.fire(response);
       }
