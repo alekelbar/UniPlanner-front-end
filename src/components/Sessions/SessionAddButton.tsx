@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material';
 import { FloatButton } from '../../../src/components';
 import { useContext } from 'react';
-import { sessionPageContext } from './SessionPage';
+import { sessionPageContext } from './context/SessionContext';
 
 
 export const SessionAddButton = () => {

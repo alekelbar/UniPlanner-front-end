@@ -1,12 +1,12 @@
 import { Close, Pause, PlayArrow } from "@mui/icons-material";
-import { Backdrop, Button, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Backdrop, Button, Container, Stack, Typography } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { clearInterval, setInterval } from 'timers';
-import { SESSION_TYPES, Session } from '../../../interfaces/session-interface';
-import { Loading } from '../../common';
-import { sessionPageContext } from '../SessionPage';
+import { SESSION_TYPES, Session } from '../../interfaces/session-interface';
+import { Loading } from '../common';
+import { sessionPageContext } from './context/SessionContext';
 
 
 interface IControlsEnd {

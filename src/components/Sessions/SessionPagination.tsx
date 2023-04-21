@@ -1,6 +1,6 @@
 import { Box, Grid, Pagination, Typography } from '@mui/material';
 import { useContext } from 'react';
-import { sessionPageContext } from './SessionPage';
+import { sessionPageContext } from './context/SessionContext';
 
 export const SessionPagination = () => {
 

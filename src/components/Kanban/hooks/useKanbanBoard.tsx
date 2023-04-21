@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux';
 import { setStatus } from '../../../redux/slices/kanban/kanban-slice';
 import { KanbanTaskModel } from '../../../redux/slices/kanban/models/taskModel';
 
-type ListsState = {
+export type ListsState = {
   TODO: KanbanTaskModel[],
   DOING: KanbanTaskModel[],
   DONE: KanbanTaskModel[],

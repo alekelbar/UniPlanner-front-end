@@ -8,7 +8,7 @@ import { startcreateSession } from '../../redux/thunks/session-thunks';
 import { useRouter } from 'next/router';
 import { RESPONSES } from '../../interfaces/response-messages';
 import Swal from 'sweetalert2';
-import { sessionPageContext } from './SessionPage';
+import { sessionPageContext } from './context/SessionContext';
 
 const initialValues: CreateSession = {
   duration: 1,

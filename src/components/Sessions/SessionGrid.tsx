@@ -1,4 +1,4 @@
-import { sessionPageContext } from "./SessionPage";
+import { sessionPageContext } from './context/SessionContext';
 import { Divider, Grid, Typography } from '@mui/material';
 import SessionCard from '../../../src/components/Sessions/SessionCard';
 import { setSelectedSession, useAppDispatch } from '../../../src/redux';
