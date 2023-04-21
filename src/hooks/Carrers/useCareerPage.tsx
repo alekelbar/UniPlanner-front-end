@@ -18,11 +18,11 @@ export const useCareerPage = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await dispatch(startLoadCareers(query.id as string));
+      const response = await dispatch(startLoadCareers(query.user as string));
       if (response !== RESPONSES.SUCCESS)
         await Swal.fire(response);
     })();
-  }, [query.id]);
+  }, [query.user]);
 
   return {
     open, onOpen, onClose, careers, loading

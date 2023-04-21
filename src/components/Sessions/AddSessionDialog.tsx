@@ -24,7 +24,7 @@ const initialValues: CreateSession = {
 export default function AddSessionDialog ({ onClose, open }: AddSessionDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const width = fullScreen ? '100%' : '50%';
@@ -33,7 +33,7 @@ export default function AddSessionDialog ({ onClose, open }: AddSessionDialogPro
     initialValues,
     onSubmit: async (values) => {
       const { query } = router;
-      const response = await dispatch(startcreateSession(query!.id as string, {
+      const response = await dispatch(startcreateSession(query.user as string, {
         ...values
       }));
 

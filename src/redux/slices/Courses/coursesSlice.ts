@@ -8,7 +8,14 @@ const initialState: CoursesState = {
   loading: false,
   error: null,
   count: 0,
-  selected: null,
+  selected: {
+    career: "",
+    courseDescription: "",
+    credits: 4,
+    name: "Course",
+    user: "",
+    _id: "",
+  },
 };
 
 export const coursesSlice = createSlice({

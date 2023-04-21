@@ -12,7 +12,7 @@ export interface CoursesState {
   loading: boolean;
   error: string | null;
   count: number;
-  selected: Course | null;
+  selected: Course;
 }
 
 export interface PaginatedCourses {

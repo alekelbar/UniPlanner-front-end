@@ -20,7 +20,7 @@ const SettingsPage = () => {
   const dispatch = useAppDispatch();
 
   const onLoad = async () => {
-    const response = await dispatch(startLoadSetting(query.id as string));
+    const response = await dispatch(startLoadSetting(query.user as string));
     if (response !== RESPONSES.SUCCESS) {
       await Swal.fire(response);
     }
@@ -28,7 +28,7 @@ const SettingsPage = () => {
 
   useEffect(() => {
     onLoad();
-  }, [query.id]);
+  }, [query.user]);
 
   const { selected, loading } = useAppSelector(state => state.setting);
 

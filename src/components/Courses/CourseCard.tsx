@@ -23,26 +23,12 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
 
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { userId } } = router;
 
   const handleDelete = async () => {
     const response = await dispatch(startRemoveCourse(course));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut());
-          logOut();
-          return;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que todavía tienes algunas entregas 🔒';
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      Swal.fire(response);
     }
     reload(actualPage);
   };

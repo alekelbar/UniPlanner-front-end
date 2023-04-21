@@ -20,8 +20,6 @@ const ProfilePage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const router = useRouter();
-
   const { user } = useAppSelector(state => state.auth);
 
   const formik = useFormik({

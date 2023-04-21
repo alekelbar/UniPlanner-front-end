@@ -1,14 +1,12 @@
 import { Button, Dialog, DialogContent, DialogTitle, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import { Stack } from '@mui/system';
-import { FormikTouched, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startAddCourse } from '../../redux/thunks/courses.thunks';
 
 interface AddCourseDialogProps {
@@ -20,6 +18,8 @@ interface AddCourseDialogProps {
 export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { careerId, userId } } = router;
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const width = fullScreen ? '100%' : '50%';
@@ -32,28 +32,13 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
       credits: 4,
     },
     onSubmit: async (values) => {
-      const { courseDescription, credits, name } = values;
-      const response = await dispatch(startAddCourse(name, courseDescription, credits));
-      if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
+      const response = await dispatch(startAddCourse({
+        ...values, career: careerId as string, user: userId as string
+      }));
 
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut);
-            logOut();
-            onClose();
-            return;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
-      }
+      if (response !== RESPONSES.SUCCESS)
+        Swal.fire(response);
+
       formik.resetForm();
       onClose();
     },
@@ -71,8 +56,6 @@ export function AddCourseDialog ({ onClose, open }: AddCourseDialogProps): JSX.E
         .required('Porfavor, agrega los creditos que vale este curso'),
     }),
   });
-
-  type FormikIndex = keyof FormikTouched<{ name: string; courseDescription: string; credits: number; }>;
 
   return (
     <>

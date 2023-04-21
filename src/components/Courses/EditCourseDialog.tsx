@@ -18,10 +18,12 @@ interface EditCourseDialogProps {
 }
 
 export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX.Element {
+
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { careerId, userId } } = router;
 
-  const { selected } = useAppSelector(st => st.courses);
+  const { selected } = useAppSelector(state => state.courses);
 
   const [selectedCourse, setSelectedCourse] = useState(selected);
   const theme = useTheme();
@@ -36,27 +38,17 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
     },
     onSubmit: async (values) => {
       const { courseDescription, credits, name } = values;
-      const response = await dispatch(startUpdateCourse(name, courseDescription, credits));
+
+      const response = await dispatch(startUpdateCourse({
+        name,
+        courseDescription,
+        credits,
+        career: careerId as string,
+        user: userId as string,
+      }, selected._id!));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut);
-            logOut();
-            onClose();
-            return;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        Swal.fire(response);
       }
       onClose();
     },
@@ -81,7 +73,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
     formik.setFieldValue('name', selected?.name);
     formik.setFieldValue('credits', selected?.credits);
   }, [selected]);
-  
+
 
   return (
     <>

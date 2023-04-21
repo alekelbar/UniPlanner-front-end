@@ -18,10 +18,10 @@ export const CareerCard = function CareerCard ({ career }: CareerCardProps): JSX
   const dispatch = useAppDispatch();
 
   const router = useRouter();
-  const { query: { id } } = router;
+  const { query: { user } } = router;
 
   const handleRemove = async () => {
-    const response = await dispatch(startRemoveCareer(id as string, _id));
+    const response = await dispatch(startRemoveCareer(user as string, _id));
     if (response !== RESPONSES.SUCCESS) {
       await Swal.fire(response);
     }
@@ -30,7 +30,7 @@ export const CareerCard = function CareerCard ({ career }: CareerCardProps): JSX
 
   const handleSelectedCareer = () => {
     dispatch(setSelectedCareer(career));
-    router.push('/home/courses');
+    router.push(`/home/courses/${career.name}/${career._id}/${user}`);
   };
 
   return (

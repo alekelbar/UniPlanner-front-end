@@ -39,99 +39,62 @@ export const startLoadCourses = (careerId: string, page: number) => {
 };
 
 export const startRemoveCourse = (course: Course) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
-    const {
-      auth: { user },
-    } = getState();
-
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
+    dispatch(startLoadingCourses());
 
     const service = new CourseService();
-    console.log(course, " El curso a borrar");
     const response = await service.removeCourse(course);
 
-    if (typeof response === "string") {
+    const { data } = response;
+    if (response.status !== 200) {
+      dispatch(stopLoadingCourses());
       return response;
     }
 
-    dispatch(removeCourse(response.data));
+    dispatch(removeCourse(data));
+    dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
 
-export const startAddCourse = (
-  name: string,
-  courseDescription: string,
-  credits: number
-) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startAddCourse = (createdCourse: Course) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
-    const {
-      auth: { user },
-      career: { selected },
-    } = getState();
-
-    if (!user || !selected) {
-      return RESPONSES.UNAUTHORIZE;
-    }
+    dispatch(startLoadingCourses());
 
     const service = new CourseService();
-    const course: Course = {
-      name,
-      courseDescription,
-      credits,
-      career: selected._id,
-      user: user.id,
-    };
+    const response = await service.createCourse(createdCourse);
 
-    const response = await service.createCourse(course);
-
-    if (typeof response === "string") {
+    if (response.status !== 201) {
+      dispatch(stopLoadingCourses());
       return response;
     }
 
     dispatch(addCourse(response.data));
+    dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
 
-export const startUpdateCourse = (
-  name: string,
-  courseDescription: string,
-  credits: number
-) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startUpdateCourse = (createCourse: Course, courseId: string) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
-    const {
-      auth: { user },
-      career: { selected: selectedCareer },
-      courses: { selected: selectedCourse },
-    } = getState();
-
-    if (!user || !selectedCareer || !selectedCourse) {
-      return RESPONSES.UNAUTHORIZE;
-    }
+    dispatch(startLoadingCourses());
 
     const service = new CourseService();
-    const course: Course = {
-      name,
-      courseDescription,
-      credits,
-      career: selectedCareer._id,
-      user: user.id,
-    };
+    const course: Course = createCourse;
 
-    const { _id: id } = selectedCourse;
-    const response = await service.updateCourse(id as string, course);
+    const response = await service.updateCourse(course, courseId);
 
-    if (typeof response === "string") {
+    const { data } = response;
+    if (response.status !== 200) {
+      dispatch(stopLoadingCourses());
       return response;
     }
 
-    dispatch(updateCourse(response.data));
+    dispatch(updateCourse(data));
+    dispatch(stopLoadingCourses());
     return RESPONSES.SUCCESS;
   };
 };
