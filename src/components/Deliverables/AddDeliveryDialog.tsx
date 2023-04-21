@@ -96,7 +96,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         .required('La fecha limite del entregable es obligatoria'),
       status: Yup
         .string()
-        .min(5, "Use almenos 5 caracteres")
         .required('El status del entregable es obligatorio'),
       note: Yup
         .number()
@@ -145,7 +144,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.deadline && formik.errors.deadline && (
-              <Typography variant='caption' color={'error'}>{formik.errors.deadline}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.deadline}</Typography>
             )}
 
             <TextField
@@ -161,7 +160,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -177,7 +176,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.description && formik.errors.description && (
-              <Typography variant='caption' color={'error'}>{formik.errors.description}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.description}</Typography>
             )}
 
             <TextField
@@ -191,7 +190,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.note && formik.errors.note && (
-              <Typography variant='caption' color={'error'}>{formik.errors.note}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.note}</Typography>
             )}
 
             <TextField
@@ -205,7 +204,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.percent && formik.errors.percent && (
-              <Typography variant='caption' color={'error'}>{formik.errors.percent}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.percent}</Typography>
             )}
 
             <Select
@@ -218,7 +217,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.status}</Typography>
             )}
             <Button
               fullWidth

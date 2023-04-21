@@ -1,4 +1,4 @@
-import { KanbanBoard } from '../../../src/components/Kanban/KanbanForm';
+import { KanbanAdd } from '../../../src/components/Kanban/KanbanForm';
 import { useContext } from 'react';
 import { kanbanContext } from "./context/kanbanContext";
 
@@ -14,6 +14,6 @@ export const KanbanAddDialog = () => {
   } = useContext(kanbanContext);
 
   return (
-    <KanbanBoard onClose={onClose} open={OpenAdd} />
+    <KanbanAdd onClose={onClose} open={OpenAdd} />
   );
 };

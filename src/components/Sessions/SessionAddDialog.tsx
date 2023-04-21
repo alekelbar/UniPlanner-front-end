@@ -60,7 +60,7 @@ export const SessionAddDialog = () => {
         .required("La duración de la sesión es requerida"),
       name: Yup
         .string()
-        .min(5, "El nombre de una sesión debé al menos tener 5 caracteres")
+        .min(2, "El nombre de una sesión debé al menos tener 2 caracteres")
         .required("El nombre de la sesión es requerido"),
       type: Yup
         .string()
@@ -105,7 +105,7 @@ export const SessionAddDialog = () => {
               helperText="¿Como va a nombrar a esta sesión?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -120,7 +120,7 @@ export const SessionAddDialog = () => {
               helperText="¿Cuál es la duración en minutos?" />
 
             {formik.touched.duration && formik.errors.duration && (
-              <Typography variant='caption' color={'error'}>{formik.errors.duration}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.duration}</Typography>
             )}
 
             <Select
@@ -133,7 +133,7 @@ export const SessionAddDialog = () => {
               <MenuItem value={SESSION_TYPES.WORKING}>{SESSION_TYPES.WORKING}</MenuItem>
             </Select>
             {formik.touched.type && formik.errors.type && (
-              <Typography variant='caption' color={'error'}>{formik.errors.type}</Typography>
+              <Typography variant='caption' color={'primary.main'}>{formik.errors.type}</Typography>
             )}
 
             <Button

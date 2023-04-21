@@ -12,7 +12,7 @@ interface KanbanAddProps {
   onClose: () => void;
 }
 
-export const KanbanBoard = ({ onClose, open }: KanbanAddProps): JSX.Element => {
+export const KanbanAdd = ({ onClose, open }: KanbanAddProps): JSX.Element => {
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(st => st.auth);
@@ -45,7 +45,7 @@ export const KanbanBoard = ({ onClose, open }: KanbanAddProps): JSX.Element => {
       content: Yup
         .string()
         .required("La descripción de la tarea es requerida")
-        .min(10, "Trate de usar al menos 10 caracteres"),
+        .min(5, "Trate de usar al menos 5 caracteres"),
       title: Yup
         .string()
         .required("El nombre de la tarea es requerida")
@@ -90,7 +90,7 @@ export const KanbanBoard = ({ onClose, open }: KanbanAddProps): JSX.Element => {
             helperText="¿Como va a nombrar a esta tarea?" />
 
           {formik.touched.title && formik.errors.title && (
-            <Typography variant='caption' color={'error'}>{formik.errors.title}</Typography>
+            <Typography variant='caption' color={'primary.main'}>{formik.errors.title}</Typography>
           )}
 
           <TextField
@@ -107,7 +107,7 @@ export const KanbanBoard = ({ onClose, open }: KanbanAddProps): JSX.Element => {
             helperText="¿Como va a nombrar a esta tarea?" />
 
           {formik.touched.content && formik.errors.content && (
-            <Typography variant='caption' color={'error'}>{formik.errors.content}</Typography>
+            <Typography variant='caption' color={'primary.main'}>{formik.errors.content}</Typography>
           )}
           <Button
             fullWidth

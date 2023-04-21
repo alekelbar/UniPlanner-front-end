@@ -56,11 +56,11 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
       name: Yup
         .string()
         .min(5, "Trata de utilizar al menos 5 caracteres")
-        .required(),
+        .required("Falta el nombre del curso"),
       courseDescription: Yup
         .string()
-        .min(10, "Trata de utilizar al menos 10 caracteres")
-        .required(),
+        .min(5, "Trata de utilizar al menos 5 caracteres")
+        .required("Falta la descripción del curso"),
       credits: Yup.number()
         .positive("debe ser un numero positivo")
         .required('Porfavor, agrega los creditos que vale este curso'),
@@ -114,7 +114,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.name && formik.errors.name && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+                    <Typography variant='caption' color={'primary.main'}>{formik.errors.name}</Typography>
                   )}
                   <TextField
                     fullWidth
@@ -129,7 +129,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.courseDescription && formik.errors.courseDescription && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
+                    <Typography variant='caption' color={'primary.main'}>{formik.errors.courseDescription}</Typography>
                   )}
                   <TextField
                     fullWidth
@@ -144,7 +144,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.credits && formik.errors.credits && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
+                    <Typography variant='caption' color={'primary.main'}>{formik.errors.credits}</Typography>
                   )}
                   <Button
                     fullWidth

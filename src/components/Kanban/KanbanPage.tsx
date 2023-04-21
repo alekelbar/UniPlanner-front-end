@@ -5,7 +5,7 @@ import { useKanbanBoard } from '../../../src/components/Kanban/hooks/useKanbanBo
 import { ReactElement } from 'react';
 import { KanbanLists } from './KanbanLists';
 import { KanbanAddButton } from './KanbanAddButton';
-import { KanbanAddDialog } from './KanbanAddDialog';
+import { KanbanAdd } from './KanbanAddDialog';
 import { Provider } from './context/kanbanContext';
 
 // model ...
@@ -36,4 +36,4 @@ export const KanbanPage = ({ children }: { children: ReactElement | ReactElement
 
 KanbanPage.lists = KanbanLists;
 KanbanPage.AddButton = KanbanAddButton;
-KanbanPage.AddDialog = KanbanAddDialog;
+KanbanPage.AddDialog = KanbanAdd;

@@ -23,7 +23,6 @@ import { validateToken } from '../../src/services/auth/validate-token';
 const LoginPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
-  const [messageName, setMessageName] = useState("");
   const router = useRouter();
 
   const formik = useFormik({
@@ -79,7 +78,7 @@ const LoginPage: React.FC = () => {
                   placeholder='Identificación'
                   helperText="Un identificador único"
                 />
-                {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'error'}>{formik.errors.id}</Typography>}
+                {formik.touched.id && formik.errors.id && <Typography variant='caption' color={'primary.main'}>{formik.errors.id}</Typography>}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -93,7 +92,7 @@ const LoginPage: React.FC = () => {
                   type={'password'}
                   helperText="Su contraseña"
                 />
-                {formik.touched.password && formik.errors.password && <Typography variant='caption' color={'error'}>{formik.errors.password}</Typography>}
+                {formik.touched.password && formik.errors.password && <Typography variant='caption' color={'primary.main'}>{formik.errors.password}</Typography>}
               </Grid>
             </Grid>
           </Grid>
