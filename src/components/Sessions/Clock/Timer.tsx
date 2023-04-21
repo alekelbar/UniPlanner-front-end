@@ -75,7 +75,6 @@ interface ITimer {
 
 export const Timer: React.FC<ITimer> = ({ session, dialogHandler }) => {
 
-  const theme = useTheme();
   const { onClose, open } = dialogHandler;
 
   const secondsLeftRef = useRef(0);

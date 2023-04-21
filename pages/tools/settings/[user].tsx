@@ -85,7 +85,7 @@ const SettingsPage = () => {
                     value={props.values.do}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    helperText={'Realizar'}
+                    helperText={'Prio. 1'}
                   />
                   {props.touched.do && props.errors.do && (
                     <Typography variant='caption' color={'error'}>{props.errors.do}</Typography>
@@ -99,7 +99,7 @@ const SettingsPage = () => {
                     value={props.values.prepare}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    helperText={'Preparar'}
+                    helperText={'Prio. 2'}
                   />
                   {props.touched.prepare && props.errors.prepare && (
                     <Typography variant='caption' color={'error'}>{props.errors.prepare}</Typography>
@@ -113,7 +113,7 @@ const SettingsPage = () => {
                     value={props.values.delegate}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    helperText={'Delegar'}
+                    helperText={'Prio. 3'}
                   />
                   {props.touched.delegate && props.errors.delegate && (
                     <Typography variant='caption' color={'error'}>{props.errors.delegate}</Typography>
@@ -127,7 +127,7 @@ const SettingsPage = () => {
                     value={props.values.ignore}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    helperText={'Ignorar'}
+                    helperText={'Prio. 4'}
                   />
                   {props.touched.ignore && props.errors.ignore && (
                     <Typography variant='caption' color={'error'}>{props.errors.ignore}</Typography>

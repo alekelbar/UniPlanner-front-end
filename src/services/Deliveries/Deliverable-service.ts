@@ -31,72 +31,34 @@ export class DeliverableService {
 
   async createDeliverables(deriverable: Deliverable) {
     try {
-      const deliverable = await this.API.post<Deliverable>(
-        `deliverables`,
-        deriverable
-      );
-
-      return deliverable;
+      return await this.API.post<Deliverable>(`deliverables`, deriverable);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) return error.response;
+      else return error.message;
     }
   }
 
   async removeDeliverables(deriverable: Deliverable) {
     try {
-      const deliverable = await this.API.delete<Deliverable>(
+      return await this.API.delete<Deliverable>(
         `deliverables/${deriverable._id}`
       );
-
-      return deliverable;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) {
+        return error.response;
+      } else return error.message;
     }
   }
 
   public async updateDeliverable(deriverable: Deliverable) {
     try {
-      const updated = await this.API.patch<Deliverable>(
+      return await this.API.patch<Deliverable>(
         `deliverables/${deriverable._id}`,
         deriverable
       );
-
-      return updated;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) return error.response;
+      else return error.message;
     }
   }
 }

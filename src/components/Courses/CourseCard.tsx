@@ -41,12 +41,15 @@ export default function CourseCard ({ course, onOpenEdit, reload, actualPage }: 
     >
       <CardHeader
         title={name}
+        titleTypographyProps={{
+          variant: 'body1'
+        }}
         sx={{
           color: (theme) => theme.palette.text.primary,
         }}
         subheader={
           <Tooltip title='Cantidad de creditos correspondientes a esta materia' placement='top-start'>
-            <Typography variant="subtitle1" sx={{
+            <Typography variant="body1" sx={{
               color: (theme) => theme.palette.info.main,
             }} gutterBottom>
               Credits: {credits}

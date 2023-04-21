@@ -1,79 +1,37 @@
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid, Pagination, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Pagination, Stack, Typography } from '@mui/material';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
 import { FloatButton, Loading } from '../../../src/components';
 import AddSessionDialog from '../../../src/components/Sessions/AddSessionDialog';
 import { Timer } from '../../../src/components/Sessions/Clock/Timer';
 import SessionCard from '../../../src/components/Sessions/SessionCard';
-import isInteger from '../../../src/helpers/isInteger';
 import { isValidToken } from '../../../src/helpers/isValidToken';
-import usePagination from '../../../src/hooks/pagination';
-import { RESPONSES } from '../../../src/interfaces/response-messages';
-import { setSelectedSession, useAppDispatch, useAppSelector } from '../../../src/redux';
-import { startLoadSession } from '../../../src/redux/thunks/session-thunks';
+import { setSelectedSession } from '../../../src/redux';
+import { useSession } from '../../../src/components/Sessions/hooks/useSession';
 
 export default function SessionsPage (): JSX.Element {
-  const theme = useTheme();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { query: { user } } = router;
-
-
-  const { sessions = [], count, loading, selected } = useAppSelector(state => state.sessions);
-  const [openClock, setOpenClock] = useState(false);
 
   const {
-    actualPage,
-    handleChangePage,
-    totalPages,
-    setTotalPages,
-  } = usePagination(count);
-
-
-  const [openCreate, setOpenCreate] = useState(false);
-
-  const onOpenCreate = () => {
-    setOpenCreate(true);
-  };
-
-  const onCloseCreate = () => {
-    setOpenCreate(false);
-  };
-
-  const reload = async (page: number = 1) => {
-    if (user) {
-      const response = await dispatch(startLoadSession(user as string, page));
-      if (response !== RESPONSES.SUCCESS)
-        await Swal.fire(response);
+    sessionState: {
+      loading,
+      selected,
+      sessions,
+      reload,
+      dispatch
+    },
+    clock: {
+      openClock, setOpenClock
+    },
+    pagination: {
+      handleChangePage, totalPages, actualPage
+    },
+    dialogHandler: {
+      openCreate, onOpenCreate, onCloseCreate
+    },
+    theming: {
+      theme
     }
-  };
-
-  useEffect(() => {
-    reload(actualPage);
-  }, [actualPage]);
-
-  useEffect(() => {
-
-    if (sessions.length === 0 && actualPage > 1) {
-      reload(actualPage - 1);
-    }
-
-    if (sessions.length > 5) {
-      reload(actualPage);
-    }
-
-    // Cálculo para la paginación
-    const pages: number =
-      isInteger(count / 5)
-        ? count / 5
-        : Math.floor(count / 5) + 1;
-
-    setTotalPages(pages);
-
-  }, [sessions]);
+  } = useSession();
 
   if (loading) return (<Loading called='session/id' />);
 
@@ -129,6 +87,7 @@ export default function SessionsPage (): JSX.Element {
       <AddSessionDialog onClose={onCloseCreate} open={openCreate} />
 
       <Timer session={selected} dialogHandler={{ open: openClock, onClose: () => { setOpenClock(false); } }} />
+
     </Stack>
   );
 }

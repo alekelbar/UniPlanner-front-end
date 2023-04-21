@@ -30,7 +30,9 @@ const initialValues = {
 export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { selected } = useAppSelector(s => s.setting);
+
+  const { query: { courseId } } = router;
+  const { selected } = useAppSelector(state => state.setting);
 
   const theme: Theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -42,13 +44,10 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
       const { deadline, description, name, note, percent, status } = values;
 
       const { importance, urgency } = makePriority(new Date(deadline),
-        percent >= selected!.importance
-          ? true
-          : false
-      );
+        percent >= selected!.importance);
 
       const response = await dispatch(startcreateDelivery({
-        deadline: new Date(deadline),
+        deadline: new Date(deadline).toString(),
         description,
         name,
         note,
@@ -56,6 +55,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         status,
         importance,
         urgency,
+        course: courseId as string,
       }));
       if (response !== RESPONSES.SUCCESS) {
         let responseText = "";

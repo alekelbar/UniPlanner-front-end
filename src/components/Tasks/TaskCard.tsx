@@ -21,29 +21,11 @@ interface TaskCardProps {
 export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openClock }: TaskCardProps): JSX.Element {
 
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const handleRemove = async () => {
     const response = await dispatch(startRemoveTask(task));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut());
-          logOut();
-          break;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-          break;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     reload(actualPage);
   };

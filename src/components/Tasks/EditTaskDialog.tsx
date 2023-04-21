@@ -26,6 +26,8 @@ const initialValues: CreateTask = {
 export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { deliveryId, deliveryName, userId } } = router;
+
   const { selected } = useAppSelector(st => st.tasks);
   const [selectedTask, setSelectedTask] = useState(selected);
   const theme = useTheme();
@@ -41,28 +43,12 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
         name,
         descripcion,
         status,
-        _id: selectedTask?._id
+        _id: selectedTask._id,
+        delivery: deliveryId as string
       }));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        await Swal.fire(response);
       }
       formik.resetForm(initialValues);
       onClose();

@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../src/redux';
 import { startLoadDeliveries } from '../../../../../src/redux/thunks/deliverables-thunks';
 import NotFound from '../../../../404';
 import { useRouter } from 'next/router';
+import { priorityCalc } from '../../../../../src/helpers/priorityCalc';
 
 interface DeliveriesProps {
 
@@ -24,6 +25,7 @@ interface DeliveriesProps {
 
 export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   const { query: { courseId, courseName } } = useRouter();
 
   const { deliverables, count, loading } = useAppSelector(st => st.deliveries);
@@ -89,22 +91,30 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
 
   if (loading) return <Loading called='deliveries' />;
 
+  const sortedDeliveries = [...deliverables];
+
+  sortedDeliveries.sort((a, b) => {
+    return (priorityCalc[b.urgency] + priorityCalc[b.importance]) -
+      (priorityCalc[a.urgency] + priorityCalc[a.importance]);
+  });
+
   return (
     <Stack direction="column" sx={{ borderRadius: '.8em' }}>
       <Box component={'div'} position='sticky' top={0} sx={{
-        backgroundColor: ({ palette }) => palette.primary.dark,
+        backgroundColor: ({ palette }) => palette.secondary.main,
         zIndex: '10'
       }}>
         <Typography
           mt={2}
           align='center'
-          bgcolor={'secondary'}
+          color={'primary'}
           variant='subtitle1'>
           {`${courseName}`}
         </Typography>
         <Grid container spacing={2} direction="row" justifyContent={'center'} alignItems='center'>
           <Grid item>
             <Pagination
+
               page={actualPage}
               sx={{
                 width: "100%",
@@ -122,15 +132,15 @@ export default function DeliveriesPage ({ }: DeliveriesProps): JSX.Element {
         gap={1}
         p={2}
         direction={'row'}
-        justifyContent="center"
+        justifyContent="space-around"
         alignItems={'center'}>
         {
-          deliverables.length
-            ? deliverables.map((delivery) => {
+          sortedDeliveries.length
+            ? sortedDeliveries.map((delivery) => {
               return (
-                <Grid item xs={12} sm={5} md={6} lg={3} key={delivery._id + delivery.name}>
+                <Grid item xs={12} sm={4} md={6} lg={3} key={delivery._id}>
                   <DeliveryCard actualPage={actualPage} onOpenEdit={onOpenEdit} reload={reload} deliverable={delivery} />
-                  <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} />
+                  {/* <Divider variant='fullWidth' sx={{ display: { md: 'none' } }} /> */}
                 </Grid>
               );
             })

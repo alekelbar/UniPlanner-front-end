@@ -1,7 +1,4 @@
-import {
-  PreloadedState,
-  configureStore
-} from "@reduxjs/toolkit";
+import { PreloadedState, configureStore } from "@reduxjs/toolkit";
 import { SessionSlice } from "./slices";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
@@ -22,6 +19,10 @@ export const store = configureStore({
     sessions: SessionSlice.reducer,
     kanban: KanbanSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

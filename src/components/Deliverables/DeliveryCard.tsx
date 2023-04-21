@@ -3,7 +3,7 @@ import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
+import { MAX_CARD_HEIGHT, MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
 import { DELIVERABLE_STATUS, Deliverable } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
@@ -12,6 +12,9 @@ import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSli
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
 import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
+import { useEffect } from 'react';
+import { startLoadSetting } from '../../redux/thunks/settings-thunks';
+import { Loading } from '../common';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
@@ -22,14 +25,27 @@ interface DeliveryCardProps {
 
 export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: DeliveryCardProps): JSX.Element {
 
-  const { selected } = useAppSelector(state => state.setting);
+  const { selected, loading } = useAppSelector(state => state.setting);
 
+  const { query: { userId, courseId } } = useRouter();
 
   let create_at: Date = new Date();
   const deadline = parseISO(deliverable.deadline.toString());
+
   if (deliverable.createdAt) {
     create_at = parseISO(deliverable.createdAt.toString());
   }
+
+  const onLoad = async () => {
+    const response = await dispatch(startLoadSetting(userId as string));
+    if (response !== RESPONSES.SUCCESS) {
+      await Swal.fire(response);
+    }
+  };
+
+  useEffect(() => {
+    onLoad();
+  }, [userId]);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -64,26 +80,9 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
   };
 
   const handleRemove = async () => {
-    const response = await dispatch(startRemoveDelivery(deliverable));
+    const response = await dispatch(startRemoveDelivery({ ...deliverable, _id: deliverable._id, course: courseId as string }));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut());
-          logOut();
-          break;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que todavía te quedan algunas tareas 🔒';
-          break;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     reload(actualPage);
   };
@@ -100,15 +99,22 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
 
   const colorSeleted = getPriorityColor(importance, urgency, userMatrizColor);
 
+  if (loading) return <Loading />;
+
   return (
     <Card variant='elevation' data-testid="career-card" sx={{
       minHeight: MIN_CARD_HEIGHT,
+      // maxHeight: MAX_CARD_HEIGHT,
+      // overflow: 'auto'
     }}>
       <CardHeader
         title={deliverable.name}
+        titleTypographyProps={{
+          variant: 'body1'
+        }}
         subheader={
           <>
-            <Typography variant="body2" component="p">
+            <Typography variant="caption" component="p">
               {deliverable.description}
             </Typography>
             <Typography variant='caption' sx={{
@@ -153,7 +159,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
               <Button
                 onClick={() => {
                   dispatch(setSelectedDelivery(deliverable));
-                  router.push('/schedule/tasks');
+                  router.push(`/schedule/tasks/${deliverable._id}/${deliverable.name}/${userId}`);
                 }}
                 sx={{
                   cursor: 'pointer',

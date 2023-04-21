@@ -22,6 +22,8 @@ interface EditDeliverableDialogProps {
 export default function EditDeliverableDialog ({ onClose, open }: EditDeliverableDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { courseId } } = router;
+
   const { selected } = useAppSelector(st => st.deliveries);
   const { selected: selectedSetting } = useAppSelector(st => st.setting);
 
@@ -50,34 +52,19 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
       );
 
       const response = await dispatch(startUpdateDelivery({
-        deadline: new Date(deadline),
+        deadline: new Date(deadline).toString(),
         description,
         name,
         note,
         percent,
         status,
         importance,
-        urgency
+        urgency,
+        course: courseId as string,
+        _id: selected?._id
       }));
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        await Swal.fire(response);
       }
       onClose();
     },

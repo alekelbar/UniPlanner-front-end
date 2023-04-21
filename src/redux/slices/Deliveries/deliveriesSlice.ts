@@ -1,9 +1,11 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  DELIVERABLE_TAGS,
   Deliverable,
   DeliverableState,
 } from "../../../interfaces/deliveries.interface";
+import { format } from "date-fns";
 
 // Define the initial state using that type
 const initialState: DeliverableState = {
@@ -11,7 +13,19 @@ const initialState: DeliverableState = {
   loading: false,
   error: null,
   count: 0,
-  selected: null,
+  selected: {
+    deadline: "2023-01-19T00:00:00.000+00:00",
+    description: "",
+    importance: DELIVERABLE_TAGS.IMPORTANT,
+    name: "",
+    note: 1,
+    percent: 1,
+    status: "",
+    urgency: DELIVERABLE_TAGS.NOT_URGENT,
+    _id: "",
+    course: "",
+    createdAt: new Date(),
+  },
 };
 
 export const deliveriesSlice = createSlice({

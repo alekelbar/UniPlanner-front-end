@@ -21,7 +21,7 @@ export interface TaskState {
   tasks: Task[];
   loading: boolean;
   error: string | null;
-  selected: Task | null;
+  selected: Task;
   count: number;
 }
 

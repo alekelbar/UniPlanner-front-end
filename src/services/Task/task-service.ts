@@ -12,91 +12,49 @@ export class TaskService {
     this.API = API_INSTANCE;
   }
 
-  async getTasks(delivery: Deliverable, page: number) {
+  async getTasks(delivery: string, page: number) {
     try {
-      const tasks = await this.API.get<{
+      return await this.API.get<{
         count: number;
         tasks: Task[];
-      }>(`tasks/delivery/${delivery._id}`, {
+      }>(`tasks/delivery/${delivery}`, {
         params: {
           page: page - 1,
         },
       });
-
-      return tasks;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) {
+        return error.response;
+      } else return error.message;
     }
   }
 
   async createTask(createTask: CreateTask) {
     try {
-      const task = await this.API.post<Task>(`tasks`, createTask);
-
-      return task;
+      return await this.API.post<Task>(`tasks`, createTask);
     } catch (error: any) {
       if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+        return error.response;
+      } else return error.message;
     }
   }
 
   async removeTask(removeTask: Task) {
     try {
-      const task = await this.API.delete<Task>(`tasks/${removeTask._id}`);
-      return task;
+      return await this.API.delete<Task>(`tasks/${removeTask._id}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (!error.response) return error.response;
+      else return error.message;
     }
   }
 
   async updateTask(updateTask: Task) {
     try {
-      const task = await this.API.patch<Task>(
-        `tasks/${updateTask._id}`,
-        updateTask
-      );
-      return task;
+      return await this.API.patch<Task>(`tasks/${updateTask._id}`, updateTask);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      if (error.response) {
+        return error.response;
+      } else return error.message;
     }
   }
 }

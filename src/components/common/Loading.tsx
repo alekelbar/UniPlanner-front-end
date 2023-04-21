@@ -7,7 +7,7 @@ interface ILoadingProps {
 
 export function Loading ({ called = ' unknow' }: ILoadingProps): JSX.Element {
   console.log('called by: ', called);
-  
+
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
