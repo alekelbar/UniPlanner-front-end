@@ -20,7 +20,6 @@ export enum USER_EXCEPTIONS {
 
 export class UserService {
   private API: AxiosInstance;
-  private static instance: UserService | null = null;
 
   public constructor() {
     this.API = API_INSTANCE;
@@ -28,66 +27,25 @@ export class UserService {
 
   async login(userLogin: UserLogin) {
     try {
-      const { data } = await this.API.post<UserState>("auth/login", userLogin);
-
-      return data;
+      return await this.API.post<UserState>("auth/login", userLogin);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async register(userRegister: UserRegister) {
     try {
-      const { data } = await this.API.post<UserState>(
-        "auth/register",
-        userRegister
-      );
-      return data;
+      return await this.API.post<UserState>("auth/register", userRegister);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async updateUser(updateUser: UpdateUser, id: string) {
     try {
-      const { data } = await this.API.patch<User>(
-        `auth/user/${id}`,
-        updateUser
-      );
-
-      return data;
+      return await this.API.patch<User>(`auth/user/${id}`, updateUser);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 }

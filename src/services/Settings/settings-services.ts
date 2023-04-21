@@ -14,58 +14,26 @@ export class SettingService {
     try {
       return await this.API.get<Setting>(`user-settings/${user}`);
     } catch (error: any) {
-      if (error.response) {
-        return error.response;
-      } else return error.message;
+      return error.response.data.message;
     }
   }
 
-  async createSessions(createSetting: CreateSetting) {
+  async createSetting(createSetting: CreateSetting) {
     try {
-      const settings = await this.API.post<Setting>(
-        `user-settings`,
-        createSetting
-      );
-
-      return settings.data;
+      return await this.API.post<Setting>(`user-settings`, createSetting);
     } catch (error: any) {
-      console.log(error);
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async updateSetting(updateSetting: Setting) {
     try {
-      const setting = await this.API.patch<Setting>(
+      return await this.API.patch<Setting>(
         `user-settings/${updateSetting._id}`,
         updateSetting
       );
-
-      return setting.data;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 }

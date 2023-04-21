@@ -14,34 +14,36 @@ import {
 import { AppDispatch, RootState } from "../store";
 
 export const startUserLogin = (login: UserLogin) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(initLoadingApp());
 
     const service = new UserService();
     const logIn = await service.login(login);
 
-    if (typeof logIn === "string") {
+    const { data } = logIn;
+    console.log(logIn);
+
+    if (logIn.status !== 201) {
       dispatch(stopLoadingApp());
       return logIn;
     }
 
-    const { loading, token, user } = logIn;
+    const { loading, token, user } = data;
 
     dispatch(setAuth({ loading, token, user }));
 
-    setLocalToken(logIn, "token");
+    setLocalToken(data, "token");
 
     // Cargar las preferencias de usuario...
-    const userId = getState().auth.user?.id;
-
     const settingsService = new SettingService();
-    const settings = await settingsService.getSetting(userId as string);
+    const response = await settingsService.getSetting(data.user.id as string);
 
-    if (typeof settings === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingApp());
-      return settings;
+      return response;
     }
 
+    const { data: settings } = response;
     dispatch(updateSetting(settings));
     dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
@@ -51,17 +53,39 @@ export const startUserLogin = (login: UserLogin) => {
 export const startUserRegister = (register: UserRegister) => {
   return async (dispatch: AppDispatch) => {
     dispatch(initLoadingApp());
+
     const service = new UserService();
+    const settingsService = new SettingService();
 
     const registered = await service.register(register);
+    const { data } = registered;
 
-    if (typeof registered === "string") {
+    if (registered.status !== 201) {
       dispatch(stopLoadingApp());
       return registered;
     }
 
-    dispatch(setAuth(registered));
+    const response = await settingsService.createSetting({
+      delegate: "#d3e1fd",
+      do: "#d14d72",
+      ignore: "#fcfde7",
+      importance: 3,
+      prepare: "#adffcd",
+      urgency: 1,
+      user: data.user.id,
+    });
+
+    if (response.status !== 201) {
+      dispatch(stopLoadingApp());
+      return response;
+    }
+
+    const { data: setting } = response;
+
+    dispatch(updateSetting(setting));
+    dispatch(setAuth(data));
     setLocalToken(registered, "token");
+
     dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
   };

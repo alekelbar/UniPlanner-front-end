@@ -23,9 +23,7 @@ export class DeliverableService {
         },
       });
     } catch (error: any) {
-      if (error.response) {
-        return error.response;
-      } else return error.message;
+      return error.response.data.message;
     }
   }
 
@@ -33,8 +31,7 @@ export class DeliverableService {
     try {
       return await this.API.post<Deliverable>(`deliverables`, deriverable);
     } catch (error: any) {
-      if (error.response) return error.response;
-      else return error.message;
+      return error.response.data.message;
     }
   }
 
@@ -44,9 +41,7 @@ export class DeliverableService {
         `deliverables/${deriverable._id}`
       );
     } catch (error: any) {
-      if (error.response) {
-        return error.response;
-      } else return error.message;
+      return error.response.data.message;
     }
   }
 
@@ -57,8 +52,7 @@ export class DeliverableService {
         deriverable
       );
     } catch (error: any) {
-      if (error.response) return error.response;
-      else return error.message;
+      return error.response.data.message;
     }
   }
 }

@@ -42,14 +42,15 @@ export const startUpdateSetting = (settingUpdate: Setting) => {
     }
 
     const service = new SettingService();
-    const settings = await service.updateSetting(settingUpdate);
+    const response = await service.updateSetting(settingUpdate);
 
-    if (typeof settings === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingSettings());
-      return settings;
+      return response;
     }
 
-    dispatch(updateSetting(settings));
+    const { data } = response;
+    dispatch(updateSetting(data));
     dispatch(stopLoadingSettings());
     return RESPONSES.SUCCESS;
   };

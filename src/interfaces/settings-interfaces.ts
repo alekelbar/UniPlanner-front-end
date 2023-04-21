@@ -5,6 +5,7 @@ export interface CreateSetting {
   prepare: string;
   delegate: string;
   ignore: string;
+  user: string;
 }
 
 export interface Setting {

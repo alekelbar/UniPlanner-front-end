@@ -37,20 +37,7 @@ const LoginPage: React.FC = () => {
 
 
       if (response !== RESPONSES.SUCCESS) {
-        let responsesMessage = "";
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responsesMessage = "Parece que su credenciales son invalidas 🔒";
-            break;
-          default:
-            responsesMessage = "Ocurrio un error con el servidor";
-            break;
-        }
-        await Swal.fire({
-          title: "Hubo un inconveniente 😊",
-          icon: 'info',
-          text: responsesMessage,
-        });
+        await Swal.fire(response);
         return;
       }
       router.push('/');

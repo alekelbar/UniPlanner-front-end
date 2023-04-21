@@ -48,6 +48,7 @@ const RegisterPage: React.FC = () => {
       repassword: '',
     },
     onSubmit: async (values) => {
+      console.log(values)
       const { career, email, id: identification, name: fullname, password } = values;
 
       const response = await dispatch(startUserRegister({
@@ -59,24 +60,11 @@ const RegisterPage: React.FC = () => {
       }));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responsesMessage = "";
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responsesMessage = "Parece que su credenciales son invalidas 🔒";
-            break;
-          default:
-            responsesMessage = "Ocurrio un error con el servidor";
-            break;
-        }
-        await Swal.fire({
-          title: "Hubo un inconveniente 😊",
-          icon: 'info',
-          text: responsesMessage,
-        });
+        await Swal.fire(response);
         return;
       }
 
-      router.push('/schedule/careers');
+      router.push('/');
     },
     validationSchema: Yup.object({
       id: Yup

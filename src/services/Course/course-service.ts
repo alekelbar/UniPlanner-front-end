@@ -13,7 +13,7 @@ export class CourseService {
 
   public async getUserCourse(userId: string, careerId: string, page: number) {
     try {
-      const courses = await this.API.get<PaginatedCourses>(
+      return await this.API.get<PaginatedCourses>(
         `courses/user/${userId}/career/${careerId}`,
         {
           params: {
@@ -21,23 +21,8 @@ export class CourseService {
           },
         }
       );
-
-      return courses;
     } catch (error: any) {
-      console.log(error);
-
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
@@ -45,8 +30,7 @@ export class CourseService {
     try {
       return await this.API.delete<Course>(`courses/${course._id}`);
     } catch (error: any) {
-      if (error.response) return error.response;
-      else error.message;
+      return error.response.data.message;
     }
   }
 
@@ -54,9 +38,7 @@ export class CourseService {
     try {
       return await this.API.post<Course>(`courses`, course);
     } catch (error: any) {
-      if (error.response) {
-        return error.response;
-      } else return error.message;
+      return error.response.data.message;
     }
   }
 
@@ -64,9 +46,7 @@ export class CourseService {
     try {
       return await this.API.patch<Course>(`courses/${courseId}`, course);
     } catch (error: any) {
-      if (error.response) {
-        return error.response;
-      } else return error.message;
+      return error.response.data.message;
     }
   }
 }

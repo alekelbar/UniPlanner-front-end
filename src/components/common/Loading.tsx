@@ -36,7 +36,7 @@ export function Loading ({ called = ' unknow' }: ILoadingProps): JSX.Element {
         height: "100%",
       }}
     >
-      <CircularProgress variant="determinate" color="primary" value={progress} />
+      <CircularProgress variant="indeterminate" color="primary" value={progress} />
       <Typography variant="h6" component="div">
         Cargando...
       </Typography>
