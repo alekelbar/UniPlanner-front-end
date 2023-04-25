@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import type { RenderOptions } from "@testing-library/react";
 import { PreloadedState, configureStore } from "@reduxjs/toolkit";
 
-import { AppStore, RootState, persistReducers } from "../../redux/store";
+import { AppStore, RootState, reducer } from "../../redux/store";
 import { Provider } from "react-redux";
 
 // This type interface extends the default options for render from RTL, as well
@@ -18,7 +18,7 @@ export function renderWithProviders (
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = configureStore({ reducer: persistReducers, preloadedState }),
+    store = configureStore({ reducer, preloadedState }),
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {

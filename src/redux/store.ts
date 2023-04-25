@@ -1,4 +1,4 @@
-import { PreloadedState, configureStore } from "@reduxjs/toolkit";
+import { PreloadedState, combineReducers, configureStore } from "@reduxjs/toolkit";
 import { SessionSlice } from "./slices";
 import careerSlice from "./slices/Career/careerSlice";
 import coursesSlice from "./slices/Courses/coursesSlice";
@@ -8,8 +8,7 @@ import { TaskSlice } from "./slices/Tasks/task-slice";
 import authSlice from "./slices/auth/authSlice";
 import { KanbanSlice } from "./slices/kanban/kanban-slice";
 
-export const store = configureStore({
-  reducer: {
+export const reducer = combineReducers({
     setting: settingSlice.reducer,
     auth: authSlice.reducer,
     career: careerSlice.reducer,
@@ -18,7 +17,10 @@ export const store = configureStore({
     tasks: TaskSlice.reducer,
     sessions: SessionSlice.reducer,
     kanban: KanbanSlice.reducer,
-  },
+})
+
+export const store = configureStore({
+  reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
