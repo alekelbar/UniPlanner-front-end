@@ -1,31 +1,19 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors/auth.interceptor";
-import { PaginatedCourses, Course } from "../../interfaces/course.interface";
+import { AxiosInstance } from "axios";
+import { Course, PaginatedCourses } from "../../interfaces/course.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { API_URL } from "../api-service";
+import { API_INSTANCE } from "../api-service";
 
 export class CourseService {
   private API: AxiosInstance;
   private static instance: CourseService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): CourseService {
-    if (!this.instance) {
-      this.instance = new CourseService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   public async getUserCourse(userId: string, careerId: string, page: number) {
     try {
-      const courses = await this.API.get<PaginatedCourses>(
+      return await this.API.get<PaginatedCourses>(
         `courses/user/${userId}/career/${careerId}`,
         {
           params: {
@@ -33,89 +21,32 @@ export class CourseService {
           },
         }
       );
-
-      return courses;
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   public async removeCourse(course: Course) {
     try {
-      const response = await this.API.delete<Course>(`courses/${course._id}`);
-      return response;
+      return await this.API.delete<Course>(`courses/${course._id}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 404:
-          return RESPONSES.NOT_FOUND;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   public async createCourse(course: Course) {
     try {
-      const response = await this.API.post<Course>(`courses`, course);
-
-      return response;
+      return await this.API.post<Course>(`courses`, course);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 404:
-          return RESPONSES.NOT_FOUND;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
-  public async updateCourse(id: string, course: Course) {
+  public async updateCourse(course: Course, courseId: string) {
     try {
-      const response = await this.API.patch<Course>(`courses/${id}`, course);
-
-      return response;
+      return await this.API.patch<Course>(`courses/${courseId}`, course);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 404:
-          return RESPONSES.NOT_FOUND;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 }

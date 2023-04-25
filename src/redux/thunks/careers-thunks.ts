@@ -1,4 +1,3 @@
-import CareerPage from "../../../pages/home/careers";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { CareerService } from "../../services";
 import {
@@ -10,80 +9,61 @@ import {
 } from "../slices/Career/careerSlice";
 import { AppDispatch, RootState } from "../store";
 
-export const startLoadCareers = () => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadCareers = (id: string) => {
+  return async (dispatch: AppDispatch) => {
     // cargando las carreras...
     dispatch(StartLoadingCareer());
-    const {
-      auth: { user },
-    } = getState();
 
-    
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-    
-    const service = CareerService.createService();
-    const careers = await service.getCareers(user.identification);
-    
-    if (typeof careers === "string") {
+    const service = new CareerService();
+    const response = await service.getCareers(id);
+
+    const { data } = response;
+    if (response.status !== 200) {
       dispatch(StopLoadingCareer());
-      return RESPONSES.UNAUTHORIZE;
+      return data.message;
     }
 
-    dispatch(setCareers(careers));
+    dispatch(setCareers(data));
     dispatch(StopLoadingCareer());
     return RESPONSES.SUCCESS;
   };
 };
 
-export const startAddCareer = (idCareer: string) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startAddCareer = (careerId: string, userId: string) => {
+  return async (dispatch: AppDispatch) => {
     // agregando una carrera
     dispatch(StartLoadingCareer());
-    const {
-      auth: { user },
-    } = getState();
 
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
+    const service = new CareerService();
+    const response = await service.addCareer(careerId, userId);
 
-    const service = CareerService.createService();
-    const response = await service.addCareer(user.id, idCareer);
-
-    if (typeof response === "string") {
+    const { data } = response;
+    if (response.status !== 201) {
       dispatch(StopLoadingCareer());
-      return RESPONSES.NOT_FOUND;
+      return data.message;
     }
 
-    dispatch(addCareer(response));
+    dispatch(addCareer(data));
     dispatch(StopLoadingCareer());
     return RESPONSES.SUCCESS;
   };
 };
 
-export const startRemoveCareer = (idCareer: string) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startRemoveCareer = (careerId: string, userId: string) => {
+  return async (dispatch: AppDispatch) => {
     // agregando una carrera
     dispatch(StartLoadingCareer());
-    const {
-      auth: { user },
-    } = getState();
 
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
+    const service = new CareerService();
+    const response = await service.removeCareer(careerId, userId);
 
-    const service = CareerService.createService();
-    const response = await service.removeCareer(user.id, idCareer);
-
-    if (typeof response === "string") {
+    const { data } = response;
+    if (response.status !== 200) {
       dispatch(StopLoadingCareer());
-      return response;
+      return data.message;
     }
 
-    dispatch(removeCareer(response));
+    dispatch(removeCareer(data));
     dispatch(StopLoadingCareer());
     return RESPONSES.SUCCESS;
   };

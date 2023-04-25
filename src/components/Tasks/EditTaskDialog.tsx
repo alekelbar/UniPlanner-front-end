@@ -2,14 +2,12 @@ import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startUpdateTask } from '../../redux/thunks/tasks-thunks';
 
 interface EditTaskDialogProps {
@@ -26,6 +24,8 @@ const initialValues: CreateTask = {
 export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { deliveryId } } = router;
+
   const { selected } = useAppSelector(st => st.tasks);
   const [selectedTask, setSelectedTask] = useState(selected);
   const theme = useTheme();
@@ -41,28 +41,12 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
         name,
         descripcion,
         status,
-        _id: selectedTask?._id
+        _id: selectedTask._id,
+        delivery: deliveryId as string
       }));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        await Swal.fire(response);
       }
       formik.resetForm(initialValues);
       onClose();
@@ -70,10 +54,12 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
     validationSchema: Yup.object({
       descripcion: Yup
         .string()
-        .required("La descripción de la tarea es requerida"),
+        .required("La descripción de la tarea es requerida")
+        .min(5, "Trate de usar al menos 5 caracteres"),
       name: Yup
         .string()
-        .required("El nombre de la tarea es requerida"),
+        .required("El nombre de la tarea es requerida")
+        .min(5, "Trate de usar al menos 5 caracteres"),
       status: Yup
         .string()
         .required("El status de la tarea es requerida"),
@@ -103,12 +89,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar esta tarea? 😊
-          </Typography>
+          Actualización de Tarea
         </DialogTitle>
         <DialogContent>
           <Stack
@@ -133,7 +114,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               helperText="¿Como va a nombrar a esta tarea?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -150,7 +131,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               helperText="¿Como describe esta tarea?" />
 
             {formik.touched.descripcion && formik.errors.descripcion && (
-              <Typography variant='caption' color={'error'}>{formik.errors.descripcion}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.descripcion}</Typography>
             )}
 
             <Select
@@ -163,7 +144,7 @@ export default function EditTaskDialog ({ onClose, open }: EditTaskDialogProps):
               <MenuItem value={TASK_STATUS.IMCOMPLETED}>{TASK_STATUS.IMCOMPLETED}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
             )}
 
             <Button

@@ -1,13 +1,12 @@
-import axios, { AxiosInstance } from "axios";
-import CareerPage from "../../../pages/home/careers";
-import { authInterceptor } from "../../interceptors/auth.interceptor";
+import { AxiosInstance } from "axios";
 import { RESPONSES } from "../../interfaces/response-messages";
 import {
   UserLogin,
   UserRegister,
   UserState,
 } from "../../interfaces/users.interface";
-import { User, UpdateUser, API_URL } from "../../types";
+import { UpdateUser, User } from "../../types";
+import { API_INSTANCE } from "../api-service";
 
 export enum USER_EXCEPTIONS {
   ALREADY_REGISTERED = "Usted ya se encuentra registrado",
@@ -21,85 +20,32 @@ export enum USER_EXCEPTIONS {
 
 export class UserService {
   private API: AxiosInstance;
-  private static instance: UserService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): UserService {
-    if (!this.instance) {
-      this.instance = new UserService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async login(userLogin: UserLogin) {
     try {
-      const { data } = await this.API.post<UserState>("auth/login", userLogin);
-
-      return data;
+      return await this.API.post<UserState>("auth/login", userLogin);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async register(userRegister: UserRegister) {
     try {
-      const { data } = await this.API.post<UserState>(
-        "auth/register",
-        userRegister
-      );
-      return data;
+      return await this.API.post<UserState>("auth/register", userRegister);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async updateUser(updateUser: UpdateUser, id: string) {
     try {
-      const { data } = await this.API.patch<User>(
-        `auth/user/${id}`,
-        updateUser
-      );
-
-      return data;
+      return await this.API.patch<User>(`auth/user/${id}`, updateUser);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-      switch (error.response.status) {
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        case 400:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 }

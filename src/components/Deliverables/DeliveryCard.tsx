@@ -3,16 +3,16 @@ import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { logOut } from '../../helpers/local-storage';
-import { Deliverable, DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
+import { DELIVERABLE_STATUS, Deliverable } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
+import { ColorMatrixPreferences, getPriorityColor } from '../Career/helpers/priorityCalc';
+import { useEffect } from 'react';
+import { startLoadSetting } from '../../redux/thunks/settings-thunks';
 import { Loading } from '../common';
-import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface DeliveryCardProps {
   deliverable: Deliverable;
@@ -22,15 +22,29 @@ interface DeliveryCardProps {
 }
 
 export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: DeliveryCardProps): JSX.Element {
+
+  const { selected, loading } = useAppSelector(state => state.setting);
+
+  const { query: { userId, courseId } } = useRouter();
+
+  let create_at: Date = new Date();
   const deadline = parseISO(deliverable.deadline.toString());
-
-  let create_at: Date | null = null;
-
-  const { selected } = useAppSelector(s => s.setting);
 
   if (deliverable.createdAt) {
     create_at = parseISO(deliverable.createdAt.toString());
   }
+
+  const onLoad = async () => {
+    const response = await dispatch(startLoadSetting(userId as string));
+    if (response !== RESPONSES.SUCCESS) {
+      await Swal.fire(response);
+    }
+  };
+
+  useEffect(() => {
+    if (!selected.user) // verificando si es la configuración por defecto...
+      onLoad();
+  }, [userId]);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -39,24 +53,24 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
     if (deliverable.status === DELIVERABLE_STATUS.PENDING) {
       if (isAfter(new Date(), deadline)) {
         return (
-          <Typography variant="body2" sx={{
+          <Typography component={'div'} variant="h6" sx={{
             color: (theme) => theme.palette.error.main
           }}>
-            No entregado | {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
+            {formatDistance(deadline, new Date(), { locale: es, addSuffix: true }).toUpperCase()}
           </Typography>
         );
       }
       return (
-        <Typography variant="body2" sx={{
+        <Typography component={'div'} variant="h6" sx={{
           color: (theme) => theme.palette.warning.main
         }}>
-          Se entrega: {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
+          {formatDistance(deadline, new Date(), { locale: es, addSuffix: true }).toUpperCase()}
         </Typography>
       );
     }
 
     return (
-      <Typography variant="body2" sx={{
+      <Typography component={'div'} variant="h6" sx={{
         color: (theme) => theme.palette.success.main
       }}>
         Entregado
@@ -65,31 +79,13 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
   };
 
   const handleRemove = async () => {
-    const response = await dispatch(startRemoveDelivery(deliverable));
+    const response = await dispatch(startRemoveDelivery({ ...deliverable, _id: deliverable._id, course: courseId as string }));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut());
-          logOut();
-          break;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que todavía te quedan algunas tareas 🔒';
-          break;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     reload(actualPage);
   };
 
-  if (!selected) return <Loading />;
   const { importance, urgency } = deliverable;
   const { do: doing, delegate, ignore, prepare } = selected;
 
@@ -102,15 +98,22 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
 
   const colorSeleted = getPriorityColor(importance, urgency, userMatrizColor);
 
+  if (loading) return <Loading />;
+
   return (
-    <Card variant='elevation' sx={{
+    <Card variant='elevation' data-testid="career-card" sx={{
       minHeight: MIN_CARD_HEIGHT,
+      // maxHeight: MAX_CARD_HEIGHT,
+      // overflow: 'auto'
     }}>
       <CardHeader
         title={deliverable.name}
+        titleTypographyProps={{
+          variant: 'h5'
+        }}
         subheader={
           <>
-            <Typography variant="body2" component="p">
+            <Typography variant="caption" component="p">
               {deliverable.description}
             </Typography>
             <Typography variant='caption' sx={{
@@ -155,12 +158,19 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
               <Button
                 onClick={() => {
                   dispatch(setSelectedDelivery(deliverable));
-                  router.push('/home/tasks');
+                  router.push(`/schedule/tasks/${deliverable._id}/${deliverable.name}/${userId}`);
+                }}
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    transform: 'scale(.9)',
+                  },
                 }}
                 fullWidth
-                variant='outlined'
+                variant='contained'
                 color='secondary'>
-                ver tareas
+                VER TAREAS
               </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>

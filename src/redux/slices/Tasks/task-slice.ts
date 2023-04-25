@@ -3,7 +3,13 @@ import { Task, TaskState } from "../../../interfaces/task-interface";
 
 const initialState: TaskState = {
   tasks: [],
-  selected: null,
+  selected: {
+    descripcion: "",
+    name: "",
+    status: "",
+    _id: "",
+    delivery: "",
+  },
   error: null,
   loading: false,
   count: 0,

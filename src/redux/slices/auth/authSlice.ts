@@ -6,7 +6,7 @@ import { UserState, UserToken } from "../../../interfaces/users.interface";
 // Define the initial state using that type
 const initialState: UserState = getLocalToken() || {
   token: null,
-  user: null,
+  user: { email: "", fullname: "", id: "", identification: "" },
   loading: false,
 };
 
@@ -33,7 +33,12 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth, onLogOut, onUpdateUser, initLoadingApp, stopLoadingApp } =
-  authSlice.actions;
+export const {
+  setAuth,
+  onLogOut,
+  onUpdateUser,
+  initLoadingApp,
+  stopLoadingApp,
+} = authSlice.actions;
 
 export default authSlice;

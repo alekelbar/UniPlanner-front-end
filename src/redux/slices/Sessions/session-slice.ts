@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Session, SessionState } from "../../../interfaces/session-interface";
+import { Session, SESSION_TYPES, SessionState } from "../../../interfaces/session-interface";
 
 const initialState: SessionState = {
   count: 0,
   loading: false,
-  selected: null,
+  selected: { _id: "", duration: 0, name: "unknown", type: SESSION_TYPES.RESTING },
   sessions: [],
 };
 

@@ -1,6 +1,5 @@
-import { School } from '@mui/icons-material';
-import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
-import Link from '../common/Link';
+import { Menu } from '@mui/icons-material';
+import { AppBar, Button, Stack, Typography } from '@mui/material';
 
 interface NabvarProps {
   onOpen: () => void;
@@ -9,21 +8,24 @@ interface NabvarProps {
 export function Navbar ({ onOpen }: NabvarProps): JSX.Element {
 
   return (
-    <AppBar position='static'>
-      <Toolbar variant='regular'>
-        <IconButton size='large' onClick={onOpen} edge="start" color="inherit" aria-label="menu"
-          sx={{ mr: 2 }}
+    <AppBar position='static' sx={{ p: 2 }}>
+      <Stack direction={'row'} justifyContent={'start'} alignItems={'center'} gap={1.5}>
+        <Button
+          sx={{
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'scale(1.1)',
+            },
+          }}
+          onClick={onOpen}
         >
-          <School />
-        </IconButton>
-        <Typography variant="button" color="inherit">
-          <Tooltip title='Volver a las carreras' placement='bottom'>
-            <Link href={'/home/careers'} sx={{ color: 'text.primary' }}>
-              Gestión de entregables
-            </Link>
-          </Tooltip>
+          <Menu sx={{ fontSize: '2em' }} color='primary' />
+        </Button>
+        <Typography variant="h4">
+          UniPlanner
         </Typography>
-      </Toolbar>
+      </Stack>
     </AppBar>
   );
 }

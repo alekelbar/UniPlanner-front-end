@@ -1,17 +1,18 @@
 
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { format, parseISO } from 'date-fns';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux';
-import * as Yup from 'yup';
-import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
-import { format, parseISO } from 'date-fns';
-import { startUpdateDelivery } from '../../redux/thunks/deliverables-thunks';
-import { RESPONSES } from '../../interfaces/response-messages';
 import Swal from 'sweetalert2';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
+import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
+import { makePriority } from '../Career/helpers/priorityCalc';
+import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { useAppDispatch, useAppSelector } from '../../redux';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
+import { startUpdateDelivery } from '../../redux/thunks/deliverables-thunks';
 
 interface EditDeliverableDialogProps {
   open: boolean,
@@ -21,7 +22,10 @@ interface EditDeliverableDialogProps {
 export default function EditDeliverableDialog ({ onClose, open }: EditDeliverableDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { courseId } } = router;
+
   const { selected } = useAppSelector(st => st.deliveries);
+  const { selected: selectedSetting } = useAppSelector(st => st.setting);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -41,33 +45,26 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
     },
     onSubmit: async (values) => {
       const { deadline, description, name, note, percent, status } = values;
+
+      const { importance, urgency } = makePriority(new Date(deadline), percent >= selectedSetting!.importance
+        ? true
+        : false
+      );
+
       const response = await dispatch(startUpdateDelivery({
-        deadline: new Date(deadline),
+        deadline: new Date(deadline).toString(),
         description,
         name,
         note,
         percent,
         status,
+        importance,
+        urgency,
+        course: courseId as string,
+        _id: selected?._id
       }));
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        await Swal.fire(response);
       }
       onClose();
     },
@@ -85,7 +82,6 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         .required('La fecha limite del entregable es obligatoria'),
       status: Yup
         .string()
-        .min(5, "Use almenos 5 caracteres")
         .required('El status del entregable es obligatorio'),
       note: Yup
         .number()
@@ -124,12 +120,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar ese entregable? 😊
-          </Typography>
+          Actualización de Entrega
         </DialogTitle>
         <DialogContent>
           {
@@ -153,7 +144,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.deadline && formik.errors.deadline && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.deadline}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.deadline}</Typography>
                   )}
 
                   <TextField
@@ -169,7 +160,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     rows={2}
                     multiline />
                   {formik.touched.name && formik.errors.name && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
                   )}
 
                   <TextField
@@ -185,7 +176,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.description && formik.errors.description && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.description}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.description}</Typography>
                   )}
 
                   <TextField
@@ -199,7 +190,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.note && formik.errors.note && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.note}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.note}</Typography>
                   )}
 
                   <TextField
@@ -213,7 +204,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.percent && formik.errors.percent && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.percent}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.percent}</Typography>
                   )}
 
                   <Select
@@ -226,7 +217,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
                   </Select>
                   {formik.touched.status && formik.errors.status && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
                   )}
 
                   <Button

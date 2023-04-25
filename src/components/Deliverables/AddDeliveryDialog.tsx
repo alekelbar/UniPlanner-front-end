@@ -1,39 +1,22 @@
-import { useTheme, Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Theme, Typography, useMediaQuery } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Theme, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
-import { DELIVERABLE_STATUS, DELIVERABLE_TAGS } from '../../interfaces/deliveries.interface';
+import { makePriority } from '../Career/helpers/priorityCalc';
+import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startcreateDelivery } from '../../redux/thunks/deliverables-thunks';
-import { isSameWeek } from 'date-fns';
 import { Loading } from '../common';
-import { ImportantThings, UrgentThings } from '../../helpers/priorityCalc';
 
 interface AddDeliveryDialogProps {
   open: boolean,
   onClose: () => void,
 }
-
-const makePriority = (deadline: Date, important: boolean) => {
-
-  const urgency: UrgentThings = isSameWeek(deadline, new Date())
-    ? DELIVERABLE_TAGS.URGENT
-    : DELIVERABLE_TAGS.NOT_URGENT;
-
-  const importance: ImportantThings = important
-    ? DELIVERABLE_TAGS.IMPORTANT
-    : DELIVERABLE_TAGS.NOT_IMPORTANT;
-
-  return {
-    urgency,
-    importance
-  };
-};
 
 const initialValues = {
   name: '',
@@ -47,7 +30,10 @@ const initialValues = {
 export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { selected } = useAppSelector(s => s.setting);
+
+  const { query: { courseId } } = router;
+  
+  const { selected } = useAppSelector(state => state.setting);
 
   const theme: Theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -59,13 +45,10 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
       const { deadline, description, name, note, percent, status } = values;
 
       const { importance, urgency } = makePriority(new Date(deadline),
-        percent > selected!.importance
-          ? true
-          : false
-      );
+        percent >= selected!.importance);
 
       const response = await dispatch(startcreateDelivery({
-        deadline: new Date(deadline),
+        deadline: new Date(deadline).toString(),
         description,
         name,
         note,
@@ -73,6 +56,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         status,
         importance,
         urgency,
+        course: courseId as string,
       }));
       if (response !== RESPONSES.SUCCESS) {
         let responseText = "";
@@ -112,7 +96,6 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         .required('La fecha limite del entregable es obligatoria'),
       status: Yup
         .string()
-        .min(5, "Use almenos 5 caracteres")
         .required('El status del entregable es obligatorio'),
       note: Yup
         .number()
@@ -127,7 +110,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
     }),
   });
 
-  if (!selected) return <Loading />;
+  if (open && !selected) return <Loading called='addDelivery' />;
 
   return (
     <>
@@ -141,12 +124,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Tienes una nueva entrega? 😊
-          </Typography>
+          Nueva Entrega
         </DialogTitle>
         <DialogContent>
           <Stack
@@ -166,7 +144,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.deadline && formik.errors.deadline && (
-              <Typography variant='caption' color={'error'}>{formik.errors.deadline}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.deadline}</Typography>
             )}
 
             <TextField
@@ -182,7 +160,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -198,7 +176,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.description && formik.errors.description && (
-              <Typography variant='caption' color={'error'}>{formik.errors.description}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.description}</Typography>
             )}
 
             <TextField
@@ -212,7 +190,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.note && formik.errors.note && (
-              <Typography variant='caption' color={'error'}>{formik.errors.note}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.note}</Typography>
             )}
 
             <TextField
@@ -226,7 +204,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               onBlur={formik.handleBlur}
               autoComplete='off' />
             {formik.touched.percent && formik.errors.percent && (
-              <Typography variant='caption' color={'error'}>{formik.errors.percent}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.percent}</Typography>
             )}
 
             <Select
@@ -239,7 +217,7 @@ export default function AddDeliveryDialog ({ onClose, open }: AddDeliveryDialogP
               <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
             )}
             <Button
               fullWidth

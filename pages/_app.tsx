@@ -1,18 +1,15 @@
-import { CacheProvider, EmotionCache } from '@emotion/react';
+import { CacheProvider, EmotionCache, ThemeContext } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Theme, ThemeProvider } from '@mui/material/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
-import Copyright from '../src/components/common/Copyright';
-import { LayoutComponent } from '../src/components/Layout/Layout';
-import { createEmotionCache, theme } from '../src/config';
+import { LayoutComponent } from '../src/components/Layout'; // No importar esto NUNCA desde components, es una dependecia circular
+import { createEmotionCache } from '../src/config';
 import { store } from '../src/redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist';
-import { Loading } from '../src/components';
-import { useState } from 'react';
-import { ThemeContext } from '../src/context/theme-provider';
+import UNATheme from '../src/config/MUI/theme';
+import { Switch, Theme, ThemeProvider } from '@mui/material';
+import React from 'react';
+import { OnChangeThemeContext } from '../src/context/theme-provider';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -20,36 +17,31 @@ const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-export default function MyApp (props: MyAppProps) {
 
+export default function MyApp (props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const [appTheme, setAppTheme] = useState(theme);
+
+  const [appTheme, setAppTheme] = React.useState<Theme>(UNATheme);
 
   const onChangeTheme = (theme: Theme) => {
     setAppTheme(theme);
   };
 
-  const persistor = persistStore(store);
-
   return (
-    <ThemeContext.Provider value={{ onChangeTheme }}>
-      <Provider store={store}>
-        <PersistGate loading={<Loading />} persistor={persistor}>
-          <CacheProvider value={emotionCache}>
-            <Head>
-              <meta name="viewport" content="initial-scale=1, width=device-width" />
-            </Head>
-            <ThemeProvider theme={appTheme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <LayoutComponent>
-                <CssBaseline />
-                <Component {...pageProps} />
-                <Copyright />
-              </LayoutComponent>
-            </ThemeProvider>
-          </CacheProvider>
-        </PersistGate>
-      </Provider>
-    </ThemeContext.Provider>
+    <Provider store={store}>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <OnChangeThemeContext.Provider value={{ onChangeTheme }}>
+          <ThemeProvider theme={appTheme}>
+            <LayoutComponent>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </LayoutComponent>
+          </ThemeProvider>
+        </OnChangeThemeContext.Provider>
+      </CacheProvider>
+    </Provider>
   );
 }

@@ -5,6 +5,7 @@ export interface CreateSetting {
   prepare: string;
   delegate: string;
   ignore: string;
+  user: string;
 }
 
 export interface Setting {
@@ -21,5 +22,5 @@ export interface Setting {
 export interface SettingState {
   loading: boolean;
   error: string | null;
-  selected: Setting | null;
+  selected: Setting;
 }

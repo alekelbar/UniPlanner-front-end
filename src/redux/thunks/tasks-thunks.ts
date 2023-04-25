@@ -1,5 +1,5 @@
 import { RESPONSES } from "../../interfaces/response-messages";
-import { CreateTask, Task, UpdateTask } from "../../interfaces/task-interface";
+import { CreateTask, Task } from "../../interfaces/task-interface";
 import { TaskService } from "../../services/Task/task-service";
 import {
   addTask,
@@ -11,29 +11,20 @@ import {
 } from "../slices/Tasks/task-slice";
 import { AppDispatch, RootState } from "../store";
 
-export const startLoadTasks = (page: number) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadTasks = (deliveryId: string, page: number) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LAS TAREAS...
     dispatch(startLoadingTask());
 
-    const {
-      auth: { user },
-      deliveries: { selected: selectedDelivery },
-    } = getState();
+    const service = new TaskService();
+    const response = await service.getTasks(deliveryId, page);
 
-    if (!user || !selectedDelivery) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = TaskService.createService();
-    const response = await service.getTasks(selectedDelivery, page);
-
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingTask());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(loadTask(data));
     dispatch(stopLoadingTask());
     return RESPONSES.SUCCESS;
@@ -41,30 +32,21 @@ export const startLoadTasks = (page: number) => {
 };
 
 export const startCreateTask = (createTask: CreateTask) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LAS TAREAS...
     dispatch(startLoadingTask());
 
-    const {
-      auth: { user },
-      deliveries: { selected: selectedDelivery },
-    } = getState();
-
-    if (!user || !selectedDelivery) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = TaskService.createService();
-    createTask.delivery = selectedDelivery._id;
-
+    const service = new TaskService();
     const response = await service.createTask(createTask);
 
-    if (typeof response === "string") {
+    console.log(response);
+
+    if (response.status !== 201) {
       dispatch(stopLoadingTask());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(addTask(data));
     dispatch(stopLoadingTask());
     return RESPONSES.SUCCESS;
@@ -72,27 +54,19 @@ export const startCreateTask = (createTask: CreateTask) => {
 };
 
 export const startRemoveTask = (remove: Task) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LAS TAREAS...
     dispatch(startLoadingTask());
 
-    const {
-      auth: { user },
-    } = getState();
-
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = TaskService.createService();
+    const service = new TaskService();
     const response = await service.removeTask(remove);
 
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingTask());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(removeTask(remove));
     dispatch(stopLoadingTask());
     return RESPONSES.SUCCESS;
@@ -100,28 +74,19 @@ export const startRemoveTask = (remove: Task) => {
 };
 
 export const startUpdateTask = (update: Task) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LAS TAREAS...
     dispatch(startLoadingTask());
 
-    const {
-      auth: { user },
-      deliveries: { selected: selectedDelivery },
-    } = getState();
-
-    if (!user || !selectedDelivery) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = TaskService.createService();
+    const service = new TaskService();
     const response = await service.updateTask(update);
 
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingTask());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(updateTask(update));
     dispatch(stopLoadingTask());
     return RESPONSES.SUCCESS;

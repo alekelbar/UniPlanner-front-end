@@ -1,101 +1,39 @@
-import axios, { AxiosInstance } from "axios";
-import { authInterceptor } from "../../interceptors";
+import { AxiosInstance } from "axios";
 import { RESPONSES } from "../../interfaces/response-messages";
-import { Session } from "../../interfaces/session-interface";
-import { UserToken } from "../../interfaces/users.interface";
-import { CreateSession } from "../../interfaces/session-interface";
-import { API_URL } from "../api-service";
 import { CreateSetting, Setting } from "../../interfaces/settings-interfaces";
-import { Settings } from "@mui/icons-material";
+import { API_INSTANCE } from "../api-service";
 
 export class SettingService {
   private API: AxiosInstance;
-  private static instance: SettingService | null = null;
 
-  private constructor() {
-    this.API = axios.create({
-      baseURL: API_URL,
-    });
-    authInterceptor(this.API);
-  }
-
-  public static createService(): SettingService {
-    if (!this.instance) {
-      this.instance = new SettingService();
-      return this.instance;
-    }
-    return this.instance;
+  public constructor() {
+    this.API = API_INSTANCE;
   }
 
   async getSetting(user: string) {
     try {
-      const settings = await this.API.get<Setting>(`user-settings/${user}`);
-
-      return settings.data;
+      return await this.API.get<Setting>(`user-settings/${user}`);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
-  async createSessions(createSetting: CreateSetting) {
+  async createSetting(createSetting: CreateSetting) {
     try {
-      const settings = await this.API.post<Setting>(
-        `user-settings`,
-        createSetting
-      );
-
-      return settings.data;
+      return await this.API.post<Setting>(`user-settings`, createSetting);
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 
   async updateSetting(updateSetting: Setting) {
     try {
-      const setting = await this.API.patch<Setting>(
+      return await this.API.patch<Setting>(
         `user-settings/${updateSetting._id}`,
         updateSetting
       );
-
-      console.log(setting);
-
-      return setting.data;
-      
     } catch (error: any) {
-      if (!error.response) {
-        return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
-
-      switch (error.response.status) {
-        case 400:
-          return RESPONSES.BAD_REQUEST;
-        case 401:
-          return RESPONSES.UNAUTHORIZE;
-        default:
-          return RESPONSES.INTERNAL_SERVER_ERROR;
-      }
+      return error.response.data.message;
     }
   }
 }

@@ -8,29 +8,21 @@ import {
 } from "../slices/Settings/setting-slice";
 import { AppDispatch, RootState } from "../store";
 
-const service = SettingService.createService();
-
-export const startLoadSetting = () => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadSetting = (userId: string) => {
+  return async (dispatch: AppDispatch) => {
     // cargando las carreras...
     dispatch(setLoadingSettings());
 
-    const {
-      auth: { user },
-    } = getState();
+    const service = new SettingService();
+    const response = await service.getSetting(userId);
 
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const settings = await service.getSetting(user.id);
-
-    if (typeof settings === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingSettings());
-      return RESPONSES.UNAUTHORIZE;
+      return response;
     }
 
-    dispatch(updateSetting(settings));
+    const { data } = response;
+    dispatch(updateSetting(data));
     dispatch(stopLoadingSettings());
     return RESPONSES.SUCCESS;
   };
@@ -49,14 +41,16 @@ export const startUpdateSetting = (settingUpdate: Setting) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const settings = await service.updateSetting(settingUpdate);
+    const service = new SettingService();
+    const response = await service.updateSetting(settingUpdate);
 
-    if (typeof settings === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingSettings());
-      return settings;
+      return response;
     }
 
-    dispatch(updateSetting(settings));
+    const { data } = response;
+    dispatch(updateSetting(data));
     dispatch(stopLoadingSettings());
     return RESPONSES.SUCCESS;
   };

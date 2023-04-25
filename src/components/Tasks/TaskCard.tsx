@@ -1,15 +1,14 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Swal from 'sweetalert2';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
-import { Task, TASK_STATUS } from '../../interfaces/task-interface';
+import { TASK_STATUS, Task } from '../../interfaces/task-interface';
 import { useAppDispatch } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedTask } from '../../redux/slices/Tasks/task-slice';
+import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveTask } from '../../redux/thunks/tasks-thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface TaskCardProps {
   task: Task;
@@ -22,36 +21,18 @@ interface TaskCardProps {
 export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openClock }: TaskCardProps): JSX.Element {
 
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const handleRemove = async () => {
     const response = await dispatch(startRemoveTask(task));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut());
-          logOut();
-          break;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-          break;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     reload(actualPage);
   };
 
   return (
-    <Card variant='elevation' sx={{
-      minHeight: MIN_CARD_HEIGHT,
+    <Card variant='elevation' data-testid='task-card' sx={{
+      // minHeight: MIN_CARD_HEIGHT,
     }}>
       <CardHeader
         title={task.name}
@@ -75,6 +56,13 @@ export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openCl
         <Button
           fullWidth
           variant='contained'
+          sx={{
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+            '&:hover': {
+              transform: 'scale(.9)',
+            },
+          }}
           onClick={() => { dispatch(setSelectedTask(task)); openClock(); }}
           color='secondary'>
           Temporizar

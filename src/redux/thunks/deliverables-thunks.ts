@@ -2,38 +2,29 @@ import { Deliverable } from "../../interfaces/deliveries.interface";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { DeliverableService } from "../../services/Deliveries/Deliverable-service";
 import {
+  addDelivery,
   loadDeliveries,
+  removeDelivery,
   startLoadingDeliveries,
   stopLoadingDeliveries,
-  addDelivery,
-  removeDelivery,
   updateDeliverable,
 } from "../slices/Deliveries/deliveriesSlice";
 import { AppDispatch, RootState } from "../store";
 
-export const startLoadDeliveries = (page: number) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadDeliveries = (courseId: string, page: number) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
 
-    const {
-      auth: { user },
-      courses: { selected: selectedCourse },
-    } = getState();
+    const service = new DeliverableService();
+    const response = await service.getDeliverables(courseId, page);
 
-    if (!user || !selectedCourse) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = DeliverableService.createService();
-    const response = await service.getDeliverables(selectedCourse, page);
-
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingDeliveries());
       return response;
     }
 
-    const data = response.data;
+    const { data } = response;
     dispatch(loadDeliveries(data));
     dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
@@ -41,90 +32,60 @@ export const startLoadDeliveries = (page: number) => {
 };
 
 export const startcreateDelivery = (deliverable: Deliverable) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
 
-    const {
-      auth: { user },
-      courses: { selected: selectedCourse },
-    } = getState();
-
-    if (!user || !selectedCourse) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    deliverable.course = selectedCourse._id;
-
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.createDeliverables(deliverable);
 
-    if (typeof response === "string") {
+    if (response.status === 200) {
       dispatch(stopLoadingDeliveries());
       return response;
     }
-    const deliverie = response.data;
-    dispatch(addDelivery(deliverie));
+    const { data } = response;
+    dispatch(addDelivery(data));
     dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };
 };
 
 export const startRemoveDelivery = (deliverable: Deliverable) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
 
-    const {
-      auth: { user },
-      courses: { selected: selectedCourse },
-    } = getState();
-
-    if (!user || !selectedCourse) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.removeDeliverables(deliverable);
 
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingDeliveries());
       return response;
     }
 
-    const deliverie = response.data;
-    dispatch(removeDelivery(deliverie));
+    const { data } = response;
+    console.log(data);
+    dispatch(removeDelivery(data));
     dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };
 };
 
 export const startUpdateDelivery = (deliverable: Deliverable) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     // cargando LOS CURSOS...
     dispatch(startLoadingDeliveries());
 
-    const {
-      auth: { user },
-      courses: { selected: selectedCourse },
-      deliveries: { selected: selectedDeliveries },
-    } = getState();
-
-    if (!user || !selectedCourse || !selectedDeliveries) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    deliverable._id = selectedDeliveries._id;
-
-    const service = DeliverableService.createService();
+    const service = new DeliverableService();
     const response = await service.updateDeliverable(deliverable);
 
-    if (typeof response === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingDeliveries());
       return response;
     }
 
-    const deliverie = response.data;
-    dispatch(updateDeliverable(deliverie));
+    const { data } = response;
+    dispatch(updateDeliverable(data));
     dispatch(stopLoadingDeliveries());
     return RESPONSES.SUCCESS;
   };

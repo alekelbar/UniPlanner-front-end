@@ -1,55 +1,40 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { logOut } from '../../helpers/local-storage';
 import { Career } from '../../interfaces/career.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch } from '../../redux/hooks';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { setSelectedCareer } from '../../redux/slices/Career/careerSlice';
 import { startRemoveCareer } from '../../redux/thunks/careers-thunks';
-import { MIN_CARD_HEIGHT } from '../../config/sizes';
 
 interface CareerCardProps {
   career: Career;
 }
 
-export function CareerCard ({ career }: CareerCardProps): JSX.Element {
+
+export const CareerCard = function CareerCard ({ career }: CareerCardProps): JSX.Element {
+
   const { name, _id } = career;
   const dispatch = useAppDispatch();
+
   const router = useRouter();
+  const { query: { user } } = router;
 
   const handleRemove = async () => {
-    const response = await dispatch(startRemoveCareer(_id));
+    const response = await dispatch(startRemoveCareer(user as string, _id));
     if (response !== RESPONSES.SUCCESS) {
-      let responseText = "";
-      switch (response) {
-        case RESPONSES.UNAUTHORIZE:
-          responseText = "Parece que no tiene autorización para estar aquí 🔒";
-          router.push("/");
-          dispatch(onLogOut);
-          logOut();
-          return;
-        case RESPONSES.BAD_REQUEST:
-          responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-          return;
-      }
-      await Swal.fire({
-        title: "Una disculpa",
-        text: responseText,
-        icon: 'info'
-      });
+      await Swal.fire(response);
     }
     return;
   };
 
   const handleSelectedCareer = () => {
     dispatch(setSelectedCareer(career));
-    router.push('/home/courses');
+    router.push(`/schedule/courses/${career.name}/${career._id}/${user}`);
   };
 
   return (
-    <Card variant='elevation'>
+    <Card variant='elevation' data-testid="career-card">
       <CardHeader
         title={name}
       />
@@ -59,6 +44,13 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
             variant='contained'
             color='secondary'
             onClick={handleSelectedCareer}
+            sx={{
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+              '&:hover': {
+                transform: 'scale(.9)',
+              },
+            }}
           > Cursos
           </Button>
           <Button
@@ -71,4 +63,4 @@ export function CareerCard ({ career }: CareerCardProps): JSX.Element {
       </CardContent>
     </Card>
   );
-}
+};

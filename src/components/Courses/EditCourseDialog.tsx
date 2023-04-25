@@ -6,10 +6,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startUpdateCourse } from '../../redux/thunks/courses.thunks';
 
 interface EditCourseDialogProps {
@@ -18,10 +16,12 @@ interface EditCourseDialogProps {
 }
 
 export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX.Element {
+
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { careerId, userId } } = router;
 
-  const { selected } = useAppSelector(st => st.courses);
+  const { selected } = useAppSelector(state => state.courses);
 
   const [selectedCourse, setSelectedCourse] = useState(selected);
   const theme = useTheme();
@@ -30,33 +30,23 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
 
   const formik = useFormik({
     initialValues: {
-      name: selectedCourse?.name || "",
-      courseDescription: selectedCourse?.courseDescription || "",
-      credits: selectedCourse?.credits || 4,
+      name: "",
+      courseDescription: "",
+      credits: 0,
     },
     onSubmit: async (values) => {
       const { courseDescription, credits, name } = values;
-      const response = await dispatch(startUpdateCourse(name, courseDescription, credits));
+
+      const response = await dispatch(startUpdateCourse({
+        name,
+        courseDescription,
+        credits,
+        career: careerId as string,
+        user: userId as string,
+      }, selected._id!));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut);
-            logOut();
-            onClose();
-            return;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        Swal.fire(response);
       }
       onClose();
     },
@@ -64,11 +54,11 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
       name: Yup
         .string()
         .min(5, "Trata de utilizar al menos 5 caracteres")
-        .required(),
+        .required("Falta el nombre del curso"),
       courseDescription: Yup
         .string()
-        .min(10, "Trata de utilizar al menos 10 caracteres")
-        .required(),
+        .min(5, "Trata de utilizar al menos 5 caracteres")
+        .required("Falta la descripción del curso"),
       credits: Yup.number()
         .positive("debe ser un numero positivo")
         .required('Porfavor, agrega los creditos que vale este curso'),
@@ -82,6 +72,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
     formik.setFieldValue('credits', selected?.credits);
   }, [selected]);
 
+
   return (
     <>
       <Dialog
@@ -94,12 +85,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a actualizar ese curso? 😊
-          </Typography>
+          Actualizar curso
         </DialogTitle>
         <DialogContent>
           {
@@ -114,6 +100,7 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                   alignItems={'center'}
                   spacing={2}>
                   <TextField
+                    fullWidth
                     value={formik.values.name}
                     name={'name'}
                     onChange={formik.handleChange}
@@ -125,9 +112,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.name && formik.errors.name && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
                   )}
                   <TextField
+                    fullWidth
                     value={formik.values.courseDescription}
                     name={'courseDescription'}
                     onChange={formik.handleChange}
@@ -139,9 +127,10 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.courseDescription && formik.errors.courseDescription && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.courseDescription}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.courseDescription}</Typography>
                   )}
                   <TextField
+                    fullWidth
                     value={formik.values.credits}
                     name={'credits'}
                     onChange={formik.handleChange}
@@ -153,12 +142,13 @@ export function EditCourseDialog ({ onClose, open }: EditCourseDialogProps): JSX
                     multiline
                     type={"text"} />
                   {formik.touched.credits && formik.errors.credits && (
-                    <Typography variant='caption' color={'error'}>{formik.errors.credits}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.credits}</Typography>
                   )}
                   <Button
+                    fullWidth
                     type="submit"
                     variant="contained"
-                    color="secondary">
+                    color="primary">
                     Actualizar
                   </Button>
                 </Stack>

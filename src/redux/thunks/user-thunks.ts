@@ -1,15 +1,10 @@
-import { Setting } from "../../components/Settings/Settings";
 import { setLocalToken } from "../../helpers/local-storage";
 import { RESPONSES } from "../../interfaces/response-messages";
 import { UserLogin, UserRegister } from "../../interfaces/users.interface";
 import { SettingService } from "../../services/Settings/settings-services";
 import { UserService } from "../../services/User/user-service";
 import { UpdateUser } from "../../types/users/update-user";
-import {
-  setLoadingSettings,
-  stopLoadingSettings,
-  updateSetting,
-} from "../slices/Settings/setting-slice";
+import { updateSetting } from "../slices/Settings/setting-slice";
 import {
   initLoadingApp,
   onUpdateUser,
@@ -18,35 +13,37 @@ import {
 } from "../slices/auth/authSlice";
 import { AppDispatch, RootState } from "../store";
 
-const service = UserService.createService();
-
 export const startUserLogin = (login: UserLogin) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(initLoadingApp());
 
+    const service = new UserService();
     const logIn = await service.login(login);
 
-    if (typeof logIn === "string") {
+    const { data } = logIn;
+    console.log(logIn);
+
+    if (logIn.status !== 201) {
       dispatch(stopLoadingApp());
       return logIn;
     }
 
-    const { loading, token, user } = logIn;
+    const { loading, token, user } = data;
 
     dispatch(setAuth({ loading, token, user }));
-    setLocalToken(logIn, "token");
+
+    setLocalToken(data, "token");
 
     // Cargar las preferencias de usuario...
-    const userId = getState().auth.user?.id;
+    const settingsService = new SettingService();
+    const response = await settingsService.getSetting(data.user.id as string);
 
-    const settingsService = SettingService.createService();
-    const settings = await settingsService.getSetting(userId as string);
-
-    if (typeof settings === "string") {
+    if (response.status !== 200) {
       dispatch(stopLoadingApp());
-      return logIn;
+      return response;
     }
 
+    const { data: settings } = response;
     dispatch(updateSetting(settings));
     dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
@@ -56,15 +53,39 @@ export const startUserLogin = (login: UserLogin) => {
 export const startUserRegister = (register: UserRegister) => {
   return async (dispatch: AppDispatch) => {
     dispatch(initLoadingApp());
-    const registered = await service.register(register);
 
-    if (typeof registered === "string") {
+    const service = new UserService();
+    const settingsService = new SettingService();
+
+    const registered = await service.register(register);
+    const { data } = registered;
+
+    if (registered.status !== 201) {
       dispatch(stopLoadingApp());
       return registered;
     }
 
-    dispatch(setAuth(registered));
+    const response = await settingsService.createSetting({
+      delegate: "#d3e1fd",
+      do: "#d14d72",
+      ignore: "#fcfde7",
+      importance: 3,
+      prepare: "#adffcd",
+      urgency: 1,
+      user: data.user.id,
+    });
+
+    if (response.status !== 201) {
+      dispatch(stopLoadingApp());
+      return response;
+    }
+
+    const { data: setting } = response;
+
+    dispatch(updateSetting(setting));
+    dispatch(setAuth(data));
     setLocalToken(registered, "token");
+
     dispatch(stopLoadingApp());
     return RESPONSES.SUCCESS;
   };
@@ -82,7 +103,7 @@ export const startUpdateUser = (updateUser: UpdateUser) => {
       return RESPONSES.UNAUTHORIZE;
     }
 
-    const service = UserService.createService();
+    const service = new UserService();
     const response = await service.updateUser(updateUser, user.id);
 
     if (typeof response === "string") {

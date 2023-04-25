@@ -1,4 +1,4 @@
-import { ImportantThings, UrgentThings } from "../helpers/priorityCalc";
+import { ImportantThings, UrgentThings } from "../components/Career/helpers/priorityCalc";
 
 export interface CreateDeliverable {
   name: string;
@@ -17,20 +17,20 @@ export interface Deliverable {
   createdAt?: Date;
   name: string;
   description: string;
-  deadline: Date;
+  deadline: string;
   status: string;
   note: number;
   percent: number;
   course?: string;
   urgency: UrgentThings;
-  importance: ImportantThings ;
+  importance: ImportantThings;
 }
 
 export interface DeliverableState {
   deliverables: Deliverable[];
   loading: boolean;
   error: string | null;
-  selected: Deliverable | null;
+  selected: Deliverable;
   count: number;
 }
 

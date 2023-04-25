@@ -8,85 +8,57 @@ import {
   startLoadingSession,
   stopLoadingSession,
 } from "../slices";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch } from "../store";
 
-export const startLoadSession = (page: number) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+export const startLoadSession = (userId: string, page: number) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(startLoadingSession());
 
-    const {
-      auth: { user },
-    } = getState();
+    const response = await new SessionService().getSessions(userId, page);
 
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    const service = SessionService.createService();
-    const response = await service.getSessions(user, page);
-
-    if (typeof response === "string") {
+    const { data } = response;
+    if (response.status !== 200) {
       dispatch(stopLoadingSession());
-      return response;
+      return data.message;
     }
 
-    const data = response.data;
     dispatch(loadSessions(data));
     dispatch(stopLoadingSession());
     return RESPONSES.SUCCESS;
   };
 };
 
-export const startcreateSession = (createSession: CreateSession) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(startLoadingSession());
-    const {
-      auth: { user },
-    } = getState();
+export const startcreateSession = (
+  user: string,
+  createSession: CreateSession
+) => {
+  return async (dispatch: AppDispatch) => {
+    const response = await new SessionService().createSessions({
+      ...createSession,
+      user,
+    });
 
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-
-    createSession.user = user.id;
-
-    const service = SessionService.createService();
-    const response = await service.createSessions(createSession);
-
-    if (typeof response === "string") {
-      dispatch(stopLoadingSession());
+    const { data } = response;
+    if (response.status !== 201) {
       return response;
     }
 
-    const session = response.data;
-    dispatch(addSession(session));
-    dispatch(stopLoadingSession());
+    dispatch(addSession(data));
     return RESPONSES.SUCCESS;
   };
 };
 
 export const startRemoveSession = (delSession: Session) => {
-  return async (dispatch: AppDispatch, getState: () => RootState) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(startLoadingSession());
+    const response = await new SessionService().removeSessions(delSession);
 
-    const {
-      auth: { user },
-    } = getState();
-
-    if (!user) {
-      return RESPONSES.UNAUTHORIZE;
-    }
-    const service = SessionService.createService();
-    const response = await service.removeSessions(delSession);
-
-    if (typeof response === "string") {
-      dispatch(stopLoadingSession());
-      return response;
+    const { data } = response;
+    if (response.status !== 200) {
+      return data.message;
     }
 
-    const deliverie = response.data;
-    dispatch(removeSession(deliverie));
-    dispatch(stopLoadingSession());
+    dispatch(removeSession(data));
     return RESPONSES.SUCCESS;
   };
 };

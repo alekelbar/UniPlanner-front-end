@@ -1,16 +1,13 @@
-import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useAppDispatch } from '../../redux';
-import * as Yup from 'yup';
-import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
 import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
-import { startCreateTask } from '../../redux/thunks/tasks-thunks';
-import { RESPONSES } from '../../interfaces/response-messages';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
-import { logOut } from '../../helpers/local-storage';
+import * as Yup from 'yup';
+import { RESPONSES } from '../../interfaces/response-messages';
+import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
+import { useAppDispatch } from '../../redux';
+import { startCreateTask } from '../../redux/thunks/tasks-thunks';
 
 interface AddTaskDialogProps {
   open: boolean,
@@ -25,8 +22,11 @@ const initialValues: CreateTask = {
 
 export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
   JSX.Element {
+
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { query: { deliveryId } } = router;
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const width = fullScreen ? '100%' : '50%';
@@ -36,30 +36,14 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
     onSubmit: async (values) => {
       const { descripcion, name, status } = values;
       const response = await dispatch(startCreateTask({
+        delivery: deliveryId as string,
         name,
         descripcion,
         status,
       }));
 
       if (response !== RESPONSES.SUCCESS) {
-        let responseText = "";
-
-        switch (response) {
-          case RESPONSES.UNAUTHORIZE:
-            responseText = "Parece que no tiene autorización para estar aquí 🔒";
-            router.push("/");
-            dispatch(onLogOut());
-            logOut();
-            break;
-          case RESPONSES.BAD_REQUEST:
-            responseText = 'Parece que hubo un inconveniente con el servidor 🔒';
-            break;
-        }
-        await Swal.fire({
-          title: "Una disculpa",
-          text: responseText,
-          icon: 'info'
-        });
+        await Swal.fire(response);
       }
 
       formik.resetForm(initialValues);
@@ -69,7 +53,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
       descripcion: Yup
         .string()
         .required("La descripción de la tarea es requerida")
-        .min(10, "Trate de usar al menos 10 caracteres"),
+        .min(5, "Trate de usar al menos 5 caracteres"),
       name: Yup
         .string()
         .required("El nombre de la tarea es requerida")
@@ -92,12 +76,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
         onClose={onClose}
         open={open}>
         <DialogTitle>
-          <Typography
-            component={'p'}
-            variant='subtitle1'
-            align='center'>
-            ¿Vas a agregar una nueva tarea? 😊
-          </Typography>
+          Nueva Tarea de entrega
         </DialogTitle>
         <DialogContent>
           <Stack
@@ -122,7 +101,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               helperText="¿Como va a nombrar a esta tarea?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'error'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -139,7 +118,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               helperText="¿Como describe esta tarea?" />
 
             {formik.touched.descripcion && formik.errors.descripcion && (
-              <Typography variant='caption' color={'error'}>{formik.errors.descripcion}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.descripcion}</Typography>
             )}
 
             <Select
@@ -152,7 +131,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               <MenuItem value={TASK_STATUS.IMCOMPLETED}>{TASK_STATUS.IMCOMPLETED}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'error'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
             )}
 
             <Button
