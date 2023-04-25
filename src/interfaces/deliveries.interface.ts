@@ -1,4 +1,4 @@
-import { ImportantThings, UrgentThings } from "../helpers/priorityCalc";
+import { ImportantThings, UrgentThings } from "../components/Career/helpers/priorityCalc";
 
 export interface CreateDeliverable {
   name: string;

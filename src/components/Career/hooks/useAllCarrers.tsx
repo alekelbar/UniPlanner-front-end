@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Career } from '../../interfaces/career.interface';
-import { CareerService } from '../../services';
+import { Career } from '../../../interfaces/career.interface';
+import { CareerService } from '../../../services';
 
 const initialState = {
   allCareers: [] as Career[],

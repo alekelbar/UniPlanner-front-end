@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 import { logOut } from '../../helpers/local-storage';
-import { makePriority } from '../../helpers/priorityCalc';
+import { makePriority } from '../Career/helpers/priorityCalc';
 import { DELIVERABLE_STATUS } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
@@ -144,7 +144,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.deadline && formik.errors.deadline && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.deadline}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.deadline}</Typography>
                   )}
 
                   <TextField
@@ -160,7 +160,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     rows={2}
                     multiline />
                   {formik.touched.name && formik.errors.name && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
                   )}
 
                   <TextField
@@ -176,7 +176,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.description && formik.errors.description && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.description}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.description}</Typography>
                   )}
 
                   <TextField
@@ -190,7 +190,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.note && formik.errors.note && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.note}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.note}</Typography>
                   )}
 
                   <TextField
@@ -204,7 +204,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     onBlur={formik.handleBlur}
                     autoComplete='off' />
                   {formik.touched.percent && formik.errors.percent && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.percent}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.percent}</Typography>
                   )}
 
                   <Select
@@ -217,7 +217,7 @@ export default function EditDeliverableDialog ({ onClose, open }: EditDeliverabl
                     <MenuItem value={DELIVERABLE_STATUS.SEND}>{DELIVERABLE_STATUS.SEND}</MenuItem>
                   </Select>
                   {formik.touched.status && formik.errors.status && (
-                    <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.status}</Typography>
+                    <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
                   )}
 
                   <Button

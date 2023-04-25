@@ -6,7 +6,7 @@ import { ReactElement } from 'react';
 import { KanbanLists } from './KanbanLists';
 import { KanbanAddButton } from './KanbanAddButton';
 import { KanbanAddDialog } from './KanbanAddDialog';
-import { Provider } from './context/kanbanContext';
+import { KanbanProvider } from './context/kanbanContext';
 
 // model ...
 // * CONTEXT:
@@ -17,7 +17,7 @@ export const KanbanPage = ({ children }: { children: ReactElement | ReactElement
   if (context.data.loading) return <Loading called='kanban' />;
 
   return (
-    <Provider value={context}>
+    <KanbanProvider value={context}>
       <Container sx={{
         mt: 2,
         display: 'flex',
@@ -30,7 +30,7 @@ export const KanbanPage = ({ children }: { children: ReactElement | ReactElement
           {children}
         </DragDropContext>
       </Container>
-    </Provider>
+    </KanbanProvider>
   );
 };
 

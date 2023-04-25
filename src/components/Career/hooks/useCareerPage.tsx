@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { RESPONSES } from "../../interfaces/response-messages";
-import { useAppDispatch, useAppSelector } from "../../redux";
-import { startLoadCareers } from "../../redux/thunks/careers-thunks";
+import { useAllCareers } from "./useAllCarrers";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { startLoadCareers } from "../../../redux/thunks/careers-thunks";
+import { RESPONSES } from "../../../interfaces/response-messages";
 
 export const useCareerPage = () => {
   const router = useRouter();
@@ -11,6 +12,9 @@ export const useCareerPage = () => {
 
   const dispatch = useAppDispatch();
   const { careers, loading } = useAppSelector(state => state.career);
+
+  const { allCareers, loading: allCarrersLoading } = useAllCareers([careers]);
+
 
   const [open, setOpen] = useState(false);
   const onOpen = () => setOpen(true);
@@ -25,6 +29,11 @@ export const useCareerPage = () => {
   }, [query.user]);
 
   return {
-    open, onOpen, onClose, careers, loading
+    dialog: {
+      open, onOpen, onClose, loading
+    },
+    state: {
+      careers, allCareers, allCarrersLoading
+    }
   };
 };

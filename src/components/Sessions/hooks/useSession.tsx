@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux';
-import usePagination from '../../../hooks/pagination';
+import usePagination from '../../../hooks/usePagination';
 import isInteger from '../../../helpers/isInteger';
 import { startLoadSession } from '../../../redux/thunks/session-thunks';
 import { RESPONSES } from '../../../interfaces/response-messages';

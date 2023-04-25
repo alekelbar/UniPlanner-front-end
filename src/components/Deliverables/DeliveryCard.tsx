@@ -3,15 +3,13 @@ import { formatDistance, isAfter, parseISO } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { MAX_CARD_HEIGHT, MIN_CARD_HEIGHT } from '../../config/sizes';
-import { logOut } from '../../helpers/local-storage';
+import { MIN_CARD_HEIGHT } from '../../config/sizes';
 import { DELIVERABLE_STATUS, Deliverable } from '../../interfaces/deliveries.interface';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { setSelectedDelivery } from '../../redux/slices/Deliveries/deliveriesSlice';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startRemoveDelivery } from '../../redux/thunks/deliverables-thunks';
-import { ColorMatrixPreferences, getPriorityColor } from './../../helpers/priorityCalc';
+import { ColorMatrixPreferences, getPriorityColor } from '../Career/helpers/priorityCalc';
 import { useEffect } from 'react';
 import { startLoadSetting } from '../../redux/thunks/settings-thunks';
 import { Loading } from '../common';
@@ -44,7 +42,8 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
   };
 
   useEffect(() => {
-    onLoad();
+    if (!selected.user) // verificando si es la configuración por defecto...
+      onLoad();
   }, [userId]);
 
   const dispatch = useAppDispatch();
@@ -57,7 +56,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
           <Typography component={'div'} variant="h6" sx={{
             color: (theme) => theme.palette.error.main
           }}>
-            No entregado | {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
+            {formatDistance(deadline, new Date(), { locale: es, addSuffix: true }).toUpperCase()}
           </Typography>
         );
       }
@@ -65,7 +64,7 @@ export function DeliveryCard ({ deliverable, reload, onOpenEdit, actualPage }: D
         <Typography component={'div'} variant="h6" sx={{
           color: (theme) => theme.palette.warning.main
         }}>
-          Se entrega: {formatDistance(deadline, new Date(), { locale: es, addSuffix: true })}
+          {formatDistance(deadline, new Date(), { locale: es, addSuffix: true }).toUpperCase()}
         </Typography>
       );
     }

@@ -32,7 +32,7 @@ export default function TaskCard ({ task, reload, onOpenEdit, actualPage, openCl
 
   return (
     <Card variant='elevation' data-testid='task-card' sx={{
-      minHeight: MIN_CARD_HEIGHT,
+      // minHeight: MIN_CARD_HEIGHT,
     }}>
       <CardHeader
         title={task.name}

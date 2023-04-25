@@ -81,7 +81,7 @@ const ProfilePage: React.FC = () => {
             helperText="Usuario"
           />
           {formik.touched.id && formik.errors.id && (
-            <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.id}</Typography>
+            <Typography variant='caption' color={'info.main'}>{formik.errors.id}</Typography>
           )}
           <TextField
             autoComplete='off'
@@ -93,7 +93,7 @@ const ProfilePage: React.FC = () => {
             helperText="Nombre"
           />
           {formik.touched.name && formik.errors.name && (
-            <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
+            <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
           )}
           <TextField
             autoComplete='off'
@@ -105,7 +105,7 @@ const ProfilePage: React.FC = () => {
             helperText="Correo Electronico"
           />
           {formik.touched.email && formik.errors.email && (
-            <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.email}</Typography>
+            <Typography variant='caption' color={'info.main'}>{formik.errors.email}</Typography>
           )}
 
           <Button data-testid='button-update' type='submit' fullWidth variant='contained' color='success' sx={{ mb: .5 }}>

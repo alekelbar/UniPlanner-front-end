@@ -1,4 +1,4 @@
-import { Career } from "../interfaces/career.interface";
+import { Career } from "../../../interfaces/career.interface";
 
 export function getUniqueCareeers(carr1: Career[], carr2: Career[]) {
   const mergeArr = [...carr1, ...carr2];

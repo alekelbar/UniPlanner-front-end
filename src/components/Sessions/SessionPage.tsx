@@ -8,7 +8,7 @@ import { SessionAddDialog } from './SessionAddDialog';
 import { SessionGrid } from './SessionGrid';
 import { SessionPagination } from './SessionPagination';
 import { useSession } from '../../../src/components/Sessions/hooks/useSession';
-import { Provider } from './context/SessionContext';
+import { SessionProvider } from './context/SessionContext';
 
 
 export default function SessionsPage ({ children }: { children: ReactElement | ReactElement[]; }): JSX.Element {
@@ -17,11 +17,11 @@ export default function SessionsPage ({ children }: { children: ReactElement | R
   if (sessionContext.sessionState.loading) return (<Loading called='session/id' />);
 
   return (
-    <Provider value={sessionContext}>
+    <SessionProvider value={sessionContext}>
       <Stack direction="column" sx={{ borderRadius: '.8em' }}>
         {children}
       </Stack>
-    </Provider>
+    </SessionProvider>
   );
 }
 

@@ -1,5 +1,5 @@
 import { Close, Pause, PlayArrow } from "@mui/icons-material";
-import { Backdrop, Button, Container, Stack, Typography } from "@mui/material";
+import { Backdrop, Button, Container, Stack, Typography, useTheme } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -69,12 +69,8 @@ export const TimerControls: React.FC<ITimerClockControls> = ({ children }) => {
   );
 };
 
-interface ITimer {
-  dialogHandler: { open: boolean, onClose: () => void; };
-  session: Session;
-}
-
 export const SessionTimer: React.FC = () => {
+  const theme = useTheme();
 
   const {
     sessionState: {
@@ -140,8 +136,8 @@ export const SessionTimer: React.FC = () => {
             value={Math.trunc((secondsLeft / totalSeconds) * 100)}
             styles={buildStyles({
               pathColor: (session.type === SESSION_TYPES.RESTING)
-                ? '#95E1D3'
-                : '#F38181',
+                ? theme.palette.success.main
+                : theme.palette.info.main,
             })}
           >
             <Typography variant='caption' fontSize={'2em'}> {Math.trunc((secondsLeft / totalSeconds) * 100)}% </Typography>

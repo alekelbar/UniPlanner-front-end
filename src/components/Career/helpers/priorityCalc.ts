@@ -1,5 +1,5 @@
-import { differenceInDays, isSameWeek } from "date-fns";
-import { DELIVERABLE_TAGS } from "../interfaces/deliveries.interface";
+import { differenceInDays } from "date-fns";
+import { DELIVERABLE_TAGS } from "../../../interfaces/deliveries.interface";
 
 export type ImportantThings =
   | DELIVERABLE_TAGS.IMPORTANT

@@ -105,7 +105,7 @@ export const SessionAddDialog = () => {
               helperText="¿Como va a nombrar a esta sesión?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -120,7 +120,7 @@ export const SessionAddDialog = () => {
               helperText="¿Cuál es la duración en minutos?" />
 
             {formik.touched.duration && formik.errors.duration && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.duration}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.duration}</Typography>
             )}
 
             <Select
@@ -133,7 +133,7 @@ export const SessionAddDialog = () => {
               <MenuItem value={SESSION_TYPES.WORKING}>{SESSION_TYPES.WORKING}</MenuItem>
             </Select>
             {formik.touched.type && formik.errors.type && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.type}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.type}</Typography>
             )}
 
             <Button

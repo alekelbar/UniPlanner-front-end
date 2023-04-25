@@ -35,7 +35,7 @@ export function SideBar ({ onClose, open }: SideBarProps): JSX.Element {
         <List sx={{ mb: 2 }}>
           <ListItem>
             <ListItemIcon>
-              <Avatar src='https://scontent.fsjo9-1.fna.fbcdn.net/v/t39.30808-6/301999029_768418684471692_6904334561164990019_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=qU9upZvwbD8AX9W2_QB&_nc_ht=scontent.fsjo9-1.fna&oh=00_AfAMrmTizvtbNEoLUEyqBZIFAq7VPmZsEyroAiyKtFeJCQ&oe=6445C19C' />
+              <Avatar src='https://scontent.fsjo9-1.fna.fbcdn.net/v/t39.30808-6/301999029_768418684471692_6904334561164990019_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TJw0dH_UN8UAX-il7VE&_nc_ht=scontent.fsjo9-1.fna&oh=00_AfA1l4mwYw9AqIzm0Zj-ex_ue7HrVMW3HtnbEdI0w2gMlQ&oe=644BB05C' />
             </ListItemIcon>
             <ListItemText
               primary={user?.fullname}

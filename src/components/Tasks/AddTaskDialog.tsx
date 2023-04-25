@@ -4,11 +4,9 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
-import { logOut } from '../../helpers/local-storage';
 import { RESPONSES } from '../../interfaces/response-messages';
 import { CreateTask, TASK_STATUS } from '../../interfaces/task-interface';
 import { useAppDispatch } from '../../redux';
-import { onLogOut } from '../../redux/slices/auth/authSlice';
 import { startCreateTask } from '../../redux/thunks/tasks-thunks';
 
 interface AddTaskDialogProps {
@@ -27,7 +25,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
 
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { query: { deliveryId, deliveryName, userId } } = router;
+  const { query: { deliveryId } } = router;
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -103,7 +101,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               helperText="¿Como va a nombrar a esta tarea?" />
 
             {formik.touched.name && formik.errors.name && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.name}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.name}</Typography>
             )}
 
             <TextField
@@ -120,7 +118,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               helperText="¿Como describe esta tarea?" />
 
             {formik.touched.descripcion && formik.errors.descripcion && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.descripcion}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.descripcion}</Typography>
             )}
 
             <Select
@@ -133,7 +131,7 @@ export default function AddTaskDialog ({ onClose, open }: AddTaskDialogProps):
               <MenuItem value={TASK_STATUS.IMCOMPLETED}>{TASK_STATUS.IMCOMPLETED}</MenuItem>
             </Select>
             {formik.touched.status && formik.errors.status && (
-              <Typography variant='caption' color={'primary.contrastText'}>{formik.errors.status}</Typography>
+              <Typography variant='caption' color={'info.main'}>{formik.errors.status}</Typography>
             )}
 
             <Button
