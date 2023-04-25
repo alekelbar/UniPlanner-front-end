@@ -6,7 +6,8 @@ type AvailableVersions = "v1" | "v2";
 export const API_VERSION: AvailableVersions = "v2";
 
 // export const API_URL = `https://ge-back.onrender.com/api/${API_VERSION}/`
-export const API_URL = process.env.API_URL;
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+console.log(API_URL)
 
 const addToken = (request: InternalAxiosRequestConfig) => {
   const token = getLocalToken()?.token
